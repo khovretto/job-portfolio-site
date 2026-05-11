@@ -50,14 +50,18 @@ Required Actions secrets:
 
 After Hostinger gives you root access:
 
-```bash
-adduser deploy
-usermod -aG sudo deploy
-mkdir -p /var/www/khovrov.dev
-chown -R deploy:deploy /var/www/khovrov.dev
-```
+Generated local key paths:
 
-Install Docker and Docker Compose using the current Docker instructions for your VPS OS.
+- Local VPS access key: `C:\Users\User\.ssh\khovrov_dev_vps`
+- GitHub Actions deploy key: `C:\Users\User\.ssh\khovrov_dev_github_actions`
+
+Run `ops/vps-bootstrap.sh` as root on the VPS with the two generated public keys:
+
+```bash
+export DEPLOY_PUBLIC_KEY='paste C:\Users\User\.ssh\khovrov_dev_vps.pub here'
+export GITHUB_ACTIONS_PUBLIC_KEY='paste C:\Users\User\.ssh\khovrov_dev_github_actions.pub here'
+bash ops/vps-bootstrap.sh
+```
 
 Create `/var/www/khovrov.dev/.env.production` from `.env.production.example` and replace every secret.
 
