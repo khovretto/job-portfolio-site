@@ -5,7 +5,11 @@ RUN if [ -f package-lock.json ]; then npm ci --no-audit --no-fund; else npm inst
 
 FROM node:22-alpine AS builder
 WORKDIR /app
+ARG NEXT_PUBLIC_SITE_URL
+ARG UMAMI_WEBSITE_ID
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL}
+ENV UMAMI_WEBSITE_ID=${UMAMI_WEBSITE_ID}
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npm run build

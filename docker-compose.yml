@@ -17,6 +17,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://khovrov.dev}
+        UMAMI_WEBSITE_ID: ${UMAMI_WEBSITE_ID:-}
     restart: unless-stopped
     env_file:
       - .env.production
