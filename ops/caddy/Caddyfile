@@ -1,0 +1,13 @@
+khovrov.dev {
+  encode zstd gzip
+  reverse_proxy app:3000
+}
+
+www.khovrov.dev {
+  redir https://khovrov.dev{uri} permanent
+}
+
+stats.khovrov.dev {
+  encode zstd gzip
+  reverse_proxy umami:3000
+}

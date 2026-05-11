@@ -1,0 +1,12 @@
+node_modules
+.next
+.git
+.github
+docker-data
+.env
+.env.local
+.env.production
+*.log
+hifi
+Maksim Khovrov.html
+Portfolio Wireframes.html
