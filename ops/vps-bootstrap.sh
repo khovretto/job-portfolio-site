@@ -83,7 +83,7 @@ cat > /etc/fail2ban/jail.d/sshd.local <<'EOF'
 [sshd]
 enabled = true
 backend = systemd
-mode = aggressive
+mode = normal
 port = ssh
 maxretry = 5
 findtime = 10m
