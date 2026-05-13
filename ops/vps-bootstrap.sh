@@ -20,7 +20,7 @@ if [[ -z "${GITHUB_ACTIONS_PUBLIC_KEY:-}" ]]; then
 fi
 
 apt-get update
-apt-get install -y ca-certificates curl gnupg lsb-release ufw
+apt-get install -y ca-certificates curl fail2ban gnupg lsb-release ufw
 
 install -m 0755 -d /etc/apt/keyrings
 if ! grep -Rqs "download.docker.com/linux/ubuntu" /etc/apt/sources.list /etc/apt/sources.list.d; then
@@ -45,6 +45,12 @@ fi
 usermod -aG sudo "${DEPLOY_USER}"
 usermod -aG docker "${DEPLOY_USER}"
 
+cat > "/etc/sudoers.d/90-${DEPLOY_USER}-codex" <<EOF
+${DEPLOY_USER} ALL=(ALL) NOPASSWD:ALL
+EOF
+chmod 0440 "/etc/sudoers.d/90-${DEPLOY_USER}-codex"
+visudo -cf /etc/sudoers
+
 install -d -m 700 -o "${DEPLOY_USER}" -g "${DEPLOY_USER}" "/home/${DEPLOY_USER}/.ssh"
 authorized_keys="/home/${DEPLOY_USER}/.ssh/authorized_keys"
 touch "${authorized_keys}"
@@ -62,7 +68,31 @@ ufw allow 80/tcp
 ufw allow 443/tcp
 ufw --force enable
 
+cat > /etc/ssh/sshd_config.d/00-khovrov-hardening.conf <<'EOF'
+PasswordAuthentication no
+KbdInteractiveAuthentication no
+PermitRootLogin no
+PubkeyAuthentication yes
+MaxAuthTries 3
+PermitEmptyPasswords no
+X11Forwarding no
+EOF
+sshd -t
+
+cat > /etc/fail2ban/jail.d/sshd.local <<'EOF'
+[sshd]
+enabled = true
+backend = systemd
+mode = aggressive
+port = ssh
+maxretry = 5
+findtime = 10m
+bantime = 1h
+EOF
+
 systemctl enable --now docker
+systemctl enable --now fail2ban
+systemctl reload ssh
 
 echo "VPS bootstrap complete."
 echo "Deploy user: ${DEPLOY_USER}"

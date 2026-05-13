@@ -19,6 +19,18 @@ The admin panel is intentionally narrow:
 - secure HTTP-only session cookie
 - no content editor in v1
 
+## VPS SSH
+
+The VPS baseline is:
+
+- SSH key login only
+- root SSH login disabled
+- password SSH disabled
+- `deploy` user used for maintenance and GitHub Actions deployments
+- `fail2ban` enabled for SSH brute-force protection
+
+`deploy` is in the Docker group and has passwordless sudo. Treat that SSH key as root-equivalent in practice.
+
 ## Logging Policy
 
 The app logs operational events for debugging and portfolio improvement:
