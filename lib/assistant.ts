@@ -166,6 +166,7 @@ export async function answerAssistantQuestion(input: {
       },
       body: JSON.stringify({
         model: input.model,
+        chat_id: "local:portfolio-demo",
         stream: false,
         temperature: 0.2,
         max_tokens: 500,
