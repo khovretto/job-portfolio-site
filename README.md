@@ -31,7 +31,7 @@ Each demo should grow into a public project without forcing the portfolio to bec
 
 Current demo modules:
 
-- Personal AI Assistant: `components/demos/demo-ai.tsx`, `app/api/chat/route.ts`
+- Personal AI Assistant: `components/demos/demo-ai.tsx`, `app/api/chat/route.ts`, optionally backed by Open WebUI through server-only env vars
 - Knowledge Base Audit + RAG Builder: `components/demos/demo-kb.tsx`, `app/api/audit/route.ts`
 - Conlang Word Generator + Audio Recognition: `components/demos/demo-conlang.tsx`
 
@@ -53,4 +53,3 @@ npm run lint
 npm run typecheck
 npm run build
 ```
-

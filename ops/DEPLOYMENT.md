@@ -90,3 +90,16 @@ https://stats.khovrov.dev
 Change the default Umami admin password immediately after first login.
 
 After creating the `khovrov.dev` website in Umami, copy its website id into `.env.production` as `UMAMI_WEBSITE_ID` and redeploy so the public site can include the tracker.
+
+## Personal Assistant Open WebUI
+
+The public assistant demo can call the private Open WebUI instance through the Docker network. Add these values to `/var/www/khovrov.dev/.env.production`:
+
+```text
+OPENWEBUI_BASE_URL=http://openwebui:8080
+OPENWEBUI_API_KEY=<portfolio-demo non-admin user key>
+ASSISTANT_DEFAULT_MODEL=google/gemini-flash-latest
+ASSISTANT_ALLOWED_MODELS=google/gemini-flash-latest,openai/gpt-mini-latest,anthropic/claude-haiku-latest
+```
+
+Generate the key from a non-admin Open WebUI user dedicated to the public portfolio demo. Do not expose this key in browser-visible variables, GitHub Actions secrets output, or committed files.

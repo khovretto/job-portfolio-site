@@ -16,6 +16,9 @@ export default async function ChatPage() {
               <th>Time</th>
               <th>Question</th>
               <th>Answer</th>
+              <th>Model</th>
+              <th>Status</th>
+              <th>Latency</th>
               <th>Sources</th>
               <th>Confidence</th>
             </tr>
@@ -26,6 +29,9 @@ export default async function ChatPage() {
                 <td>{formatDate(chat.created_at)}</td>
                 <td>{chat.question}</td>
                 <td>{chat.answer}</td>
+                <td>{chat.model}</td>
+                <td>{chat.status}</td>
+                <td>{chat.latency_ms === null ? "-" : `${chat.latency_ms}ms`}</td>
                 <td>{chat.sources.join(", ")}</td>
                 <td>{Number(chat.confidence).toFixed(2)}</td>
               </tr>

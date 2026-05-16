@@ -602,6 +602,32 @@ section {
   border-top: 1px solid var(--line);
 }
 
+.model-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: var(--bg-1);
+}
+
+.model-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.model-chip {
+  cursor: pointer;
+}
+
+.model-chip.active {
+  border-color: var(--accent);
+  background: var(--surf);
+  color: var(--accent);
+}
+
 .chat-input,
 .form-input {
   width: 100%;
@@ -841,6 +867,11 @@ section {
 
   .form-row,
   .chat-form {
+    flex-direction: column;
+  }
+
+  .model-bar {
+    align-items: flex-start;
     flex-direction: column;
   }
 

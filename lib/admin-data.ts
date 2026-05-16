@@ -50,9 +50,13 @@ export async function getRecentChats(limit = 50) {
     confidence: string;
     scope: string;
     mocked: boolean;
+    model: string;
+    status: string;
+    latency_ms: number | null;
     created_at: Date;
   }>(
-    `select id, question, answer, sources, confidence::text, scope, mocked, created_at
+    `select id, question, answer, sources, confidence::text, scope, mocked,
+            model, status, latency_ms, created_at
      from chat_requests
      order by created_at desc
      limit $1`,

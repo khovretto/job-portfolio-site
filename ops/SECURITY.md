@@ -53,3 +53,5 @@ If `/api/chat` is upgraded from mock responses to a real LLM provider:
 - add abuse monitoring
 - avoid logging secrets or sensitive user content
 - keep public-scope refusal behavior
+
+The Open WebUI portfolio integration uses a non-admin service account key stored only in `.env.production`. The public browser may choose only from the server-enforced assistant model allowlist, and `/api/chat` must never proxy arbitrary model ids or expose the Open WebUI API key.

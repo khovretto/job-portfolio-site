@@ -2,12 +2,20 @@
 
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { trackEvent } from "@/components/event-tracker";
+import {
+  ASSISTANT_MODEL_OPTIONS,
+  DEFAULT_ASSISTANT_MODEL,
+  type AssistantModelId,
+  getAssistantModelLabel,
+} from "@/lib/assistant-models";
 
 type Message = {
   role: "assistant" | "user";
   text: string;
   sources?: string[];
   confidence?: number;
+  model?: AssistantModelId;
+  status?: string;
 };
 
 type ChatResponse = {
@@ -16,6 +24,9 @@ type ChatResponse = {
   confidence: number;
   scope: string;
   mocked: boolean;
+  model: AssistantModelId;
+  status: string;
+  latencyMs: number;
 };
 
 const suggestions = [
@@ -37,6 +48,9 @@ export function DemoAI() {
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [selectedModel, setSelectedModel] =
+    useState<AssistantModelId>(DEFAULT_ASSISTANT_MODEL);
+  const [lastStatus, setLastStatus] = useState<"idle" | "live" | "mock" | "error">("idle");
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -48,16 +62,27 @@ export function DemoAI() {
     if (!trimmed || busy) return;
 
     setError(null);
+    const history = messages
+      .slice(1)
+      .slice(-6)
+      .map((message) => ({
+        role: message.role,
+        content: message.text,
+      }));
     setMessages((current) => [...current, { role: "user", text: trimmed }]);
     setInput("");
     setBusy(true);
-    trackEvent("chat_submit", { length: trimmed.length });
+    trackEvent("chat_submit", { length: trimmed.length, model: selectedModel });
 
     try {
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: trimmed }),
+        body: JSON.stringify({
+          message: trimmed,
+          model: selectedModel,
+          history,
+        }),
       });
 
       if (!response.ok) {
@@ -73,10 +98,14 @@ export function DemoAI() {
           text: body.answer,
           sources: body.sources,
           confidence: body.confidence,
+          model: body.model,
+          status: body.status,
         },
       ]);
+      setLastStatus(body.mocked ? "mock" : "live");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Chat request failed.");
+      setLastStatus("error");
     } finally {
       setBusy(false);
     }
@@ -105,6 +134,26 @@ export function DemoAI() {
                 </span>
               ))}
             </span>
+          </div>
+          <div className="model-bar">
+            <span className="mono">model</span>
+            <div className="model-picker" aria-label="Assistant model">
+              {ASSISTANT_MODEL_OPTIONS.map((model) => {
+                const isActive = selectedModel === model.id;
+                return (
+                  <button
+                    key={model.id}
+                    type="button"
+                    className={`chip model-chip ${isActive ? "active" : ""}`}
+                    onClick={() => setSelectedModel(model.id)}
+                    disabled={busy}
+                    aria-pressed={isActive}
+                  >
+                    {model.label}
+                  </button>
+                );
+              })}
+            </div>
           </div>
           <div ref={scrollRef} className="chat-log">
             {messages.map((message, index) => (
@@ -145,7 +194,15 @@ export function DemoAI() {
             <span className="mono">integrations</span>
             <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 4 }}>
               {[
-                ["chat api", "ok", "mocked server route"],
+                [
+                  "chat api",
+                  lastStatus === "error" ? "bad" : lastStatus === "idle" ? "ok" : "live",
+                  lastStatus === "live"
+                    ? "Open WebUI"
+                    : lastStatus === "mock"
+                      ? "mock fallback"
+                      : "server route",
+                ],
                 ["knowledge", "ok", "public summary"],
                 ["speech-in", "warn", "placeholder"],
                 ["rate-limit", "ok", "per-IP"],
@@ -198,6 +255,16 @@ function Bubble({ message }: { message: Message }) {
       <div style={{ fontSize: 14, color: "var(--ink)", whiteSpace: "pre-wrap" }}>{message.text}</div>
       {!isUser && message.sources ? (
         <div style={{ marginTop: 8, display: "flex", flexWrap: "wrap", gap: 5 }}>
+          {message.model ? (
+            <span className="chip" style={{ fontSize: 10 }}>
+              model: {getAssistantModelLabel(message.model)}
+            </span>
+          ) : null}
+          {message.status ? (
+            <span className="chip" style={{ fontSize: 10 }}>
+              status: {message.status}
+            </span>
+          ) : null}
           {message.sources.map((source) => (
             <span key={source} className="chip" style={{ fontSize: 10 }}>
               src: {source}
