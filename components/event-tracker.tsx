@@ -4,17 +4,12 @@ import { useEffect } from "react";
 
 export function trackEvent(type: string, metadata: Record<string, unknown> = {}) {
   const payload = JSON.stringify({ type, metadata });
-  if (navigator.sendBeacon) {
-    navigator.sendBeacon("/api/events", new Blob([payload], { type: "application/json" }));
-    return;
-  }
-
-  void fetch("/api/events", {
+  void fetch("/api/site-actions", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: payload,
     keepalive: true,
-  });
+  }).catch(() => undefined);
 }
 
 export function EventTracker() {

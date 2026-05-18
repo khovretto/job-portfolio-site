@@ -10,6 +10,8 @@ Point these A records to the VPS IPv4 address:
 - `www` -> VPS IP
 - `stats` -> VPS IP
 
+`chat.khovrov.dev` is served by the separate Open WebUI project under `/opt/personal-voice-assistant`; it is not managed by this repository's Docker Compose file.
+
 `.dev` domains require working HTTPS in browsers. Caddy handles certificates automatically after DNS resolves and ports `80` and `443` reach the VPS.
 
 ## SSH Keys
@@ -67,6 +69,20 @@ Create `/var/www/khovrov.dev/.env.production` from `.env.production.example` and
 
 Then the GitHub Actions workflow can deploy on pushes to `main`.
 
+## Deploy Workflow Behavior
+
+The GitHub Actions workflow:
+
+1. Runs `npm ci`, `npm run typecheck`, and `npm run build`.
+2. Cleans `/var/www/khovrov.dev` while preserving `.env.production`, `.env.production.*`, and `docker-data`.
+3. Uploads the repository to `/var/www/khovrov.dev`, excluding `.git`, `node_modules`, `.next`, `docker-data`, and real/local env files.
+4. Starts Postgres if needed.
+5. Builds the app image with `--no-cache` to avoid stale Next.js standalone output.
+6. Runs database migrations and admin initialization.
+7. Force-recreates the app and Caddy containers.
+
+Do not store production secrets in the repository. The source upload intentionally does not overwrite `/var/www/khovrov.dev/.env.production`.
+
 ## Runtime Commands
 
 From `/var/www/khovrov.dev`:
@@ -103,3 +119,19 @@ ASSISTANT_ALLOWED_MODELS=~google/gemini-flash-latest,~openai/gpt-mini-latest,~an
 ```
 
 Generate the key from a non-admin Open WebUI user dedicated to the public portfolio demo. Do not expose this key in browser-visible variables, GitHub Actions secrets output, or committed files.
+
+The public assistant prompt and context are editable at:
+
+```text
+https://khovrov.dev/admin/assistant
+```
+
+The edited config is stored in the portfolio Postgres database table `assistant_config`. Keep this content public, anonymized, and free of secrets.
+
+If Open WebUI group model permissions return an empty model list for the service account, the current pragmatic setting is:
+
+```text
+BYPASS_MODEL_ACCESS_CONTROL=true
+```
+
+That setting belongs in the Open WebUI project environment, not this repo. The portfolio backend still enforces its own three-model allowlist before calling Open WebUI.

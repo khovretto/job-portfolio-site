@@ -58,8 +58,20 @@ jobs:
             --exclude='node_modules' \
             --exclude='.next' \
             --exclude='docker-data' \
+            --exclude='.env' \
+            --exclude='.env.local' \
+            --exclude='.env.production' \
+            --exclude='.env.production.*' \
+            --exclude='.env.*.local' \
             -czf - . | ssh -i ~/.ssh/deploy_key "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" \
-            "mkdir -p '${{ secrets.VPS_DEPLOY_PATH }}' && tar -xzf - -C '${{ secrets.VPS_DEPLOY_PATH }}'"
+            "set -e
+             mkdir -p '${{ secrets.VPS_DEPLOY_PATH }}'
+             find '${{ secrets.VPS_DEPLOY_PATH }}' -mindepth 1 -maxdepth 1 \
+               ! -name '.env.production' \
+               ! -name '.env.production.*' \
+               ! -name 'docker-data' \
+               -exec rm -rf {} +
+             tar -xzf - -C '${{ secrets.VPS_DEPLOY_PATH }}'"
 
       - name: Deploy on VPS
         run: |
@@ -68,9 +80,12 @@ jobs:
             cd "${{ secrets.VPS_DEPLOY_PATH }}"
             test -f .env.production
             docker compose --env-file .env.production up -d --build postgres
-            docker compose --env-file .env.production build app
+            docker compose --env-file .env.production build --no-cache app
             docker compose --env-file .env.production run --rm app npm run db:migrate
             docker compose --env-file .env.production run --rm app npm run db:init-admin
-            docker compose --env-file .env.production up -d --build
+            docker compose --env-file .env.production up -d --force-recreate --no-deps app
+            docker compose --env-file .env.production up -d --force-recreate --no-deps caddy
+            docker compose --env-file .env.production up -d --no-deps umami
+            docker compose --env-file .env.production ps
             docker image prune -f
           EOF
