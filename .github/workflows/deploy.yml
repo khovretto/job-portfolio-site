@@ -89,3 +89,22 @@ jobs:
             docker compose --env-file .env.production ps
             docker image prune -f
           EOF
+
+      - name: Smoke test production
+        run: |
+          SITE_URL="https://khovrov.dev"
+          for attempt in 1 2 3 4 5; do
+            if curl -fsS "$SITE_URL/" >/dev/null; then
+              break
+            fi
+            if [ "$attempt" = "5" ]; then
+              echo "Homepage smoke test failed" >&2
+              exit 1
+            fi
+            sleep 5
+          done
+
+          curl -fsS \
+            -H 'Content-Type: application/json' \
+            -d '{"type":"deploy_smoke","metadata":{"source":"github-actions"}}' \
+            "$SITE_URL/api/site-actions" >/dev/null

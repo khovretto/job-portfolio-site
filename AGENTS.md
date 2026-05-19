@@ -54,6 +54,8 @@ Invoke-RestMethod https://khovrov.dev/api/chat -Method Post -ContentType 'applic
 Invoke-WebRequest https://khovrov.dev/admin/assistant -MaximumRedirection 0
 ```
 
+GitHub Actions should show one deploy run per push to `main`. Failed historical runs are useful audit/debug history and do not need cleanup. Investigate the latest failed run before changing production manually.
+
 ## Boundaries
 
 - Keep demo project work in separate public repositories when it grows beyond a thin portfolio adapter.
