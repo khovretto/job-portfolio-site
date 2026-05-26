@@ -75,7 +75,8 @@ jobs:
 
       - name: Deploy on VPS
         run: |
-          ssh -i ~/.ssh/deploy_key "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" 'bash -seuo pipefail' <<'EOF'
+          ssh -i ~/.ssh/deploy_key "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" 'cat > /tmp/khovrov-deploy.sh && bash /tmp/khovrov-deploy.sh; status=$?; rm -f /tmp/khovrov-deploy.sh; exit $status' <<'EOF'
+          set -euo pipefail
           set -x
           cd "${{ secrets.VPS_DEPLOY_PATH }}"
           test -f .env.production
