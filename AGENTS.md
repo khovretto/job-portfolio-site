@@ -8,8 +8,8 @@ This file is for future Codex/AI sessions working on the portfolio.
 - Admin panel: `/admin`, protected by a single admin session cookie.
 - Database: Postgres in Docker Compose, migrations in `db/*.sql`.
 - Deployment: GitHub Actions uploads source to `/var/www/khovrov.dev` and rebuilds Docker containers on the VPS.
-- Reverse proxy: Caddy in this repo serves `khovrov.dev`, `www.khovrov.dev`, and `stats.khovrov.dev`.
-- Open WebUI: separate project at `/opt/personal-voice-assistant`, served at `https://chat.khovrov.dev`.
+- Reverse proxy: Caddy in this repo serves `khovrov.dev`, `www.khovrov.dev`, `stats.khovrov.dev`, `chat.khovrov.dev`, `kb-audit.khovrov.dev`, and `automation.khovrov.dev`.
+- Open WebUI: separate project at `/opt/personal-voice-assistant`, routed by this repo's Caddy config at `https://chat.khovrov.dev`.
 
 ## Assistant Integration
 
@@ -36,8 +36,47 @@ The browser must never receive `OPENWEBUI_API_KEY`. Only `/api/chat` may call Op
 - The workflow excludes real/local env files while keeping `.env.example`; do not overwrite VPS-only secrets.
 - The app image is built with `--no-cache` to avoid stale Next.js standalone bundles.
 - Migrations are append-only. Add a new numbered SQL file under `db/`.
+- Do not add VPS-only Caddy routes manually. Put public routes in `ops/caddy/Caddyfile`, otherwise deploy cleanup will remove them.
+- Caddy basic-auth hashes belong in `/var/www/khovrov.dev/.env.production`, not in Git.
 
 Before pushing or deploying, explain the change and get explicit user approval.
+
+## Subdomain Integration Rule
+
+This repo owns the VPS-facing Caddy container. Any public subdomain on `khovrov.dev` must have its route tracked here in `ops/caddy/Caddyfile`, even when the app itself lives in another repository or `/opt/...` project directory.
+
+Recommended pattern for independent projects:
+
+- App source lives in its own repo/folder, for example `/opt/my-project`.
+- App runs in its own Docker Compose project.
+- App joins the shared external Docker network `khovrovdev_default`.
+- App service defines a stable network alias, for example `my-project`.
+- Public route lives in this repo's `ops/caddy/Caddyfile`.
+- Basic-auth hashes and secrets live only in `/var/www/khovrov.dev/.env.production`.
+- Add placeholder env variable names to `.env.example`, never real hashes or passwords.
+
+Example Caddy route:
+
+```caddyfile
+my-project.khovrov.dev {
+  encode zstd gzip
+  reverse_proxy my-project:3000
+}
+```
+
+Protected route:
+
+```caddyfile
+my-project.khovrov.dev {
+  encode zstd gzip
+
+  basic_auth {
+    admin {$CADDY_MY_PROJECT_ADMIN_HASH}
+  }
+
+  reverse_proxy my-project:3000
+}
+```
 
 ## Useful Verification
 

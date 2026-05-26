@@ -80,6 +80,7 @@ jobs:
             cd "${{ secrets.VPS_DEPLOY_PATH }}"
             test -f .env.production
             docker compose --env-file .env.production up -d --build postgres
+            docker compose --env-file .env.production run --rm --no-deps caddy caddy validate --config /etc/caddy/Caddyfile
             docker compose --env-file .env.production build --no-cache app
             docker compose --env-file .env.production run --rm app npm run db:migrate
             docker compose --env-file .env.production run --rm app npm run db:init-admin

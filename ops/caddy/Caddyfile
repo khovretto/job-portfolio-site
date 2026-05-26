@@ -11,3 +11,54 @@ stats.khovrov.dev {
   encode zstd gzip
   reverse_proxy umami:3000
 }
+
+chat.khovrov.dev {
+  encode zstd gzip
+
+  basic_auth {
+    admin {$CADDY_CHAT_ADMIN_HASH}
+  }
+
+  reverse_proxy openwebui:8080
+}
+
+kb-audit.khovrov.dev {
+  encode zstd gzip
+
+  handle /admin* {
+    basic_auth {
+      admin {$CADDY_KB_AUDIT_ADMIN_HASH}
+    }
+    reverse_proxy kb-rag-auditor-app:3000
+  }
+
+  handle /api/admin* {
+    basic_auth {
+      admin {$CADDY_KB_AUDIT_ADMIN_HASH}
+    }
+    reverse_proxy kb-rag-auditor-app:3000
+  }
+
+  handle {
+    reverse_proxy kb-rag-auditor-app:3000
+  }
+}
+
+automation.khovrov.dev {
+  encode zstd gzip
+
+  handle /webhook* {
+    reverse_proxy khovrov-n8n:5678
+  }
+
+  handle /webhook-test* {
+    reverse_proxy khovrov-n8n:5678
+  }
+
+  handle {
+    basic_auth {
+      admin {$CADDY_AUTOMATION_ADMIN_HASH}
+    }
+    reverse_proxy khovrov-n8n:5678
+  }
+}

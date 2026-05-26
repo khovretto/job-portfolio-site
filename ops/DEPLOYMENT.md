@@ -10,7 +10,7 @@ Point these A records to the VPS IPv4 address:
 - `www` -> VPS IP
 - `stats` -> VPS IP
 
-`chat.khovrov.dev` is served by the separate Open WebUI project under `/opt/personal-voice-assistant`; it is not managed by this repository's Docker Compose file.
+`chat.khovrov.dev` is routed by this repository's Caddy container to the separate Open WebUI project under `/opt/personal-voice-assistant`. Keep the Caddy route tracked in `ops/caddy/Caddyfile`; do not leave it as VPS-only state, because deploy cleanup replaces the Caddy config from Git.
 
 `.dev` domains require working HTTPS in browsers. Caddy handles certificates automatically after DNS resolves and ports `80` and `443` reach the VPS.
 
@@ -69,6 +69,24 @@ Create `/var/www/khovrov.dev/.env.production` from `.env.production.example` and
 
 Then the GitHub Actions workflow can deploy on pushes to `main`.
 
+## Caddy Basic Auth Hashes
+
+Some subdomains are additionally protected by Caddy basic auth. The hashes live only in `/var/www/khovrov.dev/.env.production`:
+
+```text
+CADDY_CHAT_ADMIN_HASH=<bcrypt hash>
+CADDY_KB_AUDIT_ADMIN_HASH=<bcrypt hash>
+CADDY_AUTOMATION_ADMIN_HASH=<bcrypt hash>
+```
+
+Generate a new hash on the VPS with:
+
+```bash
+docker exec khovrovdev-caddy-1 caddy hash-password --plaintext 'new-password'
+```
+
+Do not commit plaintext passwords or generated basic-auth hashes.
+
 ## Deploy Workflow Behavior
 
 The GitHub Actions workflow:
@@ -77,11 +95,51 @@ The GitHub Actions workflow:
 2. Cleans `/var/www/khovrov.dev` while preserving `.env.production`, `.env.production.*`, and `docker-data`.
 3. Uploads the repository to `/var/www/khovrov.dev`, excluding `.git`, `node_modules`, `.next`, `docker-data`, and real/local env files.
 4. Starts Postgres if needed.
-5. Builds the app image with `--no-cache` to avoid stale Next.js standalone output.
-6. Runs database migrations and admin initialization.
-7. Force-recreates the app and Caddy containers.
+5. Validates the Caddy config with production env values.
+6. Builds the app image with `--no-cache` to avoid stale Next.js standalone output.
+7. Runs database migrations and admin initialization.
+8. Force-recreates the app and Caddy containers.
 
 Do not store production secrets in the repository. The source upload intentionally does not overwrite `/var/www/khovrov.dev/.env.production`.
+
+## Subdomain Project Pattern
+
+The portfolio repo owns the public Caddy reverse proxy for `khovrov.dev`. Other projects may live in separate repos or `/opt/...` folders, but their public routes must still be tracked in this repo.
+
+For each independent project:
+
+1. Run the app in its own Docker Compose project.
+2. Attach the app service to the shared external network:
+
+   ```yaml
+   networks:
+     khovrovdev_default:
+       external: true
+   ```
+
+3. Give the app a stable network alias:
+
+   ```yaml
+   services:
+     my-app:
+       networks:
+         khovrovdev_default:
+           aliases:
+             - my-app
+   ```
+
+4. Add the public route in `ops/caddy/Caddyfile`:
+
+   ```caddyfile
+   my-app.khovrov.dev {
+     encode zstd gzip
+     reverse_proxy my-app:3000
+   }
+   ```
+
+5. If the route needs Caddy basic auth, put only the env variable name in `.env.example` and the real hash in `/var/www/khovrov.dev/.env.production`.
+
+Do not manually add VPS-only Caddy routes. The deploy workflow cleans and replaces the Caddy config from Git, so manual routes can disappear on the next deployment.
 
 ## Runtime Commands
 
@@ -91,6 +149,7 @@ From `/var/www/khovrov.dev`:
 docker compose --env-file .env.production ps
 docker compose --env-file .env.production logs -f app
 docker compose --env-file .env.production logs -f caddy
+docker compose --env-file .env.production run --rm --no-deps caddy caddy validate --config /etc/caddy/Caddyfile
 docker compose --env-file .env.production run --rm app npm run db:migrate
 docker compose --env-file .env.production run --rm app npm run db:init-admin
 ```
