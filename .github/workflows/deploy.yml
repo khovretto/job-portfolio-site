@@ -75,25 +75,26 @@ jobs:
 
       - name: Deploy on VPS
         run: |
-          ssh -i ~/.ssh/deploy_key "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" <<'EOF'
-            set -e
-            cd "${{ secrets.VPS_DEPLOY_PATH }}"
-            test -f .env.production
-            docker compose --env-file .env.production up -d --build postgres
-            docker compose --env-file .env.production run --rm --no-deps caddy caddy validate --config /etc/caddy/Caddyfile
-            docker compose --env-file .env.production build --no-cache app
-            docker compose --env-file .env.production run --rm app npm run db:migrate
-            docker compose --env-file .env.production run --rm app npm run db:init-admin
-            docker compose --env-file .env.production up -d --force-recreate --no-deps app
-            docker compose --env-file .env.production up -d --force-recreate --no-deps caddy
-            docker compose --env-file .env.production up -d --no-deps umami
-            docker compose --env-file .env.production ps
-            docker image prune -f
+          ssh -i ~/.ssh/deploy_key "${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}" 'bash -seuo pipefail' <<'EOF'
+          set -x
+          cd "${{ secrets.VPS_DEPLOY_PATH }}"
+          test -f .env.production
+          docker compose --env-file .env.production up -d --build postgres
+          docker compose --env-file .env.production run --rm --no-deps caddy caddy validate --config /etc/caddy/Caddyfile
+          docker compose --env-file .env.production build --no-cache app
+          docker compose --env-file .env.production run --rm app npm run db:migrate
+          docker compose --env-file .env.production run --rm app npm run db:init-admin
+          docker compose --env-file .env.production up -d --force-recreate --no-deps app
+          docker compose --env-file .env.production up -d --force-recreate --no-deps caddy
+          docker compose --env-file .env.production up -d --no-deps umami
+          docker compose --env-file .env.production ps
+          docker image prune -f
           EOF
 
       - name: Smoke test production
         run: |
           SITE_URL="https://khovrov.dev"
+          CHAT_URL="https://chat.khovrov.dev"
           for attempt in 1 2 3 4 5; do
             if curl -fsS "$SITE_URL/" >/dev/null; then
               break
@@ -104,6 +105,12 @@ jobs:
             fi
             sleep 5
           done
+
+          CHAT_STATUS="$(curl -sk -o /dev/null -w '%{http_code}' "$CHAT_URL/")"
+          if [ "$CHAT_STATUS" != "401" ]; then
+            echo "Chat smoke test expected 401, got $CHAT_STATUS" >&2
+            exit 1
+          fi
 
           curl -fsS \
             -H 'Content-Type: application/json' \
