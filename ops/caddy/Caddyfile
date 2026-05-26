@@ -14,11 +14,6 @@ stats.khovrov.dev {
 
 chat.khovrov.dev {
   encode zstd gzip
-
-  basic_auth {
-    admin {$CADDY_CHAT_ADMIN_HASH}
-  }
-
   reverse_proxy openwebui:8080
 }
 

@@ -107,11 +107,7 @@ jobs:
             sleep 5
           done
 
-          CHAT_STATUS="$(curl -sk -o /dev/null -w '%{http_code}' "$CHAT_URL/")"
-          if [ "$CHAT_STATUS" != "401" ]; then
-            echo "Chat smoke test expected 401, got $CHAT_STATUS" >&2
-            exit 1
-          fi
+          curl -fsS "$CHAT_URL/" >/dev/null
 
           curl -fsS \
             -H 'Content-Type: application/json' \

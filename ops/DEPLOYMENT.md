@@ -10,7 +10,7 @@ Point these A records to the VPS IPv4 address:
 - `www` -> VPS IP
 - `stats` -> VPS IP
 
-`chat.khovrov.dev` is routed by this repository's Caddy container to the separate Open WebUI project under `/opt/personal-voice-assistant`. Keep the Caddy route tracked in `ops/caddy/Caddyfile`; do not leave it as VPS-only state, because deploy cleanup replaces the Caddy config from Git.
+`chat.khovrov.dev` is routed by this repository's Caddy container to the separate Open WebUI project under `/opt/personal-voice-assistant`. Keep the Caddy route tracked in `ops/caddy/Caddyfile`; do not leave it as VPS-only state, because deploy cleanup replaces the Caddy config from Git. Do not put Caddy basic auth in front of Open WebUI; it conflicts with Open WebUI requests that use the `Authorization` header.
 
 `.dev` domains require working HTTPS in browsers. Caddy handles certificates automatically after DNS resolves and ports `80` and `443` reach the VPS.
 
@@ -74,7 +74,6 @@ Then the GitHub Actions workflow can deploy on pushes to `main`.
 Some subdomains are additionally protected by Caddy basic auth. The hashes live only in `/var/www/khovrov.dev/.env.production`:
 
 ```text
-CADDY_CHAT_ADMIN_HASH=<bcrypt hash>
 CADDY_KB_AUDIT_ADMIN_HASH=<bcrypt hash>
 CADDY_AUTOMATION_ADMIN_HASH=<bcrypt hash>
 ```

@@ -18,6 +18,7 @@ This file is for future Codex/AI sessions working on the portfolio.
 - Open WebUI adapter: `lib/assistant.ts`.
 - Model allowlist: `lib/assistant-models.ts`.
 - Editable prompt/context: `/admin/assistant`, backed by `assistant_config`.
+- `chat.khovrov.dev` should rely on Open WebUI's own login, not Caddy basic auth. Caddy basic auth conflicts with Open WebUI requests that use the `Authorization` header.
 
 The browser must never receive `OPENWEBUI_API_KEY`. Only `/api/chat` may call Open WebUI, and it must reject models outside the allowlist.
 
