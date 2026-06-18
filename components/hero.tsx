@@ -1,5 +1,6 @@
 import { contactLinks } from "@/lib/profile";
 import { ContactLink } from "@/components/contact-link";
+import { getMessages } from "@/lib/i18n/server";
 
 const tags = [
   "Voice agents",
@@ -13,7 +14,23 @@ const tags = [
   "Prompt Engineering",
 ];
 
-export function Hero() {
+// Renders text where [[...]] spans are highlighted with the accent color.
+function renderAccented(text: string) {
+  return text.split(/(\[\[.*?\]\])/g).map((part, index) => {
+    const match = part.match(/^\[\[(.*?)\]\]$/);
+    if (match) {
+      return (
+        <span key={index} style={{ color: "var(--accent)" }}>
+          {match[1]}
+        </span>
+      );
+    }
+    return <span key={index}>{part}</span>;
+  });
+}
+
+export async function Hero() {
+  const m = await getMessages();
   return (
     <section id="hero" style={{ paddingTop: 56, paddingBottom: 28 }}>
       <div className="container">
@@ -21,12 +38,12 @@ export function Hero() {
           <div aria-label="portrait placeholder" className="portrait-placeholder" />
           <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
             <span className="mono" style={{ color: "var(--ink-3)", fontSize: 11 }}>
-              {"// portfolio / v1 / 2026"}
+              {m.hero.kicker}
             </span>
             <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13.5, color: "var(--ink-2)", flexWrap: "wrap" }}>
               <strong style={{ color: "var(--ink)", fontWeight: 600 }}>Maksim Khovrov</strong>
               <span style={{ color: "var(--ink-4)" }}>/</span>
-              <span>Novi Sad, Serbia</span>
+              <span>{m.hero.location}</span>
               <span style={{ color: "var(--ink-4)" }}>/</span>
               <span className="mono" style={{ fontSize: 11, color: "var(--ink-3)" }}>
                 GMT+2
@@ -36,31 +53,25 @@ export function Hero() {
         </div>
 
         <h1 className="hero-title">
-          <span className="hero-role">AI Automation Engineer</span>
-          <span className="hero-statement">
-            building <span style={{ color: "var(--accent)" }}>production voice agents</span>,{" "}
-            <span style={{ color: "var(--accent)" }}>RAG systems</span> & automation workflows.
-          </span>
+          <span className="hero-role">{m.hero.role}</span>
+          <span className="hero-statement">{renderAccented(m.hero.statement)}</span>
         </h1>
 
-        <p className="hero-subline">
-          4.5 years in development and automation, with 2+ years focused on LLM systems and AI agents.
-          I combine engineering, evaluation and business judgement; I have managed a team of 10. Open to remote.
-        </p>
+        <p className="hero-subline">{m.hero.subline}</p>
 
         <div className="hero-actions" style={{ marginBottom: 18 }}>
           <ContactLink href="/cv.pdf" targetName="cv" className="btn primary lg">
-            Download CV
+            {m.hero.downloadCv}
           </ContactLink>
           <a href="#demos" className="btn lg">
-            Try the demos
+            {m.hero.tryDemos}
           </a>
           <ContactLink href={`mailto:${contactLinks.email}`} targetName="email" className="btn ghost lg">
-            Contact
+            {m.hero.contact}
           </ContactLink>
           <span style={{ flex: 1 }} />
           <span className="mono hero-shortcut" style={{ color: "var(--ink-4)", fontSize: 11 }}>
-            scroll down
+            {m.hero.scrollDown}
           </span>
         </div>
 

@@ -5,32 +5,16 @@ import { DemoAI } from "@/components/demos/demo-ai";
 import { DemoKB } from "@/components/demos/demo-kb";
 import { DemoConlang } from "@/components/demos/demo-conlang";
 import { trackEvent } from "@/components/event-tracker";
+import { useMessages } from "@/lib/i18n/provider";
 
 const demos = [
-  {
-    id: "ai",
-    num: "01",
-    title: "Personal AI Assistant",
-    sub: "Grounded chat: answers only from public knowledge about my work.",
-    component: DemoAI,
-  },
-  {
-    id: "kb",
-    num: "02",
-    title: "Public Knowledge Base Audit + RAG Builder",
-    sub: "Drop a URL and get an honest pipeline estimate: ETA, cost and confidence.",
-    component: DemoKB,
-  },
-  {
-    id: "conlang",
-    num: "03",
-    title: "Conlang + Audio Recognition",
-    sub: "150 generated words. Pick one, say it, and see what was heard.",
-    component: DemoConlang,
-  },
+  { id: "ai", num: "01", component: DemoAI },
+  { id: "kb", num: "02", component: DemoKB },
+  { id: "conlang", num: "03", component: DemoConlang },
 ] as const;
 
 export function Demos() {
+  const m = useMessages();
   const [active, setActive] = useState<(typeof demos)[number]["id"]>("ai");
   const current = demos.find((demo) => demo.id === active) || demos[0];
   const ActiveComponent = current.component;
@@ -54,12 +38,12 @@ export function Demos() {
             >
               <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <span className="mono" style={{ color: isActive ? "var(--accent)" : "var(--ink-4)" }}>
-                  module {demo.num}
+                  {m.demos.module} {demo.num}
                 </span>
                 {isActive ? <span className="dot live" /> : null}
               </span>
               <span style={{ fontSize: 14, fontWeight: 600, color: isActive ? "var(--ink)" : "var(--ink-2)" }}>
-                {demo.title}
+                {m.demos.items[demo.id].title}
               </span>
             </button>
           );
@@ -69,13 +53,13 @@ export function Demos() {
       <div className="demo-header">
         <div>
           <span className="mono" style={{ color: "var(--ink-4)" }}>
-            module {current.num} / active
+            {m.demos.module} {current.num} / {m.demos.active}
           </span>
           <h3 style={{ margin: "2px 0 4px", fontSize: 22, fontWeight: 600, letterSpacing: "-0.01em" }}>
-            {current.title}
+            {m.demos.items[current.id].title}
           </h3>
           <p style={{ margin: 0, color: "var(--ink-3)", fontSize: 13.5, maxWidth: 720 }}>
-            {current.sub}
+            {m.demos.items[current.id].sub}
           </p>
         </div>
         <div className="mono" style={{ color: "var(--ink-4)" }}>

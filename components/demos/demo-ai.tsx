@@ -2,6 +2,8 @@
 
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { trackEvent } from "@/components/event-tracker";
+import { useMessages } from "@/lib/i18n/provider";
+import type { Messages } from "@/lib/i18n/dictionaries";
 import {
   ASSISTANT_MODEL_OPTIONS,
   DEFAULT_ASSISTANT_MODEL,
@@ -29,18 +31,13 @@ type ChatResponse = {
   latencyMs: number;
 };
 
-const suggestions = [
-  "What RAG pipelines have you shipped?",
-  "How big a team have you led?",
-  "Walk me through your stack.",
-  "What sectors have you worked in?",
-];
-
 export function DemoAI() {
+  const m = useMessages();
+  const t = m.demoAi;
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      text: "Ask anything about my work. I answer only from public sources.",
+      text: t.initialMessage,
       sources: ["scope:public", "system"],
       confidence: 1,
     },
@@ -87,7 +84,7 @@ export function DemoAI() {
 
       if (!response.ok) {
         const body = (await response.json().catch(() => null)) as { error?: string } | null;
-        throw new Error(body?.error || "Chat request failed.");
+        throw new Error(body?.error || t.errorFallback);
       }
 
       const body = (await response.json()) as ChatResponse;
@@ -104,7 +101,7 @@ export function DemoAI() {
       ]);
       setLastStatus(body.mocked ? "mock" : "live");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Chat request failed.");
+      setError(err instanceof Error ? err.message : t.errorFallback);
       setLastStatus("error");
     } finally {
       setBusy(false);
@@ -157,9 +154,9 @@ export function DemoAI() {
           </div>
           <div ref={scrollRef} className="chat-log">
             {messages.map((message, index) => (
-              <Bubble key={`${message.role}-${index}`} message={message} />
+              <Bubble key={`${message.role}-${index}`} message={message} t={t} />
             ))}
-            {busy ? <LoadingBubble /> : null}
+            {busy ? <LoadingBubble t={t} /> : null}
             {error ? (
               <div className="surf-2" style={{ padding: 10, borderColor: "var(--bad)", color: "var(--bad)", fontSize: 13 }}>
                 failure / {error}
@@ -170,18 +167,18 @@ export function DemoAI() {
             <input
               value={input}
               onChange={(event) => setInput(event.target.value)}
-              placeholder="Ask about my work..."
+              placeholder={t.inputPlaceholder}
               className="chat-input"
             />
-            <button type="button" className="btn sm" disabled title="Audio input placeholder">
-              audio
+            <button type="button" className="btn sm" disabled title={t.audio}>
+              {t.audio}
             </button>
             <button type="submit" className="btn primary sm" disabled={busy || !input.trim()}>
-              {busy ? "..." : "send"}
+              {busy ? "..." : t.send}
             </button>
           </form>
           <div className="suggestions">
-            {suggestions.map((suggestion) => (
+            {t.suggestions.map((suggestion) => (
               <button key={suggestion} type="button" className="chip" onClick={() => void ask(suggestion)} disabled={busy}>
                 {suggestion}
               </button>
@@ -191,7 +188,7 @@ export function DemoAI() {
 
         <div className="side-panel">
           <div>
-            <span className="mono">integrations</span>
+            <span className="mono">{t.integrations}</span>
             <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 4 }}>
               {[
                 [
@@ -220,16 +217,17 @@ export function DemoAI() {
             </div>
           </div>
           <div>
-            <span className="mono">scope</span>
+            <span className="mono">{t.scopeLabel}</span>
             <p style={{ marginTop: 6, fontSize: 12.5, color: "var(--ink-3)" }}>
-              Answers are grounded on a public summary. Out-of-scope questions return a scope boundary instead of invented details.
+              {t.scopeText}
             </p>
           </div>
           <div style={{ marginTop: "auto", borderTop: "1px solid var(--line)", paddingTop: 10 }}>
-            <span className="mono">try this</span>
+            <span className="mono">{t.tryThis}</span>
             <ul style={{ margin: "6px 0 0", padding: "0 0 0 16px", color: "var(--ink-3)", fontSize: 12.5 }}>
-              <li>Ask something out of scope.</li>
-              <li>Ask a stack-specific question.</li>
+              {t.tryThisItems.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
             </ul>
           </div>
         </div>
@@ -238,13 +236,13 @@ export function DemoAI() {
   );
 }
 
-function Bubble({ message }: { message: Message }) {
+function Bubble({ message, t }: { message: Message; t: Messages["demoAi"] }) {
   const isUser = message.role === "user";
   return (
     <div className={`bubble ${isUser ? "user" : "assistant"}`}>
       <div style={{ display: "flex", justifyContent: "space-between", gap: 12, marginBottom: 4 }}>
         <span className="mono" style={{ color: "var(--ink-3)" }}>
-          {isUser ? "you" : "assistant"}
+          {isUser ? t.you : t.assistant}
         </span>
         {!isUser && message.confidence !== undefined ? (
           <span className="mono" style={{ color: "var(--ink-4)" }}>
@@ -276,13 +274,13 @@ function Bubble({ message }: { message: Message }) {
   );
 }
 
-function LoadingBubble() {
+function LoadingBubble({ t }: { t: Messages["demoAi"] }) {
   return (
     <div className="bubble assistant">
       <span className="mono" style={{ color: "var(--ink-3)" }}>
-        assistant
+        {t.assistant}
       </span>
-      <div style={{ marginTop: 6, color: "var(--ink-3)", fontSize: 13 }}>retrieving public context...</div>
+      <div style={{ marginTop: 6, color: "var(--ink-3)", fontSize: 13 }}>{t.loading}</div>
     </div>
   );
 }

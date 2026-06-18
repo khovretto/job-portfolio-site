@@ -6,8 +6,10 @@ import { Hero } from "@/components/hero";
 import { Nav } from "@/components/nav";
 import { Proof } from "@/components/proof";
 import { Stack } from "@/components/stack";
+import { getMessages } from "@/lib/i18n/server";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const m = await getMessages();
   return (
     <>
       <EventTracker />
@@ -19,7 +21,7 @@ export default function HomePage() {
           <div className="container">
             <div className="sec-hd">
               <span className="num">02</span>
-              <span className="name">interactive demos</span>
+              <span className="name">{m.sections.demos}</span>
               <span className="rule" />
             </div>
             <Demos />
@@ -29,7 +31,7 @@ export default function HomePage() {
           <div className="container">
             <div className="sec-hd">
               <span className="num">03</span>
-              <span className="name">experience / operating model</span>
+              <span className="name">{m.sections.experience}</span>
               <span className="rule" />
             </div>
             <Experience />
@@ -39,7 +41,7 @@ export default function HomePage() {
           <div className="container">
             <div className="sec-hd">
               <span className="num">04</span>
-              <span className="name">technical stack</span>
+              <span className="name">{m.sections.stack}</span>
               <span className="rule" />
             </div>
             <Stack />
@@ -49,14 +51,14 @@ export default function HomePage() {
           <div className="container">
             <div className="sec-hd">
               <span className="num">05</span>
-              <span className="name">contact</span>
+              <span className="name">{m.sections.contact}</span>
               <span className="rule" />
             </div>
             <Contact />
           </div>
         </section>
       </main>
-      <a href="/cv.pdf" className="btn primary floating-cv" aria-label="Download CV">
+      <a href="/cv.pdf" className="btn primary floating-cv" aria-label={m.hero.downloadCv}>
         <span>CV</span>
       </a>
     </>

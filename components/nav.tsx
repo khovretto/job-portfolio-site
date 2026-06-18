@@ -2,18 +2,17 @@
 
 import { useEffect, useState } from "react";
 import { trackEvent } from "@/components/event-tracker";
+import { useMessages } from "@/lib/i18n/provider";
+import { LanguageToggle } from "@/components/language-toggle";
 
-const links = [
-  ["numbers", "01 / numbers"],
-  ["demos", "02 / demos"],
-  ["experience", "03 / experience"],
-  ["stack", "04 / stack"],
-  ["contact", "05 / contact"],
-] as const;
+const linkIds = ["numbers", "demos", "experience", "stack", "contact"] as const;
 
 export function Nav() {
+  const m = useMessages();
   const [active, setActive] = useState("hero");
   const [theme, setTheme] = useState<"dark" | "light">("dark");
+
+  const links = linkIds.map((id, index) => [id, `0${index + 1} / ${m.nav.links[id]}`] as const);
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
@@ -44,7 +43,7 @@ export function Nav() {
           <span className="mark">MK</span>
           <span>Maksim Khovrov</span>
           <span className="mono" style={{ color: "var(--ink-4)", marginLeft: 4 }}>
-            / AI Automation Engineer
+            / {m.nav.role}
           </span>
         </a>
         <div className="nav-links">
@@ -57,8 +56,9 @@ export function Nav() {
         <div className="nav-cta">
           <span className="status">
             <span className="dot ok live" />
-            <span>open to remote</span>
+            <span>{m.nav.status}</span>
           </span>
+          <LanguageToggle />
           <button
             className="btn sm"
             type="button"
@@ -67,10 +67,10 @@ export function Nav() {
               setTheme(next);
               trackEvent("theme_toggle", { theme: next });
             }}
-            aria-label="Toggle theme"
-            title={`Switch to ${theme === "dark" ? "light" : "dark"}`}
+            aria-label={theme === "dark" ? m.nav.switchToLight : m.nav.switchToDark}
+            title={theme === "dark" ? m.nav.switchToLight : m.nav.switchToDark}
           >
-            <span>{theme === "dark" ? "Dark" : "Light"}</span>
+            <span>{theme === "dark" ? m.nav.themeDark : m.nav.themeLight}</span>
           </button>
           <a
             href="/cv.pdf"

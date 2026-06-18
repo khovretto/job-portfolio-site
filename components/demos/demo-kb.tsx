@@ -2,6 +2,8 @@
 
 import { useRef, useState } from "react";
 import { trackEvent } from "@/components/event-tracker";
+import { useMessages } from "@/lib/i18n/provider";
+import type { Messages } from "@/lib/i18n/dictionaries";
 
 const stages = [
   { id: "crawl", label: "crawl", detail: "fetch + dedupe pages" },
@@ -21,21 +23,23 @@ type Result = {
   confidence: number;
 };
 
-function validatePublicUrl(input: string) {
+function validatePublicUrl(input: string, errors: Messages["demoKb"]["errors"]) {
   try {
     const url = new URL(input);
-    if (!["http:", "https:"].includes(url.protocol)) return "Only http/https URLs are allowed.";
+    if (!["http:", "https:"].includes(url.protocol)) return errors.protocol;
     if (/(^localhost$)|(^127\.)|(^0\.0\.0\.0$)|(^10\.)|(^192\.168\.)|(\.local$)/i.test(url.hostname)) {
-      return "Private and local hosts are blocked.";
+      return errors.privateHost;
     }
-    if (/example\.(com|org|net)$/i.test(url.hostname)) return "example.* is blocked; use a real public URL.";
+    if (/example\.(com|org|net)$/i.test(url.hostname)) return errors.exampleHost;
     return null;
   } catch {
-    return "That does not look like a valid URL.";
+    return errors.invalid;
   }
 }
 
 export function DemoKB() {
+  const m = useMessages();
+  const t = m.demoKb;
   const [url, setUrl] = useState("");
   const [email, setEmail] = useState("");
   const [company, setCompany] = useState("");
@@ -54,7 +58,7 @@ export function DemoKB() {
     setActive(null);
     cancelRef.current = false;
 
-    const validation = validatePublicUrl(url);
+    const validation = validatePublicUrl(url, t.errors);
     if (validation) {
       setError(validation);
       trackEvent("audit_validation_failed", { reason: validation });
@@ -88,13 +92,13 @@ export function DemoKB() {
         body: JSON.stringify({ url, email, company }),
       });
       const body = (await response.json()) as Result | { error: string };
-      if (!response.ok || "error" in body) throw new Error("error" in body ? body.error : "Audit failed.");
+      if (!response.ok || "error" in body) throw new Error("error" in body ? body.error : t.errors.auditFailed);
       setResult(body);
       setDone(true);
       setActive(null);
       trackEvent("audit_completed", { host: new URL(url).host });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Audit estimate failed.");
+      setError(err instanceof Error ? err.message : t.errors.auditEstimateFailed);
       setActive(null);
     }
   }
@@ -128,24 +132,24 @@ export function DemoKB() {
 
       <div className="two-pane equal">
         <div className="pane divider-right">
-          <span className="mono">inputs</span>
+          <span className="mono">{t.inputs}</span>
           <div className="form-stack">
             <input
-              placeholder="https://your-public-site.com"
+              placeholder={t.urlPlaceholder}
               value={url}
               onChange={(event) => setUrl(event.target.value)}
               className="form-input mono-input"
             />
             <div className="form-row">
-              <input placeholder="email (optional)" value={email} onChange={(event) => setEmail(event.target.value)} className="form-input" />
-              <input placeholder="company (optional)" value={company} onChange={(event) => setCompany(event.target.value)} className="form-input" />
+              <input placeholder={t.emailPlaceholder} value={email} onChange={(event) => setEmail(event.target.value)} className="form-input" />
+              <input placeholder={t.companyPlaceholder} value={company} onChange={(event) => setCompany(event.target.value)} className="form-input" />
             </div>
             <div style={{ display: "flex", gap: 8, marginTop: 4, flexWrap: "wrap" }}>
               <button className="btn primary" type="button" onClick={() => void run()} disabled={Boolean(active)}>
-                {active ? "running..." : "estimate"}
+                {active ? t.running : t.estimate}
               </button>
               <button className="btn" type="button" onClick={reset}>
-                reset
+                {t.reset}
               </button>
               {error ? (
                 <span className="mono" style={{ color: "var(--bad)", alignSelf: "center" }}>
@@ -155,12 +159,12 @@ export function DemoKB() {
             </div>
           </div>
           <p style={{ marginTop: 16, fontSize: 12.5, color: "var(--ink-3)" }}>
-            This simulates the audit shape: scope, chunk, embed and run a quick retrieval estimate with a confidence number.
+            {t.description}
           </p>
         </div>
 
         <div className="pane">
-          <span className="mono">pipeline</span>
+          <span className="mono">{t.pipeline}</span>
           <div className="pipeline-stack">
             {stages.map((stage) => {
               const percent = progress[stage.id] ?? 0;

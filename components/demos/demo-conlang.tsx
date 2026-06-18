@@ -2,6 +2,7 @@
 
 import { useMemo, useRef, useState } from "react";
 import { trackEvent } from "@/components/event-tracker";
+import { useMessages } from "@/lib/i18n/provider";
 
 type SpeechRecognitionConstructor = new () => SpeechRecognitionLike;
 type SpeechRecognitionLike = {
@@ -93,6 +94,8 @@ type Heard = {
 };
 
 export function DemoConlang() {
+  const m = useMessages();
+  const t = m.demoConlang;
   const [seed, setSeed] = useState(0xcafe);
   const lexicon = useMemo(() => generateLexicon(150, seed), [seed]);
   const [query, setQuery] = useState("");
@@ -188,9 +191,9 @@ export function DemoConlang() {
               setQuery("");
               trackEvent("conlang_regenerate");
             }}
-            title="Regenerate the lexicon with a new seed"
+            title={t.newSet}
           >
-            new set
+            {t.newSet}
           </button>
           <span className="mono">
             {filtered.length} / {lexicon.length}
@@ -201,7 +204,7 @@ export function DemoConlang() {
       <div className="two-pane">
         <div className="pane divider-right">
           <input
-            placeholder="search the lexicon..."
+            placeholder={t.searchPlaceholder}
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             className="form-input mono-input"
@@ -209,7 +212,7 @@ export function DemoConlang() {
           <div className="lexicon-grid">
             {filtered.length === 0 ? (
               <span className="mono" style={{ color: "var(--ink-4)", padding: 8 }}>
-                no matches.
+                {t.noMatches}
               </span>
             ) : null}
             {filtered.map((word) => (
@@ -230,38 +233,38 @@ export function DemoConlang() {
           </div>
           {picked ? (
             <div className="surf-2" style={{ marginTop: 10, padding: 10 }}>
-              <span className="mono">selected</span>
+              <span className="mono">{t.selected}</span>
               <div style={{ marginTop: 4, fontFamily: "var(--mono)", fontSize: 18, color: "var(--ink)" }}>{picked}</div>
               <span className="mono" style={{ color: "var(--ink-4)" }}>
-                say it; the recognizer will tell you what it heard.
+                {t.selectedHint}
               </span>
             </div>
           ) : null}
         </div>
 
         <div className="pane" style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <span className="mono">audio / pick a word + say it</span>
+          <span className="mono">{t.audioLabel}</span>
           {!supported ? (
             <div className="surf-2" style={{ padding: 12, borderColor: "var(--warn)" }}>
               <span className="mono" style={{ color: "var(--warn)" }}>
                 failure
               </span>
               <p style={{ marginTop: 6, fontSize: 13, color: "var(--ink-2)" }}>
-                Your browser does not support the Web Speech API. Try Chrome or Safari.
+                {t.unsupported}
               </p>
             </div>
           ) : (
             <>
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                 <button type="button" onClick={listening ? stop : start} className={listening ? "btn primary" : "btn"} style={{ minWidth: 120 }}>
-                  {listening ? "stop" : "record"}
+                  {listening ? t.stop : t.record}
                 </button>
                 <Wave on={listening} />
               </div>
               {heard ? (
                 <div className="surf-2" style={{ padding: 12 }}>
                   <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <span className="mono">heard</span>
+                    <span className="mono">{t.heard}</span>
                     <span className="mono" style={{ color: "var(--ink-4)" }}>
                       conf {heard.confidence.toFixed(2)}
                     </span>
@@ -291,7 +294,7 @@ export function DemoConlang() {
               ) : null}
               {!heard && !listening && !error ? (
                 <p className="mono" style={{ color: "var(--ink-4)", textTransform: "none", letterSpacing: ".02em", fontSize: 12 }}>
-                  empty / pick a word from the lexicon and try saying it. the recognizer scores closeness with edit distance.
+                  {t.emptyHint}
                 </p>
               ) : null}
             </>

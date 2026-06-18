@@ -1,0 +1,213 @@
+{
+  "meta": {
+    "title": "Maksim Khovrov | AI Automation Engineer",
+    "description": "AI Automation Engineer building production voice agents, RAG systems, and automation workflows.",
+    "ogDescription": "Production voice agents, RAG systems, automation workflows, and public project demos."
+  },
+  "nav": {
+    "role": "AI Automation Engineer",
+    "links": {
+      "numbers": "numbers",
+      "demos": "demos",
+      "experience": "experience",
+      "stack": "stack",
+      "contact": "contact"
+    },
+    "status": "open to remote",
+    "themeDark": "Dark",
+    "themeLight": "Light",
+    "switchToDark": "Switch to dark",
+    "switchToLight": "Switch to light",
+    "language": "Language"
+  },
+  "sections": {
+    "demos": "interactive demos",
+    "experience": "experience / operating model",
+    "stack": "technical stack",
+    "contact": "contact"
+  },
+  "hero": {
+    "kicker": "// portfolio / v1 / 2026",
+    "location": "Novi Sad, Serbia",
+    "role": "AI Automation Engineer",
+    "statement": "building [[production voice agents]], [[RAG systems]] & automation workflows.",
+    "subline": "4.5 years in development and automation, with 2+ years focused on LLM systems and AI agents. I combine engineering, evaluation and business judgement; I have managed a team of 10. Open to remote.",
+    "downloadCv": "Download CV",
+    "tryDemos": "Try the demos",
+    "contact": "Contact",
+    "scrollDown": "scroll down"
+  },
+  "proof": {
+    "heading": "numbers",
+    "note": "anonymized / production figures",
+    "tiles": {
+      "voiceRobots": {
+        "label": "voice robots",
+        "hint": "launched into production",
+        "sub": "medical / retail / recruitment / finance / municipal"
+      },
+      "ragAccuracy": {
+        "label": "rag accuracy",
+        "hint": "3 pipelines / Qdrant + Zep"
+      },
+      "deals": {
+        "label": "deals supported",
+        "hint": "15+ technical audits + commercial proposals"
+      },
+      "team": {
+        "label": "team scaled",
+        "hint": "during automation team restructuring"
+      }
+    },
+    "sectorsLabel": "sectors shipped",
+    "sectors": [
+      "medical",
+      "retail",
+      "recruitment",
+      "finance",
+      "municipal infrastructure",
+      "b2c support"
+    ]
+  },
+  "experience": {
+    "roleLabel": "role",
+    "roleTitle": "Project Manager / Automation Engineer",
+    "company": "[Company anonymized]",
+    "period": "2020 - 2024 / 4 yrs 5 mo",
+    "keyWinsLabel": "key wins",
+    "wins": [
+      "Launched 30+ voice robots into production across medical, retail, recruitment, finance and municipal sectors.",
+      "Designed and deployed 3 RAG pipelines with Qdrant and Zep, improving reported response accuracy from 70% to 98%.",
+      "Stood up an internal voice AI with RAG for company B2C customer interactions.",
+      "Conducted 15+ technical audits and supported commercial proposals that closed $400K+ in deals.",
+      "Core developer through restructuring: onboarded specialists and scaled the team from 3 to 10+."
+    ],
+    "responsibilitiesLabel": "responsibilities",
+    "responsibilities": [
+      "Integration architecture with Bitrix24, amoCRM, 1C and IP telephony.",
+      "Custom business logic in n8n with JavaScript and Python functions.",
+      "RAG pipeline ownership: dataset prep, vector store config, retriever tuning.",
+      "Prompt engineering and scenario design for higher LLM accuracy.",
+      "Alerting and error handling for external APIs.",
+      "Mentoring, code review, internal knowledge-base maintenance."
+    ],
+    "operateLabel": "how i operate",
+    "operateTitle": "Operating loop",
+    "loop": [
+      {
+        "title": "requirements + decomposition",
+        "description": "Translate ambiguous asks into specs and testable cases."
+      },
+      {
+        "title": "integration architecture",
+        "description": "Sketch data flow, external systems and failure modes before coding."
+      },
+      {
+        "title": "build + ship",
+        "description": "Use JS, Python and n8n with version control, review and runbooks."
+      },
+      {
+        "title": "evaluate + tune",
+        "description": "Use eval sets, prompt iteration, retriever tuning and latency budgets."
+      },
+      {
+        "title": "monitor + handoff",
+        "description": "Add alerting, Swagger docs and knowledge transfer to the next owner."
+      }
+    ],
+    "educationLabel": "education",
+    "educationTitle": "Computer Science and Software Engineering studies",
+    "educationSub": "Software Engineering"
+  },
+  "stack": {
+    "groups": {
+      "languages": "languages",
+      "aiData": "ai / data",
+      "automation": "automation",
+      "dataCrm": "data / crm"
+    }
+  },
+  "contact": {
+    "label": "contact",
+    "title": "Hire a reliable AI engineer.",
+    "body": "Open to remote AI development, automation, or technical product management. Based in Novi Sad (GMT+2), comfortable with EU and US-East overlap.",
+    "privacy": "Privacy note: demo interactions may be logged for diagnostics. Raw IP addresses are not stored.",
+    "emailMe": "Email me",
+    "downloadCv": "Download CV",
+    "open": "open"
+  },
+  "demos": {
+    "module": "module",
+    "active": "active",
+    "items": {
+      "ai": {
+        "title": "Personal AI Assistant",
+        "sub": "Grounded chat: answers only from public knowledge about my work."
+      },
+      "kb": {
+        "title": "Public Knowledge Base Audit + RAG Builder",
+        "sub": "Drop a URL and get an honest pipeline estimate: ETA, cost and confidence."
+      },
+      "conlang": {
+        "title": "Conlang + Audio Recognition",
+        "sub": "150 generated words. Pick one, say it, and see what was heard."
+      }
+    }
+  },
+  "demoAi": {
+    "initialMessage": "Ask anything about my work. I answer only from public sources.",
+    "suggestions": [
+      "What RAG pipelines have you shipped?",
+      "How big a team have you led?",
+      "Walk me through your stack.",
+      "What sectors have you worked in?"
+    ],
+    "inputPlaceholder": "Ask about my work...",
+    "audio": "audio",
+    "send": "send",
+    "integrations": "integrations",
+    "scopeLabel": "scope",
+    "scopeText": "Answers are grounded on a public summary. Out-of-scope questions return a scope boundary instead of invented details.",
+    "tryThis": "try this",
+    "tryThisItems": [
+      "Ask something out of scope.",
+      "Ask a stack-specific question."
+    ],
+    "you": "you",
+    "assistant": "assistant",
+    "loading": "retrieving public context...",
+    "errorFallback": "Chat request failed."
+  },
+  "demoKb": {
+    "inputs": "inputs",
+    "pipeline": "pipeline",
+    "urlPlaceholder": "https://your-public-site.com",
+    "emailPlaceholder": "email (optional)",
+    "companyPlaceholder": "company (optional)",
+    "estimate": "estimate",
+    "running": "running...",
+    "reset": "reset",
+    "description": "This simulates the audit shape: scope, chunk, embed and run a quick retrieval estimate with a confidence number.",
+    "errors": {
+      "protocol": "Only http/https URLs are allowed.",
+      "privateHost": "Private and local hosts are blocked.",
+      "exampleHost": "example.* is blocked; use a real public URL.",
+      "invalid": "That does not look like a valid URL.",
+      "auditFailed": "Audit failed.",
+      "auditEstimateFailed": "Audit estimate failed."
+    }
+  },
+  "demoConlang": {
+    "newSet": "new set",
+    "searchPlaceholder": "search the lexicon...",
+    "noMatches": "no matches.",
+    "selected": "selected",
+    "selectedHint": "say it; the recognizer will tell you what it heard.",
+    "audioLabel": "audio / pick a word + say it",
+    "unsupported": "Your browser does not support the Web Speech API. Try Chrome or Safari.",
+    "record": "record",
+    "stop": "stop",
+    "heard": "heard",
+    "emptyHint": "empty / pick a word from the lexicon and try saying it. the recognizer scores closeness with edit distance."
+  }
+}
