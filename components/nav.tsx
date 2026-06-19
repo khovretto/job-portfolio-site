@@ -4,6 +4,24 @@ import { useEffect, useState } from "react";
 import { trackEvent } from "@/components/event-tracker";
 import { useMessages } from "@/lib/i18n/provider";
 import { LanguageToggle } from "@/components/language-toggle";
+import { CvDownload } from "@/components/cv-download";
+
+function SunIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4" />
+    </svg>
+  );
+}
+
+function MoonIcon() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />
+    </svg>
+  );
+}
 
 const linkIds = ["numbers", "demos", "experience", "stack", "contact"] as const;
 
@@ -60,7 +78,7 @@ export function Nav() {
           </span>
           <LanguageToggle />
           <button
-            className="btn sm"
+            className="btn sm icon-btn"
             type="button"
             onClick={() => {
               const next = theme === "dark" ? "light" : "dark";
@@ -70,15 +88,9 @@ export function Nav() {
             aria-label={theme === "dark" ? m.nav.switchToLight : m.nav.switchToDark}
             title={theme === "dark" ? m.nav.switchToLight : m.nav.switchToDark}
           >
-            <span>{theme === "dark" ? m.nav.themeDark : m.nav.themeLight}</span>
+            {theme === "dark" ? <SunIcon /> : <MoonIcon />}
           </button>
-          <a
-            href="/cv.pdf"
-            className="btn primary sm"
-            onClick={() => trackEvent("contact_click", { target: "cv", source: "nav" })}
-          >
-            <span>CV.pdf</span>
-          </a>
+          <CvDownload className="btn primary sm">CV</CvDownload>
         </div>
       </div>
     </nav>

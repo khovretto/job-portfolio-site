@@ -14,11 +14,14 @@
       "contact": "contact"
     },
     "status": "open to remote",
-    "themeDark": "Dark",
-    "themeLight": "Light",
-    "switchToDark": "Switch to dark",
-    "switchToLight": "Switch to light",
+    "switchToDark": "Switch to dark theme",
+    "switchToLight": "Switch to light theme",
     "language": "Language"
+  },
+  "cv": {
+    "otherPrompt": "Need another language?",
+    "english": "English",
+    "russian": "Russian"
   },
   "sections": {
     "demos": "interactive demos",
@@ -30,12 +33,12 @@
     "kicker": "// portfolio / v1 / 2026",
     "location": "Novi Sad, Serbia",
     "role": "AI Automation Engineer",
-    "statement": "building [[production voice agents]], [[RAG systems]] & automation workflows.",
-    "subline": "4.5 years in development and automation, with 2+ years focused on LLM systems and AI agents. I combine engineering, evaluation and business judgement; I have managed a team of 10. Open to remote.",
+    "tagline": "I build [[AI agents]] that run in production.",
+    "subline": "4.5 years in development and automation, 2+ focused on LLM systems and AI agents. Open to remote.",
+    "demoPrompt": "Don't take my word for it — try three live demos below.",
     "downloadCv": "Download CV",
     "tryDemos": "Try the demos",
-    "contact": "Contact",
-    "scrollDown": "scroll down"
+    "contact": "Contact"
   },
   "proof": {
     "heading": "numbers",

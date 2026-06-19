@@ -15,6 +15,8 @@ import {
   DEFAULT_PUBLIC_CONTEXT,
   DEFAULT_SYSTEM_PROMPT,
 } from "@/lib/assistant-config";
+import { deleteCvFile, upsertCvFile } from "@/lib/cv-data";
+import { isLocale } from "@/lib/i18n/config";
 
 export type LoginState = { error: string };
 
@@ -74,6 +76,52 @@ export async function updateAssistantConfigAction(formData: FormData) {
 
   revalidatePath("/admin/assistant");
   redirect("/admin/assistant?saved=1");
+}
+
+const MAX_CV_BYTES = 8 * 1024 * 1024;
+
+export async function uploadCvAction(formData: FormData) {
+  await requireAdmin();
+
+  const locale = String(formData.get("locale") || "");
+  if (!isLocale(locale)) {
+    redirect("/admin/cv?error=locale");
+  }
+
+  const file = formData.get("file");
+  if (!(file instanceof File) || file.size === 0) {
+    redirect(`/admin/cv?error=empty`);
+  }
+
+  if (file.size > MAX_CV_BYTES) {
+    redirect(`/admin/cv?error=size`);
+  }
+
+  const isPdf =
+    file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
+  if (!isPdf) {
+    redirect(`/admin/cv?error=type`);
+  }
+
+  const buffer = Buffer.from(await file.arrayBuffer());
+  const filename = file.name.trim() || `cv-${locale}.pdf`;
+  await upsertCvFile(locale, filename, "application/pdf", buffer);
+
+  revalidatePath("/admin/cv");
+  redirect("/admin/cv?saved=1");
+}
+
+export async function deleteCvAction(formData: FormData) {
+  await requireAdmin();
+
+  const locale = String(formData.get("locale") || "");
+  if (!isLocale(locale)) {
+    redirect("/admin/cv?error=locale");
+  }
+
+  await deleteCvFile(locale);
+  revalidatePath("/admin/cv");
+  redirect("/admin/cv?saved=deleted");
 }
 
 export async function resetAssistantConfigAction() {

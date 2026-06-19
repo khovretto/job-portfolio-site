@@ -1,4 +1,5 @@
 import { ContactLink } from "@/components/contact-link";
+import { CvDownload } from "@/components/cv-download";
 import { contactLinks } from "@/lib/profile";
 import { getMessages } from "@/lib/i18n/server";
 
@@ -27,29 +28,30 @@ export async function Contact() {
           <ContactLink href={`mailto:${contactLinks.email}`} targetName="email" className="btn primary lg">
             {m.contact.emailMe}
           </ContactLink>
-          <ContactLink href="/cv.pdf" targetName="cv" className="btn lg">
-            {m.contact.downloadCv}
-          </ContactLink>
+          <CvDownload className="btn lg">{m.contact.downloadCv}</CvDownload>
         </div>
       </div>
       <div style={{ display: "flex", flexDirection: "column" }}>
-        {links.map((link, index) => (
+        {links.map((link) => (
           <ContactLink key={link.key} href={link.href} targetName={link.target} className="contact-row">
-            <span className="mono">{link.key}</span>
-            <span style={{ fontFamily: "var(--mono)", fontSize: 13.5, color: link.target === "email" ? "var(--accent)" : "var(--ink)" }}>
+            <span className="mono contact-row-key">{link.key}</span>
+            <span
+              className="contact-row-value"
+              style={{ color: link.target === "email" ? "var(--accent)" : "var(--ink)" }}
+            >
               {link.value}
             </span>
-            <span style={{ color: "var(--ink-4)", textAlign: "right" }}>{m.contact.open}</span>
+            <span className="mono contact-row-open">{m.contact.open}</span>
           </ContactLink>
         ))}
       </div>
       <style>{`
         .contact-row {
           display: grid;
-          grid-template-columns: 90px 1fr 42px;
+          grid-template-columns: auto minmax(0, 1fr) auto;
           gap: 12px;
           align-items: center;
-          padding: 14px 4px;
+          padding: 14px 8px;
           border-top: 1px dashed var(--line);
           color: var(--ink);
           border-radius: 6px;
@@ -59,6 +61,35 @@ export async function Contact() {
         }
         .contact-row:hover {
           background: var(--surf-2);
+        }
+        .contact-row-key {
+          color: var(--ink-3);
+        }
+        .contact-row-value {
+          min-width: 0;
+          font-family: var(--mono);
+          font-size: 13.5px;
+          overflow-wrap: anywhere;
+        }
+        .contact-row-open {
+          justify-self: end;
+          color: var(--ink-4);
+          font-size: 11px;
+          white-space: nowrap;
+        }
+        @media (max-width: 520px) {
+          .contact-row {
+            grid-template-columns: auto minmax(0, 1fr);
+            gap: 4px 10px;
+            padding: 12px 6px;
+          }
+          .contact-row-value {
+            grid-column: 1 / -1;
+          }
+          .contact-row-open {
+            grid-row: 1;
+            grid-column: 2;
+          }
         }
       `}</style>
     </div>

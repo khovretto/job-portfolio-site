@@ -303,7 +303,9 @@ button:disabled {
 .nav-links {
   display: flex;
   gap: 4px;
-  margin-left: 18px;
+  margin-left: 10px;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .nav-links a {
@@ -326,6 +328,7 @@ button:disabled {
   align-items: center;
   gap: 8px;
   margin-left: auto;
+  flex-shrink: 0;
 }
 
 .status {
@@ -369,6 +372,43 @@ button:disabled {
 .lang-option.active {
   background: var(--accent);
   color: var(--accent-ink);
+}
+
+.icon-btn {
+  padding: 6px;
+  width: 30px;
+  height: 30px;
+}
+
+.cv-download {
+  position: relative;
+  display: inline-flex;
+}
+
+.cv-popup {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-sm);
+  box-shadow: var(--shadow);
+  white-space: nowrap;
+}
+
+.cv-popup-prompt {
+  color: var(--ink-3);
+  font-size: 11px;
+}
+
+.cv-popup-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
 }
 
 section {
@@ -443,16 +483,16 @@ section {
   line-height: 1.08;
 }
 
-.hero-statement {
+.hero-tagline {
   display: block;
   color: var(--ink);
-  font-size: clamp(40px, 6.6vw, 84px);
-  line-height: 1.02;
+  font-size: clamp(30px, 4.8vw, 58px);
+  line-height: 1.05;
 }
 
 .hero-subline {
-  max-width: 720px;
-  margin: 0 0 28px;
+  max-width: 680px;
+  margin: 0 0 22px;
   color: var(--ink-2);
   font-size: 16.5px;
 }
@@ -465,17 +505,20 @@ section {
   align-items: center;
 }
 
-.tag-rail {
-  gap: 6px;
-  margin-top: 4px;
+.hero-demo-cta {
+  gap: 10px;
 }
 
-.floating-cv {
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
-  z-index: 30;
-  box-shadow: var(--shadow);
+.hero-demo-hint {
+  margin: 12px 0 0;
+  color: var(--ink-3);
+  font-size: 12px;
+  letter-spacing: 0.01em;
+}
+
+.tag-rail {
+  gap: 6px;
+  margin-top: 22px;
 }
 
 .proof-grid,
@@ -892,7 +935,7 @@ section {
   padding: 24px;
 }
 
-@media (max-width: 880px) {
+@media (max-width: 960px) {
   .nav-links {
     display: none;
   }
@@ -949,13 +992,8 @@ section {
     grid-template-columns: 96px 1fr 34px;
   }
 
-  .hero-statement {
-    font-size: clamp(38px, 13vw, 58px);
-  }
-
-  .floating-cv {
-    right: 14px;
-    bottom: 14px;
+  .hero-tagline {
+    font-size: clamp(30px, 9vw, 46px);
   }
 }
 

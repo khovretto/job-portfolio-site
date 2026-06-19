@@ -1,5 +1,6 @@
 import { contactLinks } from "@/lib/profile";
 import { ContactLink } from "@/components/contact-link";
+import { CvDownload } from "@/components/cv-download";
 import { getMessages } from "@/lib/i18n/server";
 
 const tags = [
@@ -54,26 +55,23 @@ export async function Hero() {
 
         <h1 className="hero-title">
           <span className="hero-role">{m.hero.role}</span>
-          <span className="hero-statement">{renderAccented(m.hero.statement)}</span>
+          <span className="hero-tagline">{renderAccented(m.hero.tagline)}</span>
         </h1>
 
         <p className="hero-subline">{m.hero.subline}</p>
 
-        <div className="hero-actions" style={{ marginBottom: 18 }}>
-          <ContactLink href="/cv.pdf" targetName="cv" className="btn primary lg">
-            {m.hero.downloadCv}
-          </ContactLink>
-          <a href="#demos" className="btn lg">
+        <div className="hero-actions">
+          <a href="#demos" className="btn primary lg hero-demo-cta">
             {m.hero.tryDemos}
+            <span aria-hidden="true">↓</span>
           </a>
+          <CvDownload className="btn lg">{m.hero.downloadCv}</CvDownload>
           <ContactLink href={`mailto:${contactLinks.email}`} targetName="email" className="btn ghost lg">
             {m.hero.contact}
           </ContactLink>
-          <span style={{ flex: 1 }} />
-          <span className="mono hero-shortcut" style={{ color: "var(--ink-4)", fontSize: 11 }}>
-            {m.hero.scrollDown}
-          </span>
         </div>
+
+        <p className="hero-demo-hint mono">{m.hero.demoPrompt}</p>
 
         <div className="tag-rail">
           {tags.map((tag) => (

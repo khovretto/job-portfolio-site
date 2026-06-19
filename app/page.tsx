@@ -58,9 +58,6 @@ export default async function HomePage() {
           </div>
         </section>
       </main>
-      <a href="/cv.pdf" className="btn primary floating-cv" aria-label={m.hero.downloadCv}>
-        <span>CV</span>
-      </a>
     </>
   );
 }
