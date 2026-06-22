@@ -20,6 +20,7 @@
   },
   "cv": {
     "otherPrompt": "Нужна другая версия?",
+    "opening": "Открываю в новой вкладке…",
     "english": "English",
     "russian": "Русский"
   },
