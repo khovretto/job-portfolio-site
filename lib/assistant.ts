@@ -69,6 +69,84 @@ const openWebUiResponseSchema = z
   })
   .passthrough();
 
+const brokerSearchSchema = z
+  .object({
+    citations: z
+      .array(
+        z
+          .object({
+            title: z.string().nullish(),
+            heading_path: z.array(z.string()).nullish(),
+            snippet: z.string().nullish(),
+            source_path: z.string().nullish(),
+          })
+          .passthrough(),
+      )
+      .default([]),
+  })
+  .passthrough();
+
+export type RetrievedKnowledge = { context: string; sources: string[] };
+
+// Deterministic RAG: query the profile-pinned career_public broker ourselves and
+// inject the retrieved snippets into the prompt, rather than relying on Open WebUI
+// to invoke an OpenAPI tool (which a plain /api/chat/completions call does not do
+// reliably). Fails open to no-context so a broker hiccup never breaks the demo.
+export async function retrievePublicKnowledge(query: string): Promise<RetrievedKnowledge> {
+  const token = process.env.MNM_BROKER_TOKEN;
+  if (!token) return { context: "", sources: [] };
+
+  const baseUrl = (
+    process.env.MNM_BROKER_URL || "http://mnemosyne-broker-api-public:8765"
+  ).replace(/\/+$/, "");
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 8_000);
+
+  try {
+    const response = await fetch(`${baseUrl}/search`, {
+      method: "POST",
+      signal: controller.signal,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query,
+        top_k: 5,
+        include_snippets: true,
+        snippet_chars: 700,
+      }),
+    });
+
+    if (!response.ok) return { context: "", sources: [] };
+
+    const parsed = brokerSearchSchema.safeParse(await response.json());
+    if (!parsed.success) return { context: "", sources: [] };
+
+    const cites = parsed.data.citations.filter(
+      (c) => (c.snippet || "").trim().length > 0,
+    );
+    if (cites.length === 0) return { context: "", sources: [] };
+
+    const lines = cites.map((c) => {
+      const heading =
+        Array.isArray(c.heading_path) && c.heading_path.length
+          ? c.heading_path.join(" › ")
+          : c.title || "source";
+      return `- [${heading}] ${(c.snippet || "").trim()}`;
+    });
+    const sources = Array.from(
+      new Set(cites.map((c) => c.title || c.source_path || "Mnemosyne")),
+    ).filter((s): s is string => Boolean(s));
+
+    return { context: lines.join("\n"), sources };
+  } catch {
+    return { context: "", sources: [] };
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 export function getAllowedAssistantModels(): AssistantModelId[] {
   const configured = process.env.ASSISTANT_ALLOWED_MODELS?.split(",")
     .map(normalizeAssistantModelId)
@@ -125,7 +203,14 @@ export async function answerAssistantQuestion(input: {
 
   try {
     const config = await getAssistantConfig();
-    const systemPrompt = buildAssistantSystemPrompt(config);
+    const baseSystemPrompt = buildAssistantSystemPrompt(config);
+    const retrieved = await retrievePublicKnowledge(input.message);
+    const systemPrompt = retrieved.context
+      ? `${baseSystemPrompt}
+
+Retrieved project knowledge (authoritative for questions about specific projects — prefer it over the summary above, and name the relevant project in your answer):
+${retrieved.context}`
+      : baseSystemPrompt;
 
     const response = await fetch(`${baseUrl}/api/chat/completions`, {
       method: "POST",
@@ -158,6 +243,9 @@ export async function answerAssistantQuestion(input: {
 
     return {
       ...parsed,
+      // Prefer the real retrieved project titles as sources when we grounded the
+      // answer; fall back to whatever the model returned otherwise.
+      sources: retrieved.sources.length ? retrieved.sources : parsed.sources,
       model: input.model,
       mocked: false,
       status: "live",
