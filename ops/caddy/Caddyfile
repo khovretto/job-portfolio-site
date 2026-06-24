@@ -15,6 +15,20 @@ stats.khovrov.dev {
 chat.khovrov.dev {
   encode zstd gzip
 
+  # Access log scoped to the Mnemosyne tool-server path(s): the Open WebUI branch
+  # below is log_skip'd, so only broker traffic lands here. fail2ban's
+  # caddy-mnemosyne jail watches this file and bans IPs that hammer it with
+  # bad/missing bearer tokens (401/403). Host path: ops/caddy/logs/mnemosyne.log.
+  log {
+    output file /var/log/caddy/mnemosyne.log {
+      roll_size 10MiB
+      roll_keep 3
+    }
+    format json {
+      time_format iso8601
+    }
+  }
+
   # Mnemosyne career-public broker — same-origin OpenAPI tool server for the
   # portfolio demo. Profile-pinned (career_public → mnm_public_real only) in the
   # mnemosyne-broker-api-public container; gated by its own bearer token.
@@ -26,6 +40,7 @@ chat.khovrov.dev {
   }
 
   handle {
+    log_skip
     reverse_proxy openwebui:8080
   }
 }

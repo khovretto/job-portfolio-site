@@ -1,0 +1,3 @@
+# Caddy writes mnemosyne.log here (mounted to /var/log/caddy). Tracked so the
+# deploy (which wipes + re-extracts the deploy path) recreates the dir; the log
+# file itself is runtime-only and not committed.
