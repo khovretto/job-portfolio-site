@@ -85,3 +85,20 @@ automation.khovrov.dev {
     reverse_proxy khovrov-n8n:5678
   }
 }
+editor.khovrov.dev {
+  encode zstd gzip
+
+  header {
+    Strict-Transport-Security "max-age=31536000; includeSubDomains"
+    X-Content-Type-Options "nosniff"
+    X-Frame-Options "DENY"
+    Referrer-Policy "strict-origin-when-cross-origin"
+    Permissions-Policy "geolocation=(), camera=(), microphone=()"
+  }
+
+  basic_auth {
+    admin {$CADDY_DOCUMENT_EDITOR_DEMO_ADMIN_HASH}
+  }
+
+  reverse_proxy document-editor-demo:8080
+}
