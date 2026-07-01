@@ -12,7 +12,14 @@ export async function Experience() {
             <h3 style={{ margin: "4px 0 2px", fontSize: 20, fontWeight: 600 }}>
               {m.experience.roleTitle}
             </h3>
-            <span style={{ color: "var(--ink-3)", fontSize: 13.5 }}>{m.experience.company}</span>
+            <a
+              href="https://mcn.ru/"
+              target="_blank"
+              rel="noreferrer"
+              style={{ color: "var(--ink-3)", fontSize: 13.5, textDecoration: "underline", textUnderlineOffset: 3 }}
+            >
+              {m.experience.company}
+            </a>
           </div>
           <span className="mono">{m.experience.period}</span>
         </div>

@@ -1,3 +1,4 @@
+import { CopyLink } from "@/components/copy-link";
 import { getMessages } from "@/lib/i18n/server";
 
 const tiles = [
@@ -15,6 +16,7 @@ export async function Proof() {
         <div className="sec-hd">
           <span className="num">01</span>
           <span className="name">{m.proof.heading}</span>
+          <CopyLink hash="numbers" />
           <span className="rule" />
           <span className="mono" style={{ color: "var(--ink-4)" }}>
             {m.proof.note}

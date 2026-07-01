@@ -30,13 +30,17 @@
     "stack": "technical stack",
     "contact": "contact"
   },
+  "common": {
+    "copyLink": "copy link",
+    "copied": "copied"
+  },
   "hero": {
     "kicker": "// portfolio / v1 / 2026",
     "location": "Novi Sad, Serbia",
     "role": "AI Automation Engineer",
     "tagline": "I build [[AI agents]] that run in production.",
     "subline": "4.5 years in development and automation, 2+ focused on LLM systems and AI agents. Open to remote.",
-    "demoPrompt": "Don't take my word for it — try three live demos below.",
+    "demoPrompt": "Don't take my word for it — try four live demos below.",
     "downloadCv": "Download CV",
     "tryDemos": "Try the demos",
     "contact": "Contact"
@@ -76,7 +80,7 @@
   "experience": {
     "roleLabel": "role",
     "roleTitle": "Project Manager / Automation Engineer",
-    "company": "[Company anonymized]",
+    "company": "MCN Telecom / Business Process Automation department",
     "period": "2020 - 2024 / 4 yrs 5 mo",
     "keyWinsLabel": "key wins",
     "wins": [
@@ -120,8 +124,8 @@
       }
     ],
     "educationLabel": "education",
-    "educationTitle": "Computer Science and Software Engineering studies",
-    "educationSub": "Software Engineering"
+    "educationTitle": "MIREA — Russian Technological University",
+    "educationSub": "Computer Science and Software Engineering"
   },
   "stack": {
     "groups": {
@@ -177,6 +181,7 @@
     "audio": "audio",
     "send": "send",
     "integrations": "integrations",
+    "integrationsHint": "click to expand",
     "scopeLabel": "scope",
     "scopeText": "This assistant can't leak private data — not by choice, but by design. Its retrieval token is pinned to a public-only profile, so private context never reaches the model in the first place.",
     "tryThis": "try this",
@@ -239,12 +244,32 @@
   "demoDocumentEditor": {
     "problemLabel": "case study",
     "workflowLabel": "workflow",
-    "boundaryLabel": "public boundary",
     "title": "Evidence-backed document preparation, not a generic text editor.",
     "body": "Document Editor turns messy source DOCX/PDF material into a structured workspace where every drafted section can be traced back to inspectable source fragments. The portfolio deployment is sanitized and protected separately from the real client deployment.",
     "openDemo": "Open live demo",
-    "accessNote": "Protected demo at editor.khovrov.dev",
-    "boundaryText": "The demo should be presented as a document-preparation workspace, not autonomous compliance, legal, geological, tax, or inspection-ready output. Synthetic or public sample data only.",
+    "accessNote": "Protected demo at editor.khovrov.dev — the login and password are in my cover letter. You can also ask the AI assistant (module 01) or contact me directly.",
+    "steps": [
+      {
+        "label": "Upload",
+        "detail": "Source DOCX/PDF files are ingested and preserved unchanged — every later step keeps a pointer back to the original file and page."
+      },
+      {
+        "label": "Extract",
+        "detail": "Headings, paragraphs, tables, and page breaks are parsed into typed fragments with location metadata, so evidence stays inspectable instead of dissolving into one blob of text."
+      },
+      {
+        "label": "Map",
+        "detail": "Fragments are assigned to sections of the 103-section report template. Coverage is tracked per section, so gaps and unused sources are visible before drafting starts."
+      },
+      {
+        "label": "Draft",
+        "detail": "Section text is written against the mapped evidence, and every claim carries a citation that resolves back to a concrete source fragment for review."
+      },
+      {
+        "label": "Export",
+        "detail": "The workspace assembles the reviewed sections into a DOCX working package with citations intact, ready to hand off."
+      }
+    ],
     "chips": {
       "liveDemo": "live",
       "protected": "auth gated",

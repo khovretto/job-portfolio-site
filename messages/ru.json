@@ -30,13 +30,17 @@
     "stack": "технический стек",
     "contact": "контакты"
   },
+  "common": {
+    "copyLink": "скопировать ссылку",
+    "copied": "скопировано"
+  },
   "hero": {
     "kicker": "// портфолио / v1 / 2026",
     "location": "Нови-Сад, Сербия",
     "role": "Инженер по AI-автоматизации",
     "tagline": "Создаю [[AI-агентов]], которые работают в продакшене.",
     "subline": "4,5 года в разработке и автоматизации, из них 2+ года — в системах на основе LLM и AI-агентах. Открыт к удалённой работе.",
-    "demoPrompt": "Не верьте на слово — попробуйте три живых демо ниже.",
+    "demoPrompt": "Не верьте на слово — попробуйте четыре живых демо ниже.",
     "downloadCv": "Скачать резюме",
     "tryDemos": "Попробовать демо",
     "contact": "Связаться"
@@ -76,7 +80,7 @@
   "experience": {
     "roleLabel": "роль",
     "roleTitle": "Проджект-менеджер / Инженер по автоматизации",
-    "company": "[Компания анонимизирована]",
+    "company": "MCN Telecom / отдел автоматизации бизнес-процессов",
     "period": "2020 — 2024 / 4 года 5 мес",
     "keyWinsLabel": "ключевые результаты",
     "wins": [
@@ -120,8 +124,8 @@
       }
     ],
     "educationLabel": "образование",
-    "educationTitle": "Обучение по компьютерным наукам и программной инженерии",
-    "educationSub": "Программная инженерия"
+    "educationTitle": "МИРЭА — Российский технологический университет",
+    "educationSub": "Компьютерные науки и программная инженерия"
   },
   "stack": {
     "groups": {
@@ -161,7 +165,7 @@
       },
       "documentEditor": {
         "title": "Document Editor",
-        "sub": "A deployed evidence-backed document workspace: source fragments, section mapping, citations, review, and DOCX export."
+        "sub": "Развёрнутое рабочее пространство для документов с опорой на источники: фрагменты, привязка к разделам, цитаты, ревью и экспорт в DOCX."
       }
     }
   },
@@ -177,6 +181,7 @@
     "audio": "аудио",
     "send": "отправить",
     "integrations": "интеграции",
+    "integrationsHint": "нажмите, чтобы раскрыть",
     "scopeLabel": "контекст",
     "scopeText": "Этот ассистент не может слить приватные данные — не потому что не хочет, а по конструкции. Его токен доступа закреплён за публичным профилем, поэтому приватный контекст никогда не попадает в модель.",
     "tryThis": "попробуйте",
@@ -237,14 +242,34 @@
     "emptyHint": "пусто / выберите слово из лексикона и попробуйте произнести. распознаватель оценивает близость по редакционному расстоянию."
   },
   "demoDocumentEditor": {
-    "problemLabel": "case study",
-    "workflowLabel": "workflow",
-    "boundaryLabel": "public boundary",
-    "title": "Evidence-backed document preparation, not a generic text editor.",
-    "body": "Document Editor turns messy source DOCX/PDF material into a structured workspace where every drafted section can be traced back to inspectable source fragments. The portfolio deployment is sanitized and protected separately from the real client deployment.",
-    "openDemo": "Open live demo",
-    "accessNote": "Protected demo at editor.khovrov.dev",
-    "boundaryText": "The demo should be presented as a document-preparation workspace, not autonomous compliance, legal, geological, tax, or inspection-ready output. Synthetic or public sample data only.",
+    "problemLabel": "кейс",
+    "workflowLabel": "процесс",
+    "title": "Подготовка документов с опорой на источники, а не обычный текстовый редактор.",
+    "body": "Document Editor превращает разрозненные исходные DOCX/PDF в структурированное рабочее пространство, где каждый написанный раздел можно проследить до проверяемых фрагментов источников. Портфолио-версия очищена от клиентских данных и развёрнута отдельно от рабочего инстанса.",
+    "openDemo": "Открыть демо",
+    "accessNote": "Демо защищено паролем: editor.khovrov.dev — логин и пароль указаны в сопроводительном письме. Также можно спросить AI-ассистента (модуль 01) или связаться со мной напрямую.",
+    "steps": [
+      {
+        "label": "Загрузка",
+        "detail": "Исходные DOCX/PDF загружаются и хранятся без изменений — каждый следующий шаг сохраняет ссылку на исходный файл и страницу."
+      },
+      {
+        "label": "Извлечение",
+        "detail": "Заголовки, абзацы, таблицы и разрывы страниц разбираются в типизированные фрагменты с метаданными о расположении — доказательства остаются проверяемыми, а не растворяются в сплошном тексте."
+      },
+      {
+        "label": "Привязка",
+        "detail": "Фрагменты распределяются по разделам шаблона отчёта из 103 разделов. Покрытие отслеживается по каждому разделу: пробелы и неиспользованные источники видны до начала написания."
+      },
+      {
+        "label": "Черновик",
+        "detail": "Текст раздела пишется по привязанным материалам, и каждое утверждение несёт цитату, которая ведёт к конкретному фрагменту источника для проверки."
+      },
+      {
+        "label": "Экспорт",
+        "detail": "Рабочее пространство собирает проверенные разделы в рабочий пакет DOCX с сохранёнными цитатами, готовый к передаче."
+      }
+    ],
     "chips": {
       "liveDemo": "live",
       "protected": "auth gated",

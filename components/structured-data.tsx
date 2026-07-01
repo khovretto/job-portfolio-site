@@ -19,6 +19,10 @@ export function StructuredData() {
       addressLocality: "Novi Sad",
       addressCountry: "RS",
     },
+    alumniOf: {
+      "@type": "CollegeOrUniversity",
+      name: "MIREA — Russian Technological University",
+    },
     knowsAbout: [
       "AI Automation",
       "Voice Agents",

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { CopyLink } from "@/components/copy-link";
 import { DemoAI } from "@/components/demos/demo-ai";
 import { DemoDocumentEditor } from "@/components/demos/demo-document-editor";
 import { DemoKB } from "@/components/demos/demo-kb";
@@ -9,10 +10,10 @@ import { trackEvent } from "@/components/event-tracker";
 import { useMessages } from "@/lib/i18n/provider";
 
 const demos = [
-  { id: "ai", num: "01", component: DemoAI },
-  { id: "kb", num: "02", component: DemoKB },
-  { id: "conlang", num: "03", component: DemoConlang },
-  { id: "documentEditor", num: "04", component: DemoDocumentEditor },
+  { id: "ai", slug: "demo-assistant", num: "01", component: DemoAI },
+  { id: "kb", slug: "demo-kb-audit", num: "02", component: DemoKB },
+  { id: "conlang", slug: "demo-conlang", num: "03", component: DemoConlang },
+  { id: "documentEditor", slug: "demo-document-editor", num: "04", component: DemoDocumentEditor },
 ] as const;
 
 export function Demos() {
@@ -20,6 +21,21 @@ export function Demos() {
   const [active, setActive] = useState<(typeof demos)[number]["id"]>("ai");
   const current = demos.find((demo) => demo.id === active) || demos[0];
   const ActiveComponent = current.component;
+
+  // Deep links: #demo-<slug> opens the matching tab and scrolls to the demos section.
+  useEffect(() => {
+    function applyHash() {
+      const hash = window.location.hash.replace(/^#/, "");
+      const match = demos.find((demo) => demo.slug === hash);
+      if (match) {
+        setActive(match.id);
+        document.getElementById("demos")?.scrollIntoView();
+      }
+    }
+    applyHash();
+    window.addEventListener("hashchange", applyHash);
+    return () => window.removeEventListener("hashchange", applyHash);
+  }, []);
 
   return (
     <div>
@@ -64,8 +80,11 @@ export function Demos() {
             {m.demos.items[current.id].sub}
           </p>
         </div>
-        <div className="mono" style={{ color: "var(--ink-4)" }}>
-          {demos.findIndex((demo) => demo.id === active) + 1} / {demos.length}
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <CopyLink hash={current.slug} />
+          <span className="mono" style={{ color: "var(--ink-4)" }}>
+            {demos.findIndex((demo) => demo.id === active) + 1} / {demos.length}
+          </span>
         </div>
       </div>
 

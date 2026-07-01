@@ -3,18 +3,6 @@ import { ContactLink } from "@/components/contact-link";
 import { CvDownload } from "@/components/cv-download";
 import { getMessages } from "@/lib/i18n/server";
 
-const tags = [
-  "Voice agents",
-  "RAG (Qdrant / Zep)",
-  "n8n",
-  "LangChain",
-  "OpenAI",
-  "Python",
-  "TypeScript",
-  "Bitrix24 / amoCRM / 1C",
-  "Prompt Engineering",
-];
-
 // Renders text where [[...]] spans are highlighted with the accent color.
 function renderAccented(text: string) {
   return text.split(/(\[\[.*?\]\])/g).map((part, index) => {
@@ -72,14 +60,6 @@ export async function Hero() {
         </div>
 
         <p className="hero-demo-hint mono">{m.hero.demoPrompt}</p>
-
-        <div className="tag-rail">
-          {tags.map((tag) => (
-            <span key={tag} className="chip">
-              {tag}
-            </span>
-          ))}
-        </div>
       </div>
     </section>
   );

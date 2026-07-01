@@ -271,6 +271,9 @@ export function DemoAI() {
         <div className="side-panel">
           <div>
             <span className="mono">{t.integrations}</span>
+            <span className="mono" style={{ color: "var(--ink-4)", marginLeft: 8 }}>
+              / {t.integrationsHint}
+            </span>
             <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 4 }}>
               <IntegrationRow
                 id="chat-api"
@@ -280,11 +283,13 @@ export function DemoAI() {
                 expanded={!!expanded["chat-api"]}
                 onToggle={() => toggleIntegration("chat-api")}
               >
-                <span>{t.detailChatApi}</span>
+                <p className="status-desc">{t.detailChatApi}</p>
                 {lastLatencyMs !== null ? (
-                  <span className="mono">
-                    {t.detailChatApiLatency}: {lastLatencyMs}ms
-                  </span>
+                  <div className="status-vars">
+                    <span className="mono">
+                      {t.detailChatApiLatency}: {lastLatencyMs}ms
+                    </span>
+                  </div>
                 ) : null}
               </IntegrationRow>
 
@@ -296,29 +301,33 @@ export function DemoAI() {
                 expanded={!!expanded.knowledge}
                 onToggle={() => toggleIntegration("knowledge")}
               >
-                <span>{t.detailKnowledge}</span>
+                <p className="status-desc">{t.detailKnowledge}</p>
                 {statusChecking ? (
-                  <span className="mono">{t.checking}</span>
+                  <div className="status-vars">
+                    <span className="mono">{t.checking}</span>
+                  </div>
                 ) : knowledge ? (
-                  knowledge.reachable ? (
-                    <>
-                      <span className="mono">profile: {knowledge.profileSlug ?? "—"}</span>
-                      <span className="mono">
-                        collections: {(knowledge.allowedCollections ?? []).join(", ") || "—"}
-                      </span>
-                      <span className="mono">
-                        embedder: {knowledge.embeddingProvider ?? "—"}/{knowledge.embeddingModel ?? "—"}
-                      </span>
-                      <span className="mono">
-                        db: {knowledge.dbOk ? "ok" : "down"} · qdrant: {knowledge.qdrantOk ? "ok" : "down"}
-                      </span>
-                      {typeof knowledge.vectorMismatchCount === "number" ? (
-                        <span className="mono">vector mismatches: {knowledge.vectorMismatchCount}</span>
-                      ) : null}
-                    </>
-                  ) : (
-                    <span className="mono">{t.unreachable}</span>
-                  )
+                  <div className="status-vars">
+                    {knowledge.reachable ? (
+                      <>
+                        <span className="mono">profile: {knowledge.profileSlug ?? "—"}</span>
+                        <span className="mono">
+                          collections: {(knowledge.allowedCollections ?? []).join(", ") || "—"}
+                        </span>
+                        <span className="mono">
+                          embedder: {knowledge.embeddingProvider ?? "—"}/{knowledge.embeddingModel ?? "—"}
+                        </span>
+                        <span className="mono">
+                          db: {knowledge.dbOk ? "ok" : "down"} · qdrant: {knowledge.qdrantOk ? "ok" : "down"}
+                        </span>
+                        {typeof knowledge.vectorMismatchCount === "number" ? (
+                          <span className="mono">vector mismatches: {knowledge.vectorMismatchCount}</span>
+                        ) : null}
+                      </>
+                    ) : (
+                      <span className="mono">{t.unreachable}</span>
+                    )}
+                  </div>
                 ) : null}
                 <button
                   type="button"
@@ -341,7 +350,7 @@ export function DemoAI() {
                 expanded={!!expanded["speech-in"]}
                 onToggle={() => toggleIntegration("speech-in")}
               >
-                <span>{t.detailSpeechIn}</span>
+                <p className="status-desc">{t.detailSpeechIn}</p>
               </IntegrationRow>
 
               <IntegrationRow
@@ -352,17 +361,19 @@ export function DemoAI() {
                 expanded={!!expanded["rate-limit"]}
                 onToggle={() => toggleIntegration("rate-limit")}
               >
-                <span>{t.detailRateLimit}</span>
-                <span className="mono">
-                  {rateLimitMax} {t.rateLimitWindowSuffix}
-                </span>
-                {rateLimitInfo ? (
+                <p className="status-desc">{t.detailRateLimit}</p>
+                <div className="status-vars">
                   <span className="mono">
-                    {rateLimitInfo.remaining} {t.rateLimitRemainingSuffix}
+                    {rateLimitMax} {t.rateLimitWindowSuffix}
                   </span>
-                ) : (
-                  <span className="mono">window: {rateLimitWindowMinutes}min</span>
-                )}
+                  {rateLimitInfo ? (
+                    <span className="mono">
+                      {rateLimitInfo.remaining} {t.rateLimitRemainingSuffix}
+                    </span>
+                  ) : (
+                    <span className="mono">window: {rateLimitWindowMinutes}min</span>
+                  )}
+                </div>
               </IntegrationRow>
             </div>
           </div>
@@ -418,6 +429,11 @@ function IntegrationRow({
         </span>
         <span className="mono" style={{ color: "var(--ink-4)" }}>
           {info}
+        </span>
+        <span className="chev" aria-hidden="true">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+            <path d="m9 18 6-6-6-6" />
+          </svg>
         </span>
       </button>
       {expanded ? (

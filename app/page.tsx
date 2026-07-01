@@ -1,4 +1,5 @@
 import { Contact } from "@/components/contact";
+import { CopyLink } from "@/components/copy-link";
 import { Demos } from "@/components/demos";
 import { EventTracker } from "@/components/event-tracker";
 import { Experience } from "@/components/experience";
@@ -23,6 +24,7 @@ export default async function HomePage() {
             <div className="sec-hd">
               <span className="num">02</span>
               <span className="name">{m.sections.demos}</span>
+              <CopyLink hash="demos" />
               <span className="rule" />
             </div>
             <Demos />
@@ -33,6 +35,7 @@ export default async function HomePage() {
             <div className="sec-hd">
               <span className="num">03</span>
               <span className="name">{m.sections.experience}</span>
+              <CopyLink hash="experience" />
               <span className="rule" />
             </div>
             <Experience />
@@ -43,6 +46,7 @@ export default async function HomePage() {
             <div className="sec-hd">
               <span className="num">04</span>
               <span className="name">{m.sections.stack}</span>
+              <CopyLink hash="stack" />
               <span className="rule" />
             </div>
             <Stack />
@@ -53,6 +57,7 @@ export default async function HomePage() {
             <div className="sec-hd">
               <span className="num">05</span>
               <span className="name">{m.sections.contact}</span>
+              <CopyLink hash="contact" />
               <span className="rule" />
             </div>
             <Contact />

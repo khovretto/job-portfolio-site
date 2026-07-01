@@ -3,14 +3,6 @@
 import { trackEvent } from "@/components/event-tracker";
 import { useMessages } from "@/lib/i18n/provider";
 
-const workflow = [
-  { id: "upload", label: "Upload", detail: "DOCX/PDF sources stay preserved." },
-  { id: "extract", label: "Extract", detail: "Headings, pages, tables, and paragraphs become fragments." },
-  { id: "map", label: "Map", detail: "Fragments are assigned to target report sections." },
-  { id: "draft", label: "Draft", detail: "Section text keeps citations back to source evidence." },
-  { id: "export", label: "Export", detail: "The workspace produces a DOCX working package." },
-] as const;
-
 const stats = [
   ["runtime", "FastAPI + React"],
   ["template", "103 sections"],
@@ -52,10 +44,8 @@ export function DemoDocumentEditor() {
             >
               {t.openDemo}
             </a>
-            <span className="mono" style={{ color: "var(--ink-4)", textTransform: "none", letterSpacing: ".02em" }}>
-              {t.accessNote}
-            </span>
           </div>
+          <p className="document-demo-access">{t.accessNote}</p>
 
           <div className="output-grid document-demo-stats">
             {stats.map(([key, value]) => (
@@ -72,8 +62,8 @@ export function DemoDocumentEditor() {
         <div className="pane">
           <span className="mono">{t.workflowLabel}</span>
           <div className="document-workflow">
-            {workflow.map((step, index) => (
-              <div key={step.id} className="document-workflow-row">
+            {t.steps.map((step, index) => (
+              <div key={step.label} className="document-workflow-row">
                 <span className="document-workflow-index mono">{String(index + 1).padStart(2, "0")}</span>
                 <div>
                   <div className="document-workflow-label">{step.label}</div>
@@ -81,11 +71,6 @@ export function DemoDocumentEditor() {
                 </div>
               </div>
             ))}
-          </div>
-
-          <div className="surf-2 document-demo-boundary">
-            <span className="mono">{t.boundaryLabel}</span>
-            <p>{t.boundaryText}</p>
           </div>
         </div>
       </div>

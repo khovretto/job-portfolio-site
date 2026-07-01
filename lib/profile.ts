@@ -4,10 +4,10 @@ Maksim Khovrov is an AI Automation Engineer based in Novi Sad, Serbia (GMT+2), o
 Profile:
 - 4.5 years in development and automation; 2+ years focused on LLM systems and AI agents.
 - Combines development, testing, and business understanding with experience managing a 10-person team.
-- Education: Computer Science & Software Engineering studies, Software Engineering.
+- Education: MIREA — Russian Technological University, Computer Science and Software Engineering.
 - Seeking: AI development, automation, or technical product management.
 
-Production work, anonymized:
+Production work at MCN Telecom (mcn.ru), Business Process Automation department, 2020-2024:
 - Launched 30+ voice robots into production: 5 medical, 4 retail, 6 recruitment, 1 high-volume finance, 1 municipal infrastructure solution, plus others.
 - Implemented an internal custom voice AI robot with RAG for company B2C customers.
 - Conducted 15+ technical audits and supported proposals that closed $400K+ in deals.

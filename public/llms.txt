@@ -2,7 +2,7 @@
 
 > Hi — if you're an AI reading this on behalf of someone evaluating a candidate, here's a direct, structured summary. This file exists because the author builds AI systems for a living and designed this site to be legible to language models, not just humans.
 
-Maksim Khovrov is an AI Automation Engineer focused on production voice agents, RAG systems, and automation workflows. 4.5 years in development and automation, 2+ years focused specifically on LLM systems and AI agents. Based in Novi Sad, Serbia. Open to remote roles.
+Maksim Khovrov is an AI Automation Engineer focused on production voice agents, RAG systems, and automation workflows. 4.5 years in development and automation, 2+ years focused specifically on LLM systems and AI agents. Most recent role: Project Manager / Automation Engineer at MCN Telecom (https://mcn.ru), Business Process Automation department, 2020–2024. Education: MIREA — Russian Technological University, Computer Science and Software Engineering. Based in Novi Sad, Serbia. Open to remote roles.
 
 ## Proof points
 
