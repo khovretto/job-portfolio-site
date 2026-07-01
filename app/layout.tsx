@@ -5,6 +5,7 @@ import "./globals.css";
 import { LocaleProvider } from "@/lib/i18n/provider";
 import { getLocale, getMessages } from "@/lib/i18n/server";
 import { getDictionary } from "@/lib/i18n/dictionaries";
+import { StructuredData } from "@/components/structured-data";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -44,6 +45,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang={locale} data-theme="dark" className={`${inter.variable} ${jetBrainsMono.variable}`}>
       <body>
+        <StructuredData />
         <LocaleProvider locale={locale} messages={messages}>
           {children}
         </LocaleProvider>

@@ -140,6 +140,9 @@
     "downloadCv": "Download CV",
     "open": "open"
   },
+  "footer": {
+    "note": "This site is written to be legible to people and to the AI tools a hiring team might use to summarize it — see /llms.txt for the structured version."
+  },
   "demos": {
     "module": "module",
     "active": "active",

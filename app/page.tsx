@@ -5,6 +5,7 @@ import { Experience } from "@/components/experience";
 import { Hero } from "@/components/hero";
 import { Nav } from "@/components/nav";
 import { Proof } from "@/components/proof";
+import { SiteFooter } from "@/components/site-footer";
 import { Stack } from "@/components/stack";
 import { getMessages } from "@/lib/i18n/server";
 
@@ -58,6 +59,7 @@ export default async function HomePage() {
           </div>
         </section>
       </main>
+      <SiteFooter />
     </>
   );
 }
