@@ -95,10 +95,5 @@ editor.khovrov.dev {
     Referrer-Policy "strict-origin-when-cross-origin"
     Permissions-Policy "geolocation=(), camera=(), microphone=()"
   }
-
-  basic_auth {
-    admin {$CADDY_DOCUMENT_EDITOR_DEMO_ADMIN_HASH}
-  }
-
   reverse_proxy document-editor-demo:8080
 }
