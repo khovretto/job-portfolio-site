@@ -32,6 +32,8 @@ export class AssistantUnavailableError extends Error {
   }
 }
 
+export const CHAT_RATE_LIMIT = { max: 20, windowMs: 60 * 60 * 1000 };
+
 const assistantAnswerSchema = z.object({
   answer: z.string().trim().min(1),
   sources: z.array(z.string().trim().min(1)).min(1).default(["assistant:model"]),

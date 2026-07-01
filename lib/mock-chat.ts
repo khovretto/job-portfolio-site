@@ -34,6 +34,20 @@ const answerBank = [
     sources: ["public-summary", "contact"],
     confidence: 0.88,
   },
+  {
+    terms: ["site", "built", "made this", "deployed", "how was this"],
+    answer:
+      "This portfolio is a Next.js app backed by Postgres, deployed with Docker Compose and Caddy on a self-managed VPS, with GitHub Actions handling CI/CD on every push. This chat is grounded by Mnemosyne, a RAG system I built: a profile-pinned broker sits in front of a Postgres registry and a Qdrant vector store.",
+    sources: ["public-summary", "site-architecture"],
+    confidence: 0.9,
+  },
+  {
+    terms: ["private", "stop", "leak", "confidential", "boundary", "secure"],
+    answer:
+      "It is not a prompt telling the model to behave — it is an architecture. This demo's access token is pinned to a public-only profile in Mnemosyne, so private collections are never reachable from here, not filtered out after retrieval. There is no private data in this assistant's context to leak, even if asked.",
+    sources: ["public-summary", "mnemosyne-access-control"],
+    confidence: 0.93,
+  },
 ];
 
 export function answerPublicQuestion(message: string) {
@@ -54,7 +68,9 @@ export function answerPublicQuestion(message: string) {
   }
 
   return {
-    ...selected,
+    answer: selected.answer,
+    sources: selected.sources,
+    confidence: selected.confidence,
     scope: "public",
     mocked: true,
   };

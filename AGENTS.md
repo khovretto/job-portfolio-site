@@ -8,7 +8,7 @@ This file is for future Codex/AI sessions working on the portfolio.
 - Admin panel: `/admin`, protected by a single admin session cookie.
 - Database: Postgres in Docker Compose, migrations in `db/*.sql`.
 - Deployment: GitHub Actions uploads source to `/var/www/khovrov.dev` and rebuilds Docker containers on the VPS.
-- Reverse proxy: Caddy in this repo serves `khovrov.dev`, `www.khovrov.dev`, `stats.khovrov.dev`, `chat.khovrov.dev`, `kb-audit.khovrov.dev`, and `automation.khovrov.dev`.
+- Reverse proxy: Caddy in this repo serves `khovrov.dev`, `www.khovrov.dev`, `stats.khovrov.dev`, `chat.khovrov.dev` (+ `/toolservers/mnemosyne-public/*`), `kb-audit.khovrov.dev`, `automation.khovrov.dev`, and `editor.khovrov.dev` (sanitized Document Editor portfolio demo, added 2026-06-29).
 - Open WebUI: separate project at `/opt/personal-voice-assistant`, routed by this repo's Caddy config at `https://chat.khovrov.dev`.
 
 ## Assistant Integration
@@ -21,6 +21,7 @@ This file is for future Codex/AI sessions working on the portfolio.
 - `chat.khovrov.dev` should rely on Open WebUI's own login, not Caddy basic auth. Caddy basic auth conflicts with Open WebUI requests that use the `Authorization` header.
 
 The browser must never receive `OPENWEBUI_API_KEY`. Only `/api/chat` may call Open WebUI, and it must reject models outside the allowlist.
+- RAG grounding: before calling Open WebUI, `retrievePublicKnowledge()` in `lib/assistant.ts` hits a Mnemosyne broker's `/search` directly (`MNM_BROKER_URL`/`MNM_BROKER_TOKEN`, internal network only) and injects up to 5 cited snippets into the system prompt. Fails open (no context, never throws) if the broker is unreachable — this is intentional, don't add a hard dependency on it being up.
 
 ## Event and Audit Logging
 

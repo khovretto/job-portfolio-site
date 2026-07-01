@@ -145,8 +145,8 @@
     "active": "active",
     "items": {
       "ai": {
-        "title": "Personal AI Assistant",
-        "sub": "Grounded chat: answers only from public knowledge about my work."
+        "title": "Personal Assistant + Mnemosyne",
+        "sub": "Grounded chat: a profile-pinned RAG broker decides what's public before the model ever sees it."
       },
       "kb": {
         "title": "Public Knowledge Base Audit + RAG Builder",
@@ -161,17 +161,17 @@
   "demoAi": {
     "initialMessage": "Ask anything about my work. I answer only from public sources.",
     "suggestions": [
-      "What RAG pipelines have you shipped?",
-      "How big a team have you led?",
-      "Walk me through your stack.",
-      "What sectors have you worked in?"
+      "How was this site built?",
+      "What stops you from sharing private details?",
+      "What's your experience with RAG pipelines?",
+      "Are you open to remote roles?"
     ],
     "inputPlaceholder": "Ask about my work...",
     "audio": "audio",
     "send": "send",
     "integrations": "integrations",
     "scopeLabel": "scope",
-    "scopeText": "Answers are grounded on a public summary. Out-of-scope questions return a scope boundary instead of invented details.",
+    "scopeText": "This assistant can't leak private data — not by choice, but by design. Its retrieval token is pinned to a public-only profile, so private context never reaches the model in the first place.",
     "tryThis": "try this",
     "tryThisItems": [
       "Ask something out of scope.",
@@ -180,7 +180,22 @@
     "you": "you",
     "assistant": "assistant",
     "loading": "retrieving public context...",
-    "errorFallback": "Chat request failed."
+    "errorFallback": "Chat request failed.",
+    "statusReady": "ready",
+    "statusThinking": "thinking…",
+    "statusErrorLabel": "error",
+    "tagGroundedLive": "grounded live",
+    "tagDemoAnswer": "demo answer",
+    "recheck": "recheck",
+    "checking": "checking...",
+    "unreachable": "unreachable from here right now",
+    "detailChatApi": "Next.js route → rate-limited → Open WebUI → your selected model.",
+    "detailChatApiLatency": "last live response",
+    "detailKnowledge": "Postgres registry + Qdrant vector store behind a profile-pinned broker. This demo's token is pinned to a public-only profile — private collections aren't reachable from here, not filtered after the fact.",
+    "detailSpeechIn": "Planned: a browser Web Speech API hook. Not wired yet — no backend cost today.",
+    "detailRateLimit": "In-memory per-IP limiter in the API route.",
+    "rateLimitWindowSuffix": "requests / hour · per IP",
+    "rateLimitRemainingSuffix": "left this hour"
   },
   "demoKb": {
     "inputs": "inputs",

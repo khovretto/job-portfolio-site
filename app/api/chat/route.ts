@@ -8,6 +8,7 @@ import {
   AssistantUnavailableError,
   answerAssistantQuestion,
   resolveAssistantModel,
+  CHAT_RATE_LIMIT,
 } from "@/lib/assistant";
 import type { AssistantModelId } from "@/lib/assistant-models";
 
@@ -29,7 +30,7 @@ export const runtime = "nodejs";
 
 export async function POST(request: NextRequest) {
   const meta = getRequestMeta(request);
-  const limit = checkRateLimit(`chat:${meta.ipHash}`, 20, 60 * 60 * 1000);
+  const limit = checkRateLimit(`chat:${meta.ipHash}`, CHAT_RATE_LIMIT.max, CHAT_RATE_LIMIT.windowMs);
   let parsedBody: z.infer<typeof schema> | null = null;
   let resolvedModel: AssistantModelId | null = null;
   const startedAt = Date.now();
@@ -74,7 +75,10 @@ export async function POST(request: NextRequest) {
       ],
     );
 
-    return NextResponse.json(result);
+    return NextResponse.json({
+      ...result,
+      rateLimit: { remaining: limit.remaining, resetAt: limit.resetAt, max: CHAT_RATE_LIMIT.max },
+    });
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: "Invalid message." }, { status: 400 });

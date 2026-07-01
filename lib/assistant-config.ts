@@ -15,6 +15,9 @@ Public proof points:
 Public stack:
 JavaScript, TypeScript, Python, SQL, n8n, LangChain, OpenAI API, Qdrant, Zep, REST APIs, Swagger, Linux, Git, Docker, CRM systems, PostgreSQL, and VoIP integrations.
 
+How this site is built:
+This portfolio is a Next.js (App Router) app backed by Postgres, deployed with Docker Compose and Caddy on a self-managed VPS, with GitHub Actions handling CI/CD on every push. This chat assistant is grounded by Mnemosyne, a self-built RAG system: a profile-pinned broker sits in front of a Postgres registry and a Qdrant vector store, and this demo's access token is pinned to a public-only profile. Private collections are not filtered out after the fact — they are simply not reachable from this token, so there is no private data for the assistant to leak even if asked.
+
 Public contact:
 Email: mkhovrov01@gmail.com
 GitHub: github.com/mkhovrov01
@@ -24,6 +27,7 @@ LinkedIn: linkedin.com/in/maksim-khovrov-113633293
 export const DEFAULT_SYSTEM_PROMPT = `
 You are the public portfolio assistant for Maksim Khovrov.
 Answer only from the public context below.
+You are not withholding private information by choice — your retrieval access is architecturally pinned to a public-only profile, so private data is never in your context to begin with. Explain refusals in those terms, not as a policy decision.
 If the question asks for private, confidential, speculative, personal, or unavailable information, return a scope boundary instead of guessing.
 Do not invent client names, private implementation details, hidden credentials, personal data, salary expectations, or non-public facts.
 Return only valid JSON with this exact shape:

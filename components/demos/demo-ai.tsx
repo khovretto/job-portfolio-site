@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, ReactNode, useEffect, useRef, useState } from "react";
 import { trackEvent } from "@/components/event-tracker";
 import { useMessages } from "@/lib/i18n/provider";
 import type { Messages } from "@/lib/i18n/dictionaries";
@@ -29,7 +29,32 @@ type ChatResponse = {
   model: AssistantModelId;
   status: string;
   latencyMs: number;
+  rateLimit?: { remaining: number; resetAt: number; max: number };
 };
+
+type KnowledgeHealth = {
+  reachable: boolean;
+  status?: string | null;
+  profileSlug?: string | null;
+  allowedCollections?: string[];
+  embeddingProvider?: string | null;
+  embeddingModel?: string | null;
+  dbOk?: boolean | null;
+  qdrantOk?: boolean | null;
+  vectorMismatchCount?: number | null;
+};
+
+type AssistantStatus = {
+  knowledge: KnowledgeHealth;
+  chatRateLimit: { max: number; windowMinutes: number };
+};
+
+function humanizeSource(raw: string) {
+  const cleaned = raw.replace(/^(scope|assistant):/, "").replace(/[-_]/g, " ").trim();
+  if (!cleaned) return raw;
+  const titled = cleaned.replace(/\b\w/g, (c) => c.toUpperCase());
+  return titled.replace(/\bRag\b/g, "RAG");
+}
 
 export function DemoAI() {
   const m = useMessages();
@@ -48,6 +73,13 @@ export function DemoAI() {
   const [selectedModel, setSelectedModel] =
     useState<AssistantModelId>(DEFAULT_ASSISTANT_MODEL);
   const [lastStatus, setLastStatus] = useState<"idle" | "live" | "mock" | "error">("idle");
+  const [lastLatencyMs, setLastLatencyMs] = useState<number | null>(null);
+  const [rateLimitInfo, setRateLimitInfo] = useState<{ remaining: number; max: number } | null>(
+    null,
+  );
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+  const [assistantStatus, setAssistantStatus] = useState<AssistantStatus | null>(null);
+  const [statusChecking, setStatusChecking] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -100,6 +132,10 @@ export function DemoAI() {
         },
       ]);
       setLastStatus(body.mocked ? "mock" : "live");
+      if (!body.mocked) setLastLatencyMs(body.latencyMs);
+      if (body.rateLimit) {
+        setRateLimitInfo({ remaining: body.rateLimit.remaining, max: body.rateLimit.max });
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : t.errorFallback);
       setLastStatus("error");
@@ -113,23 +149,69 @@ export function DemoAI() {
     void ask(input);
   }
 
-  const state = error ? "failure" : busy ? "loading" : messages.length > 1 ? "success" : "default";
+  async function fetchAssistantStatus() {
+    setStatusChecking(true);
+    try {
+      const response = await fetch("/api/assistant-status");
+      const body = (await response.json()) as AssistantStatus;
+      setAssistantStatus(body);
+    } catch {
+      setAssistantStatus({
+        knowledge: { reachable: false },
+        chatRateLimit: { max: 20, windowMinutes: 60 },
+      });
+    } finally {
+      setStatusChecking(false);
+    }
+  }
+
+  function toggleIntegration(id: string) {
+    setExpanded((current) => ({ ...current, [id]: !current[id] }));
+    if (
+      (id === "knowledge" || id === "rate-limit") &&
+      !assistantStatus &&
+      !statusChecking
+    ) {
+      void fetchAssistantStatus();
+    }
+  }
+
+  const headerDotClass = error ? "bad" : busy ? "warn" : "ok";
+  const headerStatusLabel = error ? t.statusErrorLabel : busy ? t.statusThinking : t.statusReady;
+
+  const chatDotClass = lastStatus === "error" ? "bad" : lastStatus === "mock" ? "warn" : "ok";
+  const chatInfo =
+    lastStatus === "live"
+      ? "Open WebUI"
+      : lastStatus === "mock"
+        ? "mock fallback"
+        : lastStatus === "error"
+          ? "unavailable"
+          : "server route";
+
+  const knowledge = assistantStatus?.knowledge ?? null;
+  const knowledgeDotClass = knowledge === null ? "ok" : knowledge.reachable ? "ok" : "warn";
+  const knowledgeInfo =
+    knowledge === null
+      ? "public summary"
+      : knowledge.reachable
+        ? knowledge.profileSlug || "career_public"
+        : "unreachable";
+
+  const rateLimitMax = assistantStatus?.chatRateLimit.max ?? 20;
+  const rateLimitWindowMinutes = assistantStatus?.chatRateLimit.windowMinutes ?? 60;
 
   return (
     <div className="surf demo-shell">
       <div className="two-pane">
         <div className="chat-pane">
           <div className="panel-header">
-            <span className="dot live" />
+            <span className={`dot ${headerDotClass}`} />
             <span className="mono" style={{ color: "var(--ink-2)" }}>
-              personal_ai / public-only
+              personal_ai · mnemosyne
             </span>
-            <span className="state-chips">
-              {["default", "loading", "success", "empty", "failure"].map((item) => (
-                <span key={item} className="chip" style={{ opacity: item === state ? 1 : 0.35 }}>
-                  {item}
-                </span>
-              ))}
+            <span className="mono" style={{ marginLeft: "auto", color: "var(--ink-3)" }}>
+              {headerStatusLabel}
             </span>
           </div>
           <div className="model-bar">
@@ -159,7 +241,7 @@ export function DemoAI() {
             {busy ? <LoadingBubble t={t} /> : null}
             {error ? (
               <div className="surf-2" style={{ padding: 10, borderColor: "var(--bad)", color: "var(--bad)", fontSize: 13 }}>
-                failure / {error}
+                {t.statusErrorLabel} / {error}
               </div>
             ) : null}
           </div>
@@ -190,30 +272,98 @@ export function DemoAI() {
           <div>
             <span className="mono">{t.integrations}</span>
             <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 4 }}>
-              {[
-                [
-                  "chat api",
-                  lastStatus === "error" ? "bad" : lastStatus === "idle" ? "ok" : "live",
-                  lastStatus === "live"
-                    ? "Open WebUI"
-                    : lastStatus === "mock"
-                      ? "mock fallback"
-                      : "server route",
-                ],
-                ["knowledge", "ok", "public summary"],
-                ["speech-in", "warn", "placeholder"],
-                ["rate-limit", "ok", "per-IP"],
-              ].map(([key, status, info]) => (
-                <div key={key} className="status-row">
-                  <span className={`dot ${status}`} />
-                  <span className="mono" style={{ minWidth: 80 }}>
-                    {key}
+              <IntegrationRow
+                id="chat-api"
+                label="chat api"
+                dotClass={chatDotClass}
+                info={chatInfo}
+                expanded={!!expanded["chat-api"]}
+                onToggle={() => toggleIntegration("chat-api")}
+              >
+                <span>{t.detailChatApi}</span>
+                {lastLatencyMs !== null ? (
+                  <span className="mono">
+                    {t.detailChatApiLatency}: {lastLatencyMs}ms
                   </span>
-                  <span className="mono" style={{ color: "var(--ink-4)" }}>
-                    {info}
+                ) : null}
+              </IntegrationRow>
+
+              <IntegrationRow
+                id="knowledge"
+                label="knowledge"
+                dotClass={knowledgeDotClass}
+                info={knowledgeInfo}
+                expanded={!!expanded.knowledge}
+                onToggle={() => toggleIntegration("knowledge")}
+              >
+                <span>{t.detailKnowledge}</span>
+                {statusChecking ? (
+                  <span className="mono">{t.checking}</span>
+                ) : knowledge ? (
+                  knowledge.reachable ? (
+                    <>
+                      <span className="mono">profile: {knowledge.profileSlug ?? "—"}</span>
+                      <span className="mono">
+                        collections: {(knowledge.allowedCollections ?? []).join(", ") || "—"}
+                      </span>
+                      <span className="mono">
+                        embedder: {knowledge.embeddingProvider ?? "—"}/{knowledge.embeddingModel ?? "—"}
+                      </span>
+                      <span className="mono">
+                        db: {knowledge.dbOk ? "ok" : "down"} · qdrant: {knowledge.qdrantOk ? "ok" : "down"}
+                      </span>
+                      {typeof knowledge.vectorMismatchCount === "number" ? (
+                        <span className="mono">vector mismatches: {knowledge.vectorMismatchCount}</span>
+                      ) : null}
+                    </>
+                  ) : (
+                    <span className="mono">{t.unreachable}</span>
+                  )
+                ) : null}
+                <button
+                  type="button"
+                  className="chip"
+                  style={{ alignSelf: "flex-start" }}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    void fetchAssistantStatus();
+                  }}
+                >
+                  {t.recheck}
+                </button>
+              </IntegrationRow>
+
+              <IntegrationRow
+                id="speech-in"
+                label="speech-in"
+                dotClass="warn"
+                info="planned"
+                expanded={!!expanded["speech-in"]}
+                onToggle={() => toggleIntegration("speech-in")}
+              >
+                <span>{t.detailSpeechIn}</span>
+              </IntegrationRow>
+
+              <IntegrationRow
+                id="rate-limit"
+                label="rate-limit"
+                dotClass="ok"
+                info="per-IP"
+                expanded={!!expanded["rate-limit"]}
+                onToggle={() => toggleIntegration("rate-limit")}
+              >
+                <span>{t.detailRateLimit}</span>
+                <span className="mono">
+                  {rateLimitMax} {t.rateLimitWindowSuffix}
+                </span>
+                {rateLimitInfo ? (
+                  <span className="mono">
+                    {rateLimitInfo.remaining} {t.rateLimitRemainingSuffix}
                   </span>
-                </div>
-              ))}
+                ) : (
+                  <span className="mono">window: {rateLimitWindowMinutes}min</span>
+                )}
+              </IntegrationRow>
             </div>
           </div>
           <div>
@@ -236,8 +386,54 @@ export function DemoAI() {
   );
 }
 
+function IntegrationRow({
+  id,
+  label,
+  dotClass,
+  info,
+  expanded,
+  onToggle,
+  children,
+}: {
+  id: string;
+  label: string;
+  dotClass: string;
+  info: string;
+  expanded: boolean;
+  onToggle: () => void;
+  children: ReactNode;
+}) {
+  return (
+    <div>
+      <button
+        type="button"
+        className="status-row"
+        aria-expanded={expanded}
+        aria-controls={`integration-${id}`}
+        onClick={onToggle}
+      >
+        <span className={`dot ${dotClass}`} />
+        <span className="mono" style={{ minWidth: 80 }}>
+          {label}
+        </span>
+        <span className="mono" style={{ color: "var(--ink-4)" }}>
+          {info}
+        </span>
+      </button>
+      {expanded ? (
+        <div id={`integration-${id}`} className="status-detail">
+          {children}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 function Bubble({ message, t }: { message: Message; t: Messages["demoAi"] }) {
   const isUser = message.role === "user";
+  const visibleSources = (message.sources || []).slice(0, 2);
+  const extraSourceCount = (message.sources?.length || 0) - visibleSources.length;
+
   return (
     <div className={`bubble ${isUser ? "user" : "assistant"}`}>
       <div style={{ display: "flex", justifyContent: "space-between", gap: 12, marginBottom: 4 }}>
@@ -246,7 +442,7 @@ function Bubble({ message, t }: { message: Message; t: Messages["demoAi"] }) {
         </span>
         {!isUser && message.confidence !== undefined ? (
           <span className="mono" style={{ color: "var(--ink-4)" }}>
-            conf {message.confidence.toFixed(2)}
+            match {(message.confidence * 100).toFixed(0)}%
           </span>
         ) : null}
       </div>
@@ -254,20 +450,25 @@ function Bubble({ message, t }: { message: Message; t: Messages["demoAi"] }) {
       {!isUser && message.sources ? (
         <div style={{ marginTop: 8, display: "flex", flexWrap: "wrap", gap: 5 }}>
           {message.model ? (
-            <span className="chip" style={{ fontSize: 10 }}>
+            <span className="chip tag-model" style={{ fontSize: 10 }}>
               model: {getAssistantModelLabel(message.model)}
             </span>
           ) : null}
           {message.status ? (
-            <span className="chip" style={{ fontSize: 10 }}>
-              status: {message.status}
+            <span className={`chip ${message.status === "live" ? "tag-grounded" : ""}`} style={{ fontSize: 10 }}>
+              {message.status === "live" ? t.tagGroundedLive : t.tagDemoAnswer}
             </span>
           ) : null}
-          {message.sources.map((source) => (
-            <span key={source} className="chip" style={{ fontSize: 10 }}>
-              src: {source}
+          {visibleSources.map((source) => (
+            <span key={source} className="chip tag-source" style={{ fontSize: 10 }}>
+              {humanizeSource(source)}
             </span>
           ))}
+          {extraSourceCount > 0 ? (
+            <span className="chip tag-source" style={{ fontSize: 10 }}>
+              +{extraSourceCount}
+            </span>
+          ) : null}
         </div>
       ) : null}
     </div>
