@@ -158,6 +158,10 @@
       "conlang": {
         "title": "Conlang + Audio Recognition",
         "sub": "150 generated words. Pick one, say it, and see what was heard."
+      },
+      "documentEditor": {
+        "title": "Document Editor",
+        "sub": "A deployed evidence-backed document workspace: source fragments, section mapping, citations, review, and DOCX export."
       }
     }
   },
@@ -231,5 +235,20 @@
     "stop": "stop",
     "heard": "heard",
     "emptyHint": "empty / pick a word from the lexicon and try saying it. the recognizer scores closeness with edit distance."
+  },
+  "demoDocumentEditor": {
+    "problemLabel": "case study",
+    "workflowLabel": "workflow",
+    "boundaryLabel": "public boundary",
+    "title": "Evidence-backed document preparation, not a generic text editor.",
+    "body": "Document Editor turns messy source DOCX/PDF material into a structured workspace where every drafted section can be traced back to inspectable source fragments. The portfolio deployment is sanitized and protected separately from the real client deployment.",
+    "openDemo": "Open live demo",
+    "accessNote": "Protected demo at editor.khovrov.dev",
+    "boundaryText": "The demo should be presented as a document-preparation workspace, not autonomous compliance, legal, geological, tax, or inspection-ready output. Synthetic or public sample data only.",
+    "chips": {
+      "liveDemo": "live",
+      "protected": "auth gated",
+      "sanitized": "sanitized"
+    }
   }
 }

@@ -852,6 +852,80 @@ section {
   padding: 10px;
 }
 
+.document-demo-title {
+  max-width: 560px;
+  margin: 8px 0 8px;
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.16;
+}
+
+.document-demo-copy {
+  max-width: 620px;
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 14px;
+}
+
+.document-demo-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.document-demo-stats {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.document-demo-stat-value {
+  margin-top: 4px;
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.document-workflow {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.document-workflow-row {
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--bg-1);
+}
+
+.document-workflow-index {
+  color: var(--accent);
+}
+
+.document-workflow-label {
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.document-workflow-row p,
+.document-demo-boundary p {
+  margin: 3px 0 0;
+  color: var(--ink-3);
+  font-size: 12.5px;
+}
+
+.document-demo-boundary {
+  margin-top: 12px;
+  padding: 12px;
+}
+
 .lexicon-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));

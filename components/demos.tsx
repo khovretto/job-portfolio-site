@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { DemoAI } from "@/components/demos/demo-ai";
+import { DemoDocumentEditor } from "@/components/demos/demo-document-editor";
 import { DemoKB } from "@/components/demos/demo-kb";
 import { DemoConlang } from "@/components/demos/demo-conlang";
 import { trackEvent } from "@/components/event-tracker";
@@ -11,6 +12,7 @@ const demos = [
   { id: "ai", num: "01", component: DemoAI },
   { id: "kb", num: "02", component: DemoKB },
   { id: "conlang", num: "03", component: DemoConlang },
+  { id: "documentEditor", num: "04", component: DemoDocumentEditor },
 ] as const;
 
 export function Demos() {

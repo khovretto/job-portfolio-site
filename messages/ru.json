@@ -158,6 +158,10 @@
       "conlang": {
         "title": "Конланг + распознавание речи",
         "sub": "150 сгенерированных слов. Выберите одно, произнесите и увидите, что распозналось."
+      },
+      "documentEditor": {
+        "title": "Document Editor",
+        "sub": "A deployed evidence-backed document workspace: source fragments, section mapping, citations, review, and DOCX export."
       }
     }
   },
@@ -231,5 +235,20 @@
     "stop": "стоп",
     "heard": "распознано",
     "emptyHint": "пусто / выберите слово из лексикона и попробуйте произнести. распознаватель оценивает близость по редакционному расстоянию."
+  },
+  "demoDocumentEditor": {
+    "problemLabel": "case study",
+    "workflowLabel": "workflow",
+    "boundaryLabel": "public boundary",
+    "title": "Evidence-backed document preparation, not a generic text editor.",
+    "body": "Document Editor turns messy source DOCX/PDF material into a structured workspace where every drafted section can be traced back to inspectable source fragments. The portfolio deployment is sanitized and protected separately from the real client deployment.",
+    "openDemo": "Open live demo",
+    "accessNote": "Protected demo at editor.khovrov.dev",
+    "boundaryText": "The demo should be presented as a document-preparation workspace, not autonomous compliance, legal, geological, tax, or inspection-ready output. Synthetic or public sample data only.",
+    "chips": {
+      "liveDemo": "live",
+      "protected": "auth gated",
+      "sanitized": "sanitized"
+    }
   }
 }

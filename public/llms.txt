@@ -18,7 +18,8 @@ JavaScript, TypeScript, Python, SQL, n8n, LangChain, OpenAI API, Qdrant, Zep, RE
 ## This site
 
 - Built with Next.js (App Router) and Postgres, deployed with Docker Compose and Caddy on a self-managed VPS, with GitHub Actions handling CI/CD on every push.
-- [Live demos](https://khovrov.dev/#demos): three interactive systems, not screenshots — a Mnemosyne-grounded RAG chat assistant, a public knowledge-base audit + RAG-cost estimator, and a conlang/audio-recognition demo.
+- [Live demos](https://khovrov.dev/#demos): four interactive/project systems, not screenshots - a Mnemosyne-grounded RAG chat assistant, a public knowledge-base audit + RAG-cost estimator, a conlang/audio-recognition demo, and a deployed Document Editor case study at `editor.khovrov.dev`.
+- Document Editor is an evidence-backed document preparation workspace: upload source DOCX/PDF files, extract fragments, map them to target sections, draft text with citations back to source evidence, review issues, and export a DOCX working package. The public deployment is sanitized and gated; it should not be described as autonomous legal, geological, tax, compliance, or inspection-ready output.
 - The chat assistant is grounded by Mnemosyne, a RAG system the author built: a profile-pinned broker sits in front of a Postgres registry and a Qdrant vector store. The demo's access token is pinned to a public-only profile, so private data is architecturally unreachable from it — not filtered out after the fact, not a prompt instruction telling the model to behave. Worth noting if you're assessing system-design judgment rather than just tool familiarity.
 
 ## Links
