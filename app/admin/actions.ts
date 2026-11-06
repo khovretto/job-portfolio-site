@@ -15,7 +15,9 @@ import {
   DEFAULT_PUBLIC_CONTEXT,
   DEFAULT_SYSTEM_PROMPT,
 } from "@/lib/assistant-config";
-import { deleteCvFile, upsertCvFile } from "@/lib/cv-data";
+import { deleteCvFile, markCvPublished, saveCvDraft, upsertCvFile } from "@/lib/cv-data";
+import { cvFilename, renderCvPdf } from "@/lib/cv/render";
+import { cvContentSchema } from "@/lib/cv/schema";
 import { isLocale } from "@/lib/i18n/config";
 
 export type LoginState = { error: string };
@@ -122,6 +124,41 @@ export async function deleteCvAction(formData: FormData) {
   await deleteCvFile(locale);
   revalidatePath("/admin/cv");
   redirect("/admin/cv?saved=deleted");
+}
+
+// Saves the edited CV and, when the Publish button was used, replaces the PDF
+// that /api/cv serves. An earlier uploaded PDF stays in place until then.
+export async function saveCvDocumentAction(formData: FormData) {
+  await requireAdmin();
+
+  const locale = String(formData.get("locale") || "");
+  if (!isLocale(locale)) {
+    redirect("/admin/cv?error=locale");
+  }
+
+  let raw: unknown;
+  try {
+    raw = JSON.parse(String(formData.get("content") || ""));
+  } catch {
+    redirect(`/admin/cv?lang=${locale}&error=invalid`);
+  }
+
+  const parsed = cvContentSchema.safeParse(raw);
+  if (!parsed.success) {
+    redirect(`/admin/cv?lang=${locale}&error=invalid`);
+  }
+
+  await saveCvDraft(locale, parsed.data);
+
+  const publish = formData.get("intent") === "publish";
+  if (publish) {
+    const pdf = await renderCvPdf(parsed.data, locale);
+    await upsertCvFile(locale, cvFilename(parsed.data, locale), "application/pdf", pdf);
+    await markCvPublished(locale);
+  }
+
+  revalidatePath("/admin/cv");
+  redirect(`/admin/cv?lang=${locale}&saved=${publish ? "published" : "draft"}`);
 }
 
 export async function resetAssistantConfigAction() {

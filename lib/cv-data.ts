@@ -1,5 +1,7 @@
 import { query } from "@/lib/db";
 import { locales, type Locale } from "@/lib/i18n/config";
+import { defaultCvContent } from "@/lib/cv/defaults";
+import { cvContentSchema, type CvContent } from "@/lib/cv/schema";
 
 export type CvMeta = {
   locale: Locale;
@@ -92,4 +94,42 @@ export async function upsertCvFile(
 
 export async function deleteCvFile(locale: Locale): Promise<void> {
   await query(`delete from cv_files where locale = $1`, [locale]);
+}
+
+export type CvDraft = {
+  content: CvContent;
+  updatedAt: Date | null;
+  publishedAt: Date | null;
+};
+
+// Falls back to the starting content until a language is first saved.
+export async function getCvDraft(locale: Locale): Promise<CvDraft> {
+  const result = await query<{ content: unknown; updated_at: Date; published_at: Date | null }>(
+    `select content, updated_at, published_at from cv_documents where locale = $1`,
+    [locale],
+  );
+  const row = result.rows[0];
+  if (!row) return { content: defaultCvContent(locale), updatedAt: null, publishedAt: null };
+
+  const parsed = cvContentSchema.safeParse(row.content);
+  return {
+    content: parsed.success ? parsed.data : defaultCvContent(locale),
+    updatedAt: row.updated_at,
+    publishedAt: row.published_at,
+  };
+}
+
+export async function saveCvDraft(locale: Locale, content: CvContent): Promise<void> {
+  await query(
+    `insert into cv_documents (locale, content, updated_at)
+     values ($1, $2, now())
+     on conflict (locale) do update
+       set content = excluded.content,
+           updated_at = now()`,
+    [locale, JSON.stringify(content)],
+  );
+}
+
+export async function markCvPublished(locale: Locale): Promise<void> {
+  await query(`update cv_documents set published_at = now() where locale = $1`, [locale]);
 }

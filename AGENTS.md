@@ -8,7 +8,7 @@ This file is for future Codex/AI sessions working on the portfolio.
 - Admin panel: `/admin`, protected by a single admin session cookie.
 - Database: Postgres in Docker Compose, migrations in `db/*.sql`.
 - Deployment: GitHub Actions uploads source to `/var/www/khovrov.dev` and rebuilds Docker containers on the VPS.
-- Reverse proxy: Caddy in this repo serves `khovrov.dev`, `www.khovrov.dev`, `stats.khovrov.dev`, `chat.khovrov.dev` (+ `/toolservers/mnemosyne-public/*`), `kb-audit.khovrov.dev`, `automation.khovrov.dev`, and `editor.khovrov.dev` (sanitized Document Editor portfolio demo, added 2026-06-29).
+- Reverse proxy: Caddy in this repo serves `khovrov.dev`, `www.khovrov.dev`, `stats.khovrov.dev`, `chat.khovrov.dev` (including private `/toolservers/mnemosyne/*` and public `/toolservers/mnemosyne-public/*`), `kb-audit.khovrov.dev`, `automation.khovrov.dev`, and `editor.khovrov.dev` (sanitized Document Editor portfolio demo, added 2026-06-29).
 - Open WebUI: separate project at `/opt/personal-voice-assistant`, routed by this repo's Caddy config at `https://chat.khovrov.dev`.
 
 ## Assistant Integration

@@ -23,12 +23,14 @@ Stack:
 
 Contact:
 - Email: mkhovrov01@gmail.com
+- Telegram: t.me/khovre
 - GitHub: github.com/mkhovrov01
 - LinkedIn: linkedin.com/in/maksim-khovrov-113633293
 `;
 
 export const contactLinks = {
   email: "mkhovrov01@gmail.com",
+  telegram: "https://t.me/khovre",
   github: "https://github.com/mkhovrov01",
   linkedin: "https://www.linkedin.com/in/maksim-khovrov-113633293/",
 };
