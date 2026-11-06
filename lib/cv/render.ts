@@ -14,11 +14,16 @@ const ACCENT = "#d5251a";
 const MARGIN = 42;
 const BODY = 9.2;
 
-const titles: Record<Locale, Record<"summary" | "experience" | "projects" | "skills" | "education" | "languages", string>> = {
+const titles: Record<
+  Locale,
+  Record<"summary" | "experience" | "responsibilities" | "achievements" | "projects" | "skills" | "education" | "languages", string>
+> = {
   en: {
     summary: "Summary",
     experience: "Experience",
-    projects: "Projects",
+    responsibilities: "Responsibilities",
+    achievements: "Key achievements",
+    projects: "Personal Projects",
     skills: "Skills",
     education: "Education",
     languages: "Languages",
@@ -26,7 +31,9 @@ const titles: Record<Locale, Record<"summary" | "experience" | "projects" | "ski
   ru: {
     summary: "О себе",
     experience: "Опыт работы",
-    projects: "Проекты",
+    responsibilities: "Обязанности",
+    achievements: "Ключевые результаты",
+    projects: "Личные проекты",
     skills: "Навыки",
     education: "Образование",
     languages: "Языки",
@@ -34,7 +41,7 @@ const titles: Record<Locale, Record<"summary" | "experience" | "projects" | "ski
 };
 
 function safeLink(url: string): string | undefined {
-  return /^(https?:\/\/|mailto:)/i.test(url) ? url : undefined;
+  return /^(https?:\/\/|mailto:|tel:)/i.test(url) ? url : undefined;
 }
 
 export function renderCvPdf(cv: CvContent, locale: Locale): Promise<Buffer> {
@@ -77,7 +84,8 @@ export function renderCvPdf(cv: CvContent, locale: Locale): Promise<Buffer> {
       doc.font(SEMIBOLD).fontSize(10.5);
       ensureSpace(doc.heightOfString(title, { width: titleWidth }) + 26);
       const y = doc.y;
-      doc.fillColor(INK).text(title, MARGIN, y, { width: titleWidth, link, underline: false });
+      // A new page resets the font, so it is set after the check.
+      doc.font(SEMIBOLD).fontSize(10.5).fillColor(INK).text(title, MARGIN, y, { width: titleWidth, link, underline: false });
       const after = doc.y;
       if (period) {
         doc.font(REGULAR).fontSize(8.5).fillColor(MUTED);
@@ -99,7 +107,7 @@ export function renderCvPdf(cv: CvContent, locale: Locale): Promise<Buffer> {
         const height = doc.heightOfString(item, { width: width - 11, lineGap: 1.5 });
         ensureSpace(height + 2);
         const y = doc.y;
-        doc.fillColor(ACCENT).text("•", MARGIN, y, { lineBreak: false });
+        doc.font(REGULAR).fontSize(BODY).fillColor(ACCENT).text("•", MARGIN, y, { lineBreak: false });
         doc.fillColor(INK).text(item, MARGIN + 11, y, { width: width - 11, lineGap: 1.5 });
         doc.y += 1.5;
       }
@@ -115,12 +123,30 @@ export function renderCvPdf(cv: CvContent, locale: Locale): Promise<Buffer> {
 
     const contacts = cv.contacts.filter((item) => item.label);
     if (contacts.length) {
-      doc.font(REGULAR).fontSize(8.5);
+      // Placed one by one, so an address moves to the next line whole instead of breaking at a slash.
+      doc.font(REGULAR).fontSize(8.5).fillColor(MUTED);
+      const separator = "  ·  ";
+      const separatorWidth = doc.widthOfString(separator);
+      const lineHeight = doc.currentLineHeight(true);
+      let x = MARGIN;
+      let y = doc.y;
       contacts.forEach((item, index) => {
-        const last = index === contacts.length - 1;
-        doc.fillColor(MUTED).text(item.label, { continued: !last, link: safeLink(item.url) ?? null, underline: false });
-        if (!last) doc.fillColor(MUTED).text("  ·  ", { continued: true, link: null });
+        const labelWidth = doc.widthOfString(item.label);
+        if (index) {
+          if (x + separatorWidth + labelWidth > MARGIN + width) {
+            x = MARGIN;
+            y += lineHeight;
+          } else {
+            doc.text(separator, x, y, { lineBreak: false });
+            x += separatorWidth;
+          }
+        }
+        // A link's clickable box needs an explicit width when the line does not wrap.
+        doc.text(item.label, x, y, { width: labelWidth + 1, lineBreak: false, link: safeLink(item.url) ?? null, underline: false });
+        x += labelWidth;
       });
+      doc.x = MARGIN;
+      doc.y = y + lineHeight;
     }
 
     doc.moveDown(0.6);
@@ -141,13 +167,26 @@ export function renderCvPdf(cv: CvContent, locale: Locale): Promise<Buffer> {
           doc.font(REGULAR).fontSize(BODY).fillColor(MUTED);
           doc.text(item.company, MARGIN, doc.y, { width, link: safeLink(item.url) ?? null, underline: false });
         }
-        if (item.bullets.length) bullets(item.bullets);
+        for (const [label, items] of [
+          [t.responsibilities, item.responsibilities],
+          [t.achievements, item.achievements],
+        ] as const) {
+          if (!items.length) continue;
+          ensureSpace(32);
+          doc.moveDown(0.25);
+          doc.font(SEMIBOLD).fontSize(BODY).fillColor(INK).text(label, MARGIN, doc.y, { width });
+          bullets(items);
+        }
       });
     }
 
     const projects = cv.projects.filter((item) => item.name);
     if (projects.length) {
       section(t.projects);
+      if (cv.projectsNote) {
+        body(cv.projectsNote, MUTED);
+        doc.moveDown(0.25);
+      }
       projects.forEach((item, index) => {
         if (index) doc.moveDown(0.5);
         entryHead(item.name, item.period, safeLink(item.url));

@@ -21,10 +21,12 @@ export const cvContentSchema = z.object({
         company: short,
         url,
         period: short,
-        bullets: lines,
+        responsibilities: lines,
+        achievements: lines,
       }),
     )
     .max(15),
+  projectsNote: short,
   projects: z
     .array(
       z.object({

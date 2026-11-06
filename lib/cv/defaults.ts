@@ -1,171 +1,230 @@
 import type { Locale } from "@/lib/i18n/config";
-import { contactLinks } from "@/lib/profile";
 import type { CvContent } from "@/lib/cv/schema";
 
+// This repository is public, so the phone number is added in the editor, not here.
 const contacts: CvContent["contacts"] = [
-  { label: contactLinks.email, url: `mailto:${contactLinks.email}` },
-  { label: "t.me/khovre", url: contactLinks.telegram },
+  { label: "mkhovrov01@gmail.com", url: "mailto:mkhovrov01@gmail.com" },
+  { label: "t.me/khovre", url: "https://t.me/khovre" },
+  { label: "linkedin.com/in/maksim-khovrov-113633293", url: "https://www.linkedin.com/in/maksim-khovrov-113633293/" },
+  { label: "github.com/mkhovrov01", url: "https://github.com/mkhovrov01" },
   { label: "khovrov.dev", url: "https://khovrov.dev" },
-  { label: "github.com/mkhovrov01", url: contactLinks.github },
-  { label: "LinkedIn", url: contactLinks.linkedin },
 ];
 
 // The starting point of the editor until a language is first saved.
-// The facts come from the public site and "Context for AI.md".
 const defaults: Record<Locale, CvContent> = {
   en: {
     name: "Maksim Khovrov",
-    headline: "AI Automation Engineer",
-    location: "Novi Sad, Serbia (GMT+2). Open to remote work.",
+    headline: "AI / LLM Engineer",
+    location: "Novi Sad, Serbia  ·  Remote / Hybrid / Open to Relocation",
     contacts,
     summary:
-      "4.5 years in development and automation, with 2+ years of focused work with LLMs and AI agents. I combine development, testing and business understanding with experience managing a team of 10 people. Seeking a position in AI development, automation or technical product management.",
+      "AI engineer with 4.5 years in development and automation, the last 2+ focused on production LLM systems: RAG pipelines, conversational AI agents, and self-hosted AI infrastructure. Shipped 30+ voice AI solutions to production and built a governed retrieval system that now runs five self-hosted personal projects end to end.\nSeeking AI Engineer / LLM Engineer roles: designing, deploying, and scaling production AI products, with a focus on agentic workflows, retrieval systems, and AI infrastructure.",
     experience: [
       {
-        role: "Project Manager / Automation Engineer",
-        company: "MCN Telecom, Business Process Automation department",
+        role: "Product Manager / Automation Engineer",
+        company: "MCN Telecom — Moscow / Remote",
         url: "https://mcn.ru/",
-        period: "2020 – 2024 (4 yrs 5 mo)",
-        bullets: [
-          "Launched 30+ voice robots into production across medical, retail, recruitment, financial and municipal infrastructure sectors.",
-          "Implemented an internal custom voice AI robot with RAG to handle company B2C customers.",
-          "Designed and deployed 3 RAG pipelines (Qdrant, Zep) for client knowledge bases, increasing robot response accuracy from 70% to 98%.",
-          "Conducted 15+ technical audits and helped prepare commercial proposals that closed deals worth $400K+.",
-          "Core developer through a team restructuring: redesigned processes, onboarded specialists and scaled the team from 3 to 10+ people.",
-          "Added alerting and error handling for external API integrations.",
-          "Designed integration architectures with Bitrix24, amoCRM, 1C and IP telephony; built business logic in n8n with custom JavaScript and Python functions.",
-          "Mentored new developers: code reviews, training on the stack and an internal knowledge base.",
+        period: "Mar 2023 – Nov 2025",
+        responsibilities: [
+          "Managed the full implementation cycle of the internal voice AI assistant with RAG: requirements, system design, launch, support.",
+          "Designed integration architectures with Bitrix24, amoCRM, 1C, and IP telephony.",
+          "Built business logic in n8n with custom JavaScript and Python functions.",
+          "Built RAG pipelines: dataset preparation, vector store configuration, retriever tuning.",
+          "Wrote system prompts and scenarios to improve LLM response accuracy.",
+          "Gathered requirements, decomposed tasks, prepared final documentation (Swagger API).",
+          "Managed a team of 10: onboarding, mentoring, code review, internal knowledge base.",
+        ],
+        achievements: [
+          "Launched 30+ voice AI solutions into production across medical, retail, recruitment, financial, and municipal-infrastructure clients.",
+          "Designed and shipped 3 RAG pipelines (Qdrant, Zep) for client knowledge bases, raising response accuracy from 70% to 98%.",
+          "Migrated the voice pipeline from a step-based to a real-time streaming architecture.",
+          "Led 15+ technical audits and supported commercial proposals that closed $400K+ in deals.",
+          "Scaled the automation team from 3 to 10+ people.",
+          "Built alerting and error handling for high-uptime external API integrations.",
+        ],
+      },
+      {
+        role: "QA Engineer",
+        company: "MCN Telecom — Moscow / Remote",
+        url: "https://mcn.ru/",
+        period: "Jul 2021 – Mar 2023",
+        responsibilities: [
+          "Conducted manual testing, developed technical documentation and system guides.",
+          "Built and maintained internal automation workflows, shifting from manual QA to backend automation engineering.",
+        ],
+        achievements: [
+          "Took ownership of the department's technical stack when the team was reduced to 3 members; became the primary developer for automated solutions.",
+          "Promoted to Product Manager / Automation Engineer.",
         ],
       },
     ],
+    projectsNote: "Self-hosted and self-built. Portfolio and live demos: khovrov.dev",
     projects: [
       {
         name: "Cogan",
-        url: "https://khovrov.dev/#project",
+        url: "",
         period: "",
         description:
-          "System for preparing and checking complex document packages, in active development and running in production for a client: from the requirements of normative acts to a finished PDF and DOCX.",
-        bullets: [
-          "Built the FastAPI and React product: normative library with accepted clauses, versioned templates and projects, extraction review, package checks and immutable releases.",
-          "Designed a document model that keeps content apart from appearance: inheritable Formattings build one set of data into both PDF (Typst) and DOCX.",
-          "Integrated AI across the product as 25 managed actions, each with its own versioned prompt, model, limit and switch.",
-          "Developing Cogan AI, the product agent, with tools chosen by context and checked proposals, plus a harness that runs it in a sandbox against scenarios and compares variants.",
-        ],
-      },
-      {
-        name: "Mnemosyne + Personal Assistant",
-        url: "https://khovrov.dev/#demo-assistant",
-        period: "",
-        description:
-          "RAG system behind the assistant on my site: a profile-pinned broker in front of a Postgres registry and a Qdrant vector store, so private data is unreachable from the public token.",
+          "System for preparing and checking complex document packages, from normative requirements to finished PDF and DOCX; runs in production for a client. Includes a product agent with its own evaluation harness and sandbox; OCR/PDF reconstruction runs on a separate untrusted-compute worker. FastAPI, React, TypeScript, SQLite, LangGraph, Docling, Typst. Live demo: editor.khovrov.dev.",
         bullets: [],
       },
       {
-        name: "Knowledge Base RAG Auditor",
-        url: "https://khovrov.dev/#demo-kb-audit",
+        name: "Mnemosyne",
+        url: "",
         period: "",
-        description: "Public tool that audits a site and estimates the scope, cost and confidence of a RAG pipeline.",
+        description:
+          "Access-controlled knowledge retrieval broker: every AI query is scoped and re-validated against a canonical registry before it's served, so the access boundary is structural, not a prompt instruction. Python, PostgreSQL, Qdrant, FastAPI, MCP.",
+        bullets: [],
+      },
+      {
+        name: "Personal AI Assistant",
+        url: "",
+        period: "",
+        description:
+          "Self-hosted chat assistant (Open WebUI) grounded through Mnemosyne, answering with citations instead of improvising. FastAPI, Qdrant, OpenRouter.",
+        bullets: [],
+      },
+      {
+        name: "KB Auditor and RAG Builder",
+        url: "",
+        period: "",
+        description:
+          "Agent-orchestrated pipeline that crawls a public knowledge base, audits it, builds a RAG index, and evaluates retrieval quality end to end; n8n runs the agentic stages. Next.js, PostgreSQL, Prisma, n8n.",
         bullets: [],
       },
       {
         name: "PhonoForge",
-        url: "https://khovrov.dev/#demo-phonoforge",
+        url: "",
         period: "",
-        description: "Conlang and speech recognition experiment with a browser demo.",
+        description:
+          "Speech-ML project that designs a constructed-language vocabulary and its recognizer together, screening for phonetic distinctiveness before any audio is recorded; benchmarked against three baselines. Python, PanPhon, WavLM.",
         bullets: [],
       },
     ],
     skills: [
-      { group: "Languages", items: "JavaScript, TypeScript, Python, SQL" },
-      { group: "AI and data", items: "LangChain, RAG, Qdrant, Zep, Pinecone, OpenAI API, prompt engineering, fine-tuning" },
-      { group: "Tools", items: "n8n, Git, GitHub, Docker, Linux, Jupyter, Swagger, REST, CI/CD, Jira, Notion" },
-      { group: "Systems", items: "Bitrix24, amoCRM, 1C, VoIP, PostgreSQL" },
+      { group: "Languages", items: "Python, JavaScript, TypeScript, SQL" },
+      { group: "AI & Retrieval", items: "RAG, LangChain, OpenAI API, Qdrant, Zep, Prompt Engineering, MCP" },
+      { group: "Backend & Infra", items: "FastAPI, Next.js, PostgreSQL, Docker, Caddy, Linux, Git" },
+      { group: "Automation & CRM", items: "n8n, REST APIs, Webhooks, Bitrix24, amoCRM, 1C, Swagger" },
     ],
     education: [
       {
-        institution: "MIREA — Russian Technological University",
-        degree: "Computer Science and Software Engineering (incomplete degree)",
+        institution: "MIREA — Russian Technological University, Moscow",
+        degree: "Software Engineering (incomplete, 2023)",
         period: "",
       },
     ],
-    languages: [],
+    languages: [
+      { name: "Russian", level: "Native" },
+      { name: "English", level: "C1, cert.efset.org/en/7MbYem" },
+    ],
   },
   ru: {
     name: "Максим Ховров",
-    headline: "Инженер по AI-автоматизации",
-    location: "Нови-Сад, Сербия (GMT+2). Открыт к удалённой работе.",
+    headline: "AI / LLM-инженер",
+    location: "Нови-Сад, Сербия  ·  Удалённо / гибрид / готов к релокации",
     contacts,
     summary:
-      "4,5 года в разработке и автоматизации, из них 2+ года — в системах на основе LLM и AI-агентах. Сочетаю разработку, тестирование и понимание бизнеса с опытом управления командой из 10 человек. Ищу позицию в AI-разработке, автоматизации или техническом продакт-менеджменте.",
+      "AI-инженер: 4,5 года в разработке и автоматизации, из них последние 2+ года — продакшн-системы на LLM: RAG-пайплайны, диалоговые AI-агенты и self-hosted AI-инфраструктура. Запустил в продакшн 30+ голосовых AI-решений и построил систему управляемого поиска, на которой работают пять self-hosted личных проектов.\nИщу роли AI Engineer / LLM Engineer: проектирование, запуск и масштабирование AI-продуктов в продакшене, с упором на агентные процессы, поисковые системы и AI-инфраструктуру.",
     experience: [
       {
-        role: "Проджект-менеджер / Инженер по автоматизации",
-        company: "MCN Telecom, отдел автоматизации бизнес-процессов",
+        role: "Продакт-менеджер / инженер по автоматизации",
+        company: "MCN Telecom — Москва / удалённо",
         url: "https://mcn.ru/",
-        period: "2020 — 2024 (4 года 5 мес)",
-        bullets: [
-          "Запустил в продакшн 30+ голосовых роботов в медицине, ритейле, рекрутинге, финансах и муниципальной инфраструктуре.",
-          "Внедрил внутреннего голосового AI-робота с RAG для работы с B2C-клиентами компании.",
-          "Спроектировал и развернул 3 RAG-пайплайна (Qdrant, Zep) для клиентских баз знаний, повысив точность ответов роботов с 70% до 98%.",
-          "Провёл 15+ технических аудитов и помог подготовить коммерческие предложения, закрывшие сделки на $400K+.",
-          "Ключевой разработчик в период реструктуризации: перестроил процессы, онбордил специалистов, масштабировал команду с 3 до 10+ человек.",
-          "Добавил алертинг и обработку ошибок для интеграций с внешними API.",
-          "Проектировал архитектуру интеграций с Bitrix24, amoCRM, 1С и IP-телефонией; писал бизнес-логику в n8n с функциями на JavaScript и Python.",
-          "Менторил новых разработчиков: код-ревью, обучение стеку, внутренняя база знаний.",
+        period: "март 2023 – ноябрь 2025",
+        responsibilities: [
+          "Вёл полный цикл внедрения внутреннего голосового AI-ассистента с RAG: требования, проектирование, запуск, поддержка.",
+          "Проектировал архитектуру интеграций с Bitrix24, amoCRM, 1С и IP-телефонией.",
+          "Писал бизнес-логику в n8n с функциями на JavaScript и Python.",
+          "Создавал RAG-пайплайны: подготовка данных, настройка векторного хранилища, тюнинг ретривера.",
+          "Писал системные промпты и сценарии для повышения точности ответов LLM.",
+          "Собирал требования, декомпозировал задачи, готовил итоговую документацию (Swagger API).",
+          "Управлял командой из 10 человек: онбординг, менторство, код-ревью, внутренняя база знаний.",
+        ],
+        achievements: [
+          "Запустил в продакшн 30+ голосовых AI-решений для клиентов из медицины, ритейла, рекрутинга, финансов и муниципальной инфраструктуры.",
+          "Спроектировал и запустил 3 RAG-пайплайна (Qdrant, Zep) для клиентских баз знаний, повысив точность ответов с 70% до 98%.",
+          "Перевёл голосовой пайплайн с пошаговой архитектуры на потоковую в реальном времени.",
+          "Провёл 15+ технических аудитов и поддержал коммерческие предложения, закрывшие сделки на $400K+.",
+          "Масштабировал команду автоматизации с 3 до 10+ человек.",
+          "Построил алертинг и обработку ошибок для высокодоступных интеграций с внешними API.",
+        ],
+      },
+      {
+        role: "QA-инженер",
+        company: "MCN Telecom — Москва / удалённо",
+        url: "https://mcn.ru/",
+        period: "июль 2021 – март 2023",
+        responsibilities: [
+          "Проводил ручное тестирование, писал техническую документацию и руководства по системам.",
+          "Создавал и поддерживал внутренние процессы автоматизации, перейдя от ручного QA к бэкенд-автоматизации.",
+        ],
+        achievements: [
+          "Принял ответственность за технический стек отдела при сокращении команды до 3 человек; стал основным разработчиком автоматизированных решений.",
+          "Повышен до продакт-менеджера / инженера по автоматизации.",
         ],
       },
     ],
+    projectsNote: "Сам разрабатываю и размещаю. Портфолио и живые демо: khovrov.dev",
     projects: [
       {
         name: "Cogan",
-        url: "https://khovrov.dev/#project",
+        url: "",
         period: "",
         description:
-          "Система подготовки и проверки сложных комплектов документов, в активной разработке и в продакшене у клиента: от требований нормативных актов до готовых PDF и DOCX.",
-        bullets: [
-          "Разработал продукт на FastAPI и React: нормативная библиотека с принятыми пунктами, версионные шаблоны и проекты, проверка извлечения, проверка пакета и неизменяемые выпуски.",
-          "Спроектировал модель документа, где содержимое отделено от вида: наследуемые Оформления собирают одни данные в PDF (Typst) и DOCX.",
-          "Встроил ИИ по всему продукту: 25 управляемых действий, у каждого свой версионируемый промпт, модель, лимит и выключатель.",
-          "Разрабатываю Коган AI, агента продукта: инструменты по контексту, проверяемые предложения и харнесс, который гоняет его в песочнице по сценариям и сравнивает варианты.",
-        ],
-      },
-      {
-        name: "Mnemosyne + личный ассистент",
-        url: "https://khovrov.dev/#demo-assistant",
-        period: "",
-        description:
-          "RAG-система за ассистентом на моём сайте: брокер с закреплённым профилем перед реестром в Postgres и векторным хранилищем Qdrant, поэтому приватные данные недостижимы с публичным токеном.",
+          "Система подготовки и проверки сложных комплектов документов: от нормативных требований до готовых PDF и DOCX; работает в продакшене у клиента. Включает агента продукта со своим харнессом оценки и песочницей; OCR и реконструкция PDF вынесены на отдельный изолированный воркер. FastAPI, React, TypeScript, SQLite, LangGraph, Docling, Typst. Живое демо: editor.khovrov.dev.",
         bullets: [],
       },
       {
-        name: "Knowledge Base RAG Auditor",
-        url: "https://khovrov.dev/#demo-kb-audit",
+        name: "Mnemosyne",
+        url: "",
         period: "",
-        description: "Публичный инструмент: аудит сайта и оценка объёма, стоимости и уверенности RAG-пайплайна.",
+        description:
+          "Брокер поиска по знаниям с контролем доступа: каждый запрос ИИ ограничивается и перепроверяется по каноническому реестру, поэтому граница доступа задана структурой, а не инструкцией в промпте. Python, PostgreSQL, Qdrant, FastAPI, MCP.",
+        bullets: [],
+      },
+      {
+        name: "Личный AI-ассистент",
+        url: "",
+        period: "",
+        description:
+          "Self-hosted чат-ассистент (Open WebUI) с опорой на Mnemosyne: отвечает с цитатами, а не додумывает. FastAPI, Qdrant, OpenRouter.",
+        bullets: [],
+      },
+      {
+        name: "KB Auditor и RAG Builder",
+        url: "",
+        period: "",
+        description:
+          "Пайплайн с агентами: обходит публичную базу знаний, проводит аудит, строит RAG-индекс и оценивает качество поиска; агентные этапы выполняет n8n. Next.js, PostgreSQL, Prisma, n8n.",
         bullets: [],
       },
       {
         name: "PhonoForge",
-        url: "https://khovrov.dev/#demo-phonoforge",
+        url: "",
         period: "",
-        description: "Эксперимент с конлангом и распознаванием речи, с демо в браузере.",
+        description:
+          "Speech-ML-проект: словарь искусственного языка и его распознаватель проектируются вместе, фонетическая различимость проверяется до записи аудио; сравнение с тремя базовыми подходами. Python, PanPhon, WavLM.",
         bullets: [],
       },
     ],
     skills: [
-      { group: "Языки", items: "JavaScript, TypeScript, Python, SQL" },
-      { group: "AI и данные", items: "LangChain, RAG, Qdrant, Zep, Pinecone, OpenAI API, промпт-инжиниринг, fine-tuning" },
-      { group: "Инструменты", items: "n8n, Git, GitHub, Docker, Linux, Jupyter, Swagger, REST, CI/CD, Jira, Notion" },
-      { group: "Системы", items: "Битрикс24, amoCRM, 1С, VoIP, PostgreSQL" },
+      { group: "Языки", items: "Python, JavaScript, TypeScript, SQL" },
+      { group: "AI и поиск", items: "RAG, LangChain, OpenAI API, Qdrant, Zep, промпт-инжиниринг, MCP" },
+      { group: "Бэкенд и инфраструктура", items: "FastAPI, Next.js, PostgreSQL, Docker, Caddy, Linux, Git" },
+      { group: "Автоматизация и CRM", items: "n8n, REST API, вебхуки, Битрикс24, amoCRM, 1С, Swagger" },
     ],
     education: [
       {
-        institution: "МИРЭА — Российский технологический университет",
-        degree: "Компьютерные науки и программная инженерия (неоконченное)",
+        institution: "МИРЭА — Российский технологический университет, Москва",
+        degree: "Программная инженерия (неоконченное, 2023)",
         period: "",
       },
     ],
-    languages: [],
+    languages: [
+      { name: "Русский", level: "родной" },
+      { name: "Английский", level: "C1, cert.efset.org/en/7MbYem" },
+    ],
   },
 };
 

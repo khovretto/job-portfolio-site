@@ -9,7 +9,7 @@ type ListKey = "contacts" | "experience" | "projects" | "skills" | "education" |
 
 const blank: { [K in ListKey]: CvContent[K][number] } = {
   contacts: { label: "", url: "" },
-  experience: { role: "", company: "", url: "", period: "", bullets: [] },
+  experience: { role: "", company: "", url: "", period: "", responsibilities: [], achievements: [] },
   projects: { name: "", url: "", period: "", description: "", bullets: [] },
   skills: { group: "", items: "" },
   education: { institution: "", degree: "", period: "" },
@@ -173,15 +173,27 @@ export function CvEditor({ locale, initial }: { locale: Locale; initial: CvConte
               <Field label="Company link" value={item.url} onChange={(url) => patch({ url })} />
             </div>
             <Field
-              label="Achievements, one per line"
-              value={item.bullets.join("\n")}
+              label="Responsibilities, one per line"
+              value={item.responsibilities.join("\n")}
               multiline
-              rows={8}
-              onChange={(value) => patch({ bullets: value.split("\n") })}
+              rows={7}
+              onChange={(value) => patch({ responsibilities: value.split("\n") })}
+            />
+            <Field
+              label="Key achievements, one per line"
+              value={item.achievements.join("\n")}
+              multiline
+              rows={6}
+              onChange={(value) => patch({ achievements: value.split("\n") })}
             />
           </>
         ),
       })}
+
+      <fieldset className="surf cv-group">
+        <legend className="mono">Projects intro</legend>
+        <Field label="Line above the projects" value={cv.projectsNote} onChange={(value) => setField("projectsNote", value)} />
+      </fieldset>
 
       {List({
         listKey: "projects",
