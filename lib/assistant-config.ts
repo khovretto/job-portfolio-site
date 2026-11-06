@@ -20,6 +20,7 @@ This portfolio is a Next.js (App Router) app backed by Postgres, deployed with D
 
 Public contact:
 Email: mkhovrov01@gmail.com
+Telegram: t.me/khovre
 GitHub: github.com/mkhovrov01
 LinkedIn: linkedin.com/in/maksim-khovrov-113633293
 `.trim();

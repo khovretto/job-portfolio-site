@@ -30,7 +30,7 @@ const answerBank = [
   {
     terms: ["contact", "email", "hire", "remote"],
     answer:
-      "I am open to remote roles in AI automation, AI development, or technical product work. Public contact: mkhovrov01@gmail.com, GitHub at github.com/mkhovrov01, and LinkedIn at linkedin.com/in/maksim-khovrov-113633293.",
+      "I am open to remote roles in AI automation, AI development, or technical product work. Public contact: mkhovrov01@gmail.com, Telegram at t.me/khovre, GitHub at github.com/mkhovrov01, and LinkedIn at linkedin.com/in/maksim-khovrov-113633293.",
     sources: ["public-summary", "contact"],
     confidence: 0.88,
   },

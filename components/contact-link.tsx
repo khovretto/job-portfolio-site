@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 
 type Props = {
   href: string;
-  targetName: "email" | "github" | "linkedin" | "cv";
+  targetName: "email" | "telegram" | "github" | "linkedin" | "cv";
   className?: string;
   children: ReactNode;
 };

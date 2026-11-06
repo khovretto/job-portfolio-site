@@ -5,7 +5,7 @@ import { getRequestMeta } from "@/lib/request-meta";
 import { checkRateLimit } from "@/lib/rate-limit";
 
 const schema = z.object({
-  target: z.enum(["email", "github", "linkedin", "cv"]),
+  target: z.enum(["email", "telegram", "github", "linkedin", "cv"]),
 });
 
 export async function POST(request: NextRequest) {

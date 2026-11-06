@@ -5,6 +5,7 @@ import { getMessages } from "@/lib/i18n/server";
 
 const links = [
   { key: "email", value: contactLinks.email, href: `mailto:${contactLinks.email}`, target: "email" as const },
+  { key: "telegram", value: "t.me/khovre", href: contactLinks.telegram, target: "telegram" as const },
   { key: "linkedin", value: "in/maksim-khovrov-113633293", href: contactLinks.linkedin, target: "linkedin" as const },
   { key: "github", value: "github.com/mkhovrov01", href: contactLinks.github, target: "github" as const },
 ];

@@ -4,21 +4,36 @@ import type { Locale } from "@/lib/i18n/config";
 import type { CvContent } from "@/lib/cv/schema";
 
 const FONT_DIR = path.join(process.cwd(), "lib", "cv", "fonts");
+const LOGO = path.join(process.cwd(), "public", "brand", "logo.png");
 const REGULAR = "regular";
 const SEMIBOLD = "semibold";
 
-const INK = "#15171a";
-const MUTED = "#5c6168";
+const INK = "#16181c";
+const MUTED = "#5d636c";
 const ACCENT = "#d5251a";
+const RAIL = "#f1f2f4";
 
-const MARGIN = 42;
-const BODY = 9.2;
+const PAGE_W = 595.28;
+const PAGE_H = 841.89;
+const RAIL_W = 166;
+const RAIL_X = 22;
+const RAIL_TEXT_W = RAIL_W - 38;
+const MAIN_X = RAIL_W + 22;
+const MAIN_W = PAGE_W - MAIN_X - 30;
+const TOP = 30;
+const BOTTOM = PAGE_H - 26;
+
+const BODY = 9;
+const LINE_GAP = 1.15;
+const LABEL = 7.6;
+const SECTION = 10.5;
 
 const titles: Record<
   Locale,
-  Record<"summary" | "experience" | "responsibilities" | "achievements" | "projects" | "skills" | "education" | "languages", string>
+  Record<"contacts" | "summary" | "experience" | "responsibilities" | "achievements" | "projects" | "skills" | "education" | "languages", string>
 > = {
   en: {
+    contacts: "Contact",
     summary: "Summary",
     experience: "Experience",
     responsibilities: "Responsibilities",
@@ -29,6 +44,7 @@ const titles: Record<
     languages: "Languages",
   },
   ru: {
+    contacts: "Контакты",
     summary: "О себе",
     experience: "Опыт работы",
     responsibilities: "Обязанности",
@@ -48,109 +64,92 @@ export function renderCvPdf(cv: CvContent, locale: Locale): Promise<Buffer> {
   return new Promise((resolve, reject) => {
     const doc = new PDFDocument({
       size: "A4",
-      margins: { top: MARGIN, bottom: MARGIN, left: MARGIN, right: MARGIN },
+      margin: 0,
+      bufferPages: true,
       info: { Title: `${cv.name} — CV`, Author: cv.name },
       lang: locale,
       displayTitle: true,
-      font: path.join(FONT_DIR, "Inter-400.ttf"),
+      font: path.join(FONT_DIR, "Commissioner-400.ttf"),
     });
-    doc.registerFont(REGULAR, path.join(FONT_DIR, "Inter-400.ttf"));
-    doc.registerFont(SEMIBOLD, path.join(FONT_DIR, "Inter-600.ttf"));
+    doc.registerFont(REGULAR, path.join(FONT_DIR, "Commissioner-400.ttf"));
+    doc.registerFont(SEMIBOLD, path.join(FONT_DIR, "Commissioner-600.ttf"));
 
     const chunks: Buffer[] = [];
     doc.on("data", (chunk: Buffer) => chunks.push(chunk));
     doc.on("end", () => resolve(Buffer.concat(chunks)));
     doc.on("error", reject);
 
-    const width = doc.page.width - MARGIN * 2;
-    const bottom = doc.page.height - MARGIN;
+    const t = titles[locale];
+
+    const paintRail = () => {
+      doc.save().rect(0, 0, RAIL_W, PAGE_H).fill(RAIL).restore();
+    };
+    paintRail();
 
     function ensureSpace(height: number) {
-      if (doc.y + height > bottom) doc.addPage();
-    }
-
-    function section(title: string) {
-      ensureSpace(44);
-      doc.moveDown(0.75);
-      doc.font(SEMIBOLD).fontSize(8.5).fillColor(ACCENT);
-      doc.text(title.toUpperCase(), MARGIN, doc.y, { characterSpacing: 0.8 });
-      doc.moveDown(0.35);
-    }
-
-    // A title on the left with its period on the right.
-    function entryHead(title: string, period: string, link?: string) {
-      const periodWidth = period ? Math.min(170, doc.font(REGULAR).fontSize(8.5).widthOfString(period) + 2) : 0;
-      const titleWidth = width - periodWidth - (period ? 10 : 0);
-      doc.font(SEMIBOLD).fontSize(10.5);
-      ensureSpace(doc.heightOfString(title, { width: titleWidth }) + 26);
-      const y = doc.y;
-      // A new page resets the font, so it is set after the check.
-      doc.font(SEMIBOLD).fontSize(10.5).fillColor(INK).text(title, MARGIN, y, { width: titleWidth, link, underline: false });
-      const after = doc.y;
-      if (period) {
-        doc.font(REGULAR).fontSize(8.5).fillColor(MUTED);
-        doc.text(period, MARGIN + width - periodWidth, y + 1.5, { width: periodWidth, align: "right" });
+      if (doc.y + height > BOTTOM) {
+        doc.addPage({ size: "A4", margin: 0 });
+        paintRail();
+        doc.y = TOP;
       }
-      doc.x = MARGIN;
-      doc.y = Math.max(after, doc.y);
+    }
+
+    function label(text: string, x: number, width: number, color: string) {
+      doc.font(SEMIBOLD).fontSize(LABEL).fillColor(color);
+      doc.text(text.toUpperCase(), x, doc.y, { width, characterSpacing: 0.9 });
+    }
+
+    let firstSection = true;
+    function section(title: string, room = 56) {
+      ensureSpace(room);
+      if (!firstSection) doc.y += 10;
+      firstSection = false;
+      doc.font(SEMIBOLD).fontSize(SECTION).fillColor(INK);
+      doc.text(title.toUpperCase(), MAIN_X, doc.y, { width: MAIN_W, characterSpacing: 0.6 });
+      const ruleY = doc.y + 1;
+      doc.moveTo(MAIN_X, ruleY).lineTo(MAIN_X + MAIN_W, ruleY).lineWidth(1).strokeColor(ACCENT).stroke();
+      doc.y = ruleY + 4.5;
     }
 
     function body(text: string, color = INK) {
-      doc.font(REGULAR).fontSize(BODY).fillColor(color);
-      doc.text(text, MARGIN, doc.y, { width, lineGap: 1.5 });
-    }
-
-    function bullets(items: string[]) {
-      doc.font(REGULAR).fontSize(BODY).fillColor(INK);
-      doc.moveDown(0.15);
-      for (const item of items) {
-        const height = doc.heightOfString(item, { width: width - 11, lineGap: 1.5 });
-        ensureSpace(height + 2);
-        const y = doc.y;
-        doc.font(REGULAR).fontSize(BODY).fillColor(ACCENT).text("•", MARGIN, y, { lineBreak: false });
-        doc.fillColor(INK).text(item, MARGIN + 11, y, { width: width - 11, lineGap: 1.5 });
-        doc.y += 1.5;
+      for (const line of text.split("\n")) {
+        doc.font(REGULAR).fontSize(BODY);
+        ensureSpace(doc.heightOfString(line, { width: MAIN_W, lineGap: LINE_GAP }));
+        // A new page resets the font, so it is set after the check.
+        doc.font(REGULAR).fontSize(BODY).fillColor(color).text(line, MAIN_X, doc.y, { width: MAIN_W, lineGap: LINE_GAP });
+        doc.y += 1;
       }
     }
 
-    const t = titles[locale];
-
-    // Header
-    doc.font(SEMIBOLD).fontSize(22).fillColor(INK).text(cv.name, MARGIN, MARGIN);
-    if (cv.headline) doc.font(REGULAR).fontSize(12).fillColor(INK).text(cv.headline);
-    doc.moveDown(0.3);
-    if (cv.location) doc.font(REGULAR).fontSize(8.5).fillColor(MUTED).text(cv.location);
-
-    const contacts = cv.contacts.filter((item) => item.label);
-    if (contacts.length) {
-      // Placed one by one, so an address moves to the next line whole instead of breaking at a slash.
-      doc.font(REGULAR).fontSize(8.5).fillColor(MUTED);
-      const separator = "  ·  ";
-      const separatorWidth = doc.widthOfString(separator);
-      const lineHeight = doc.currentLineHeight(true);
-      let x = MARGIN;
-      let y = doc.y;
-      contacts.forEach((item, index) => {
-        const labelWidth = doc.widthOfString(item.label);
-        if (index) {
-          if (x + separatorWidth + labelWidth > MARGIN + width) {
-            x = MARGIN;
-            y += lineHeight;
-          } else {
-            doc.text(separator, x, y, { lineBreak: false });
-            x += separatorWidth;
-          }
-        }
-        // A link's clickable box needs an explicit width when the line does not wrap.
-        doc.text(item.label, x, y, { width: labelWidth + 1, lineBreak: false, link: safeLink(item.url) ?? null, underline: false });
-        x += labelWidth;
-      });
-      doc.x = MARGIN;
-      doc.y = y + lineHeight;
+    function bullets(items: string[]) {
+      for (const item of items) {
+        doc.font(REGULAR).fontSize(BODY);
+        ensureSpace(doc.heightOfString(item, { width: MAIN_W - 9, lineGap: LINE_GAP }));
+        const y = doc.y;
+        doc.font(REGULAR).fontSize(BODY).fillColor(ACCENT).text("•", MAIN_X, y, { width: 7, lineBreak: false });
+        doc.fillColor(INK).text(item, MAIN_X + 9, y, { width: MAIN_W - 9, lineGap: LINE_GAP });
+        doc.y += 0.6;
+      }
     }
 
-    doc.moveDown(0.6);
-    doc.moveTo(MARGIN, doc.y).lineTo(MARGIN + width, doc.y).lineWidth(0.8).strokeColor(ACCENT).stroke();
+    function entryHead(title: string, period: string) {
+      doc.font(REGULAR).fontSize(BODY - 0.5);
+      const periodWidth = period ? doc.widthOfString(period) + 2 : 0;
+      ensureSpace(38);
+      const y = doc.y;
+      doc.font(SEMIBOLD).fontSize(BODY + 1.2).fillColor(INK).text(title, MAIN_X, y, { width: MAIN_W - periodWidth - 8 });
+      const after = doc.y;
+      if (period) {
+        doc.font(REGULAR).fontSize(BODY - 0.5).fillColor(MUTED);
+        doc.text(period, MAIN_X + MAIN_W - periodWidth, y + 1.2, { width: periodWidth, align: "right", lineBreak: false });
+      }
+      doc.y = after;
+    }
+
+    // Main column first: text extractors, including hiring systems, read a PDF in the order it was written.
+    doc.font(SEMIBOLD).fontSize(23).fillColor(INK).text(cv.name, MAIN_X, TOP - 4, { width: MAIN_W });
+    if (cv.headline) doc.font(REGULAR).fontSize(11).fillColor(ACCENT).text(cv.headline, MAIN_X, doc.y, { width: MAIN_W });
+    doc.y += 7;
 
     if (cv.summary) {
       section(t.summary);
@@ -161,20 +160,21 @@ export function renderCvPdf(cv: CvContent, locale: Locale): Promise<Buffer> {
     if (experience.length) {
       section(t.experience);
       experience.forEach((item, index) => {
-        if (index) doc.moveDown(0.6);
+        if (index) doc.y += 5;
         entryHead(item.role || item.company, item.period);
         if (item.role && item.company) {
           doc.font(REGULAR).fontSize(BODY).fillColor(MUTED);
-          doc.text(item.company, MARGIN, doc.y, { width, link: safeLink(item.url) ?? null, underline: false });
+          doc.text(item.company, MAIN_X, doc.y, { width: MAIN_W, link: safeLink(item.url) ?? null, underline: false });
         }
-        for (const [label, items] of [
+        for (const [title, items] of [
           [t.responsibilities, item.responsibilities],
           [t.achievements, item.achievements],
         ] as const) {
           if (!items.length) continue;
-          ensureSpace(32);
-          doc.moveDown(0.25);
-          doc.font(SEMIBOLD).fontSize(BODY).fillColor(INK).text(label, MARGIN, doc.y, { width });
+          ensureSpace(24);
+          doc.y += 2;
+          doc.font(SEMIBOLD).fontSize(BODY).fillColor(INK).text(title, MAIN_X, doc.y, { width: MAIN_W });
+          doc.y += 0.5;
           bullets(items);
         }
       });
@@ -183,51 +183,85 @@ export function renderCvPdf(cv: CvContent, locale: Locale): Promise<Buffer> {
     const projects = cv.projects.filter((item) => item.name);
     if (projects.length) {
       section(t.projects);
-      if (cv.projectsNote) {
-        body(cv.projectsNote, MUTED);
-        doc.moveDown(0.25);
-      }
-      projects.forEach((item, index) => {
-        if (index) doc.moveDown(0.5);
-        entryHead(item.name, item.period, safeLink(item.url));
-        if (item.description) body(item.description);
+      if (cv.projectsNote) body(cv.projectsNote, MUTED);
+      for (const item of projects) {
+        const heading = item.period ? `${item.name} (${item.period}). ` : `${item.name}. `;
+        doc.font(REGULAR).fontSize(BODY);
+        ensureSpace(doc.heightOfString(heading + item.description, { width: MAIN_W, lineGap: LINE_GAP }) + 2);
+        doc.y += 1.5;
+        doc.font(SEMIBOLD).fontSize(BODY).fillColor(INK).text(heading, MAIN_X, doc.y, {
+          width: MAIN_W,
+          continued: Boolean(item.description),
+          lineGap: LINE_GAP,
+          link: safeLink(item.url) ?? null,
+          underline: false,
+        });
+        if (item.description) {
+          doc.font(REGULAR).fontSize(BODY).fillColor(INK).text(item.description, { lineGap: LINE_GAP, link: null });
+        }
         if (item.bullets.length) bullets(item.bullets);
+      }
+    }
+
+    // The rail belongs to the first page, wherever the main column ended.
+    doc.switchToPage(0);
+    doc.image(LOGO, RAIL_X, TOP - 4, { height: 28 });
+    doc.y = TOP + 36;
+
+    function railBlock(title: string, draw: () => void) {
+      label(title, RAIL_X, RAIL_TEXT_W, ACCENT);
+      doc.y += 2.5;
+      draw();
+      doc.y += 12;
+    }
+
+    function railText(text: string, color = INK, font = REGULAR) {
+      doc.font(font).fontSize(8.4).fillColor(color).text(text, RAIL_X, doc.y, { width: RAIL_TEXT_W, lineGap: 1.3 });
+    }
+
+    const contacts = cv.contacts.filter((item) => item.label);
+    if (cv.location || contacts.length) {
+      railBlock(t.contacts, () => {
+        if (cv.location) {
+          railText(cv.location, MUTED);
+          doc.y += 6;
+        }
+        // The gap between contacts is wider than the line spacing, so a wrapped address still reads as one item.
+        for (const item of contacts) {
+          doc.font(REGULAR).fontSize(8.1).fillColor(INK);
+          doc.text(item.label, RAIL_X, doc.y, { width: RAIL_TEXT_W, lineGap: 0.8, link: safeLink(item.url) ?? null, underline: false });
+          doc.y += 4.5;
+        }
       });
     }
 
     const skills = cv.skills.filter((item) => item.items);
     if (skills.length) {
-      section(t.skills);
-      for (const item of skills) {
-        ensureSpace(24);
-        if (item.group) {
-          doc.font(SEMIBOLD).fontSize(BODY).fillColor(INK).text(`${item.group}: `, MARGIN, doc.y, {
-            width,
-            continued: true,
-            lineGap: 1.5,
-          });
-          doc.font(REGULAR).text(item.items, { lineGap: 1.5 });
-        } else {
-          body(item.items);
+      railBlock(t.skills, () => {
+        for (const item of skills) {
+          if (item.group) railText(item.group, INK, SEMIBOLD);
+          railText(item.items, MUTED);
+          doc.y += 3.5;
         }
-        doc.y += 1;
-      }
+      });
     }
 
     const education = cv.education.filter((item) => item.institution);
     if (education.length) {
-      section(t.education);
-      education.forEach((item, index) => {
-        if (index) doc.moveDown(0.4);
-        entryHead(item.institution, item.period);
-        if (item.degree) body(item.degree, MUTED);
+      railBlock(t.education, () => {
+        for (const item of education) {
+          railText(item.institution, INK, SEMIBOLD);
+          if (item.degree) railText(item.degree, MUTED);
+          if (item.period) railText(item.period, MUTED);
+        }
       });
     }
 
     const languages = cv.languages.filter((item) => item.name);
     if (languages.length) {
-      section(t.languages);
-      body(languages.map((item) => (item.level ? `${item.name} (${item.level})` : item.name)).join("  ·  "));
+      railBlock(t.languages, () => {
+        for (const item of languages) railText(item.level ? `${item.name}: ${item.level}` : item.name);
+      });
     }
 
     doc.end();

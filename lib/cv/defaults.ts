@@ -69,22 +69,6 @@ const defaults: Record<Locale, CvContent> = {
         bullets: [],
       },
       {
-        name: "Mnemosyne",
-        url: "",
-        period: "",
-        description:
-          "Access-controlled knowledge retrieval broker: every AI query is scoped and re-validated against a canonical registry before it's served, so the access boundary is structural, not a prompt instruction. Python, PostgreSQL, Qdrant, FastAPI, MCP.",
-        bullets: [],
-      },
-      {
-        name: "Personal AI Assistant",
-        url: "",
-        period: "",
-        description:
-          "Self-hosted chat assistant (Open WebUI) grounded through Mnemosyne, answering with citations instead of improvising. FastAPI, Qdrant, OpenRouter.",
-        bullets: [],
-      },
-      {
         name: "KB Auditor and RAG Builder",
         url: "",
         period: "",
@@ -97,7 +81,7 @@ const defaults: Record<Locale, CvContent> = {
         url: "",
         period: "",
         description:
-          "Speech-ML project that designs a constructed-language vocabulary and its recognizer together, screening for phonetic distinctiveness before any audio is recorded; benchmarked against three baselines. Python, PanPhon, WavLM.",
+          "Speech-ML engine that generates spoken vocabularies and recognizes them without retraining: a pretrained wav2vec 2.0 phone model with CTC ranking over the active word list, and per-phone margins that show the weakest sound. Includes a local browser lab. Python, PyTorch, Transformers, CMUdict, FastAPI.",
         bullets: [],
       },
     ],
@@ -125,7 +109,7 @@ const defaults: Record<Locale, CvContent> = {
     location: "Нови-Сад, Сербия  ·  Удалённо / гибрид / готов к релокации",
     contacts,
     summary:
-      "AI-инженер: 4,5 года в разработке и автоматизации, из них последние 2+ года — продакшн-системы на LLM: RAG-пайплайны, диалоговые AI-агенты и self-hosted AI-инфраструктура. Запустил в продакшн 30+ голосовых AI-решений и построил систему управляемого поиска, на которой работают пять self-hosted личных проектов.\nИщу роли AI Engineer / LLM Engineer: проектирование, запуск и масштабирование AI-продуктов в продакшене, с упором на агентные процессы, поисковые системы и AI-инфраструктуру.",
+      "AI-инженер: 4,5 года в разработке и автоматизации, из них последние 2+ года — продакшн-системы на LLM: RAG-пайплайны, диалоговые AI-агенты и self-hosted AI-инфраструктура. Запустил в продакшн 30+ голосовых AI-решений и построил систему управляемого поиска, на которой работают пять self-hosted личных проектов.\nИщу роли AI Engineer / LLM Engineer: проектирование, запуск и масштабирование AI-продуктов, с упором на агентные процессы, поиск и AI-инфраструктуру.",
     experience: [
       {
         role: "Продакт-менеджер / инженер по автоматизации",
@@ -138,16 +122,16 @@ const defaults: Record<Locale, CvContent> = {
           "Писал бизнес-логику в n8n с функциями на JavaScript и Python.",
           "Создавал RAG-пайплайны: подготовка данных, настройка векторного хранилища, тюнинг ретривера.",
           "Писал системные промпты и сценарии для повышения точности ответов LLM.",
-          "Собирал требования, декомпозировал задачи, готовил итоговую документацию (Swagger API).",
-          "Управлял командой из 10 человек: онбординг, менторство, код-ревью, внутренняя база знаний.",
+          "Собирал требования, декомпозировал задачи, готовил документацию (Swagger API).",
+          "Управлял командой из 10 человек: онбординг, менторство, код-ревью, база знаний.",
         ],
         achievements: [
           "Запустил в продакшн 30+ голосовых AI-решений для клиентов из медицины, ритейла, рекрутинга, финансов и муниципальной инфраструктуры.",
           "Спроектировал и запустил 3 RAG-пайплайна (Qdrant, Zep) для клиентских баз знаний, повысив точность ответов с 70% до 98%.",
-          "Перевёл голосовой пайплайн с пошаговой архитектуры на потоковую в реальном времени.",
+          "Перевёл голосовой пайплайн с пошаговой архитектуры на потоковую.",
           "Провёл 15+ технических аудитов и поддержал коммерческие предложения, закрывшие сделки на $400K+.",
           "Масштабировал команду автоматизации с 3 до 10+ человек.",
-          "Построил алертинг и обработку ошибок для высокодоступных интеграций с внешними API.",
+          "Построил алертинг и обработку ошибок для высокодоступных интеграций с API.",
         ],
       },
       {
@@ -156,7 +140,7 @@ const defaults: Record<Locale, CvContent> = {
         url: "https://mcn.ru/",
         period: "июль 2021 – март 2023",
         responsibilities: [
-          "Проводил ручное тестирование, писал техническую документацию и руководства по системам.",
+          "Проводил ручное тестирование, писал техническую документацию и руководства.",
           "Создавал и поддерживал внутренние процессы автоматизации, перейдя от ручного QA к бэкенд-автоматизации.",
         ],
         achievements: [
@@ -172,23 +156,7 @@ const defaults: Record<Locale, CvContent> = {
         url: "",
         period: "",
         description:
-          "Система подготовки и проверки сложных комплектов документов: от нормативных требований до готовых PDF и DOCX; работает в продакшене у клиента. Включает агента продукта со своим харнессом оценки и песочницей; OCR и реконструкция PDF вынесены на отдельный изолированный воркер. FastAPI, React, TypeScript, SQLite, LangGraph, Docling, Typst. Живое демо: editor.khovrov.dev.",
-        bullets: [],
-      },
-      {
-        name: "Mnemosyne",
-        url: "",
-        period: "",
-        description:
-          "Брокер поиска по знаниям с контролем доступа: каждый запрос ИИ ограничивается и перепроверяется по каноническому реестру, поэтому граница доступа задана структурой, а не инструкцией в промпте. Python, PostgreSQL, Qdrant, FastAPI, MCP.",
-        bullets: [],
-      },
-      {
-        name: "Личный AI-ассистент",
-        url: "",
-        period: "",
-        description:
-          "Self-hosted чат-ассистент (Open WebUI) с опорой на Mnemosyne: отвечает с цитатами, а не додумывает. FastAPI, Qdrant, OpenRouter.",
+          "Система подготовки и проверки сложных комплектов документов: от нормативных требований до готовых PDF и DOCX; работает в продакшене у клиента. Агент продукта со своим харнессом оценки и песочницей; OCR и реконструкция PDF на отдельном изолированном воркере. FastAPI, React, TypeScript, SQLite, LangGraph, Docling, Typst. Живое демо: editor.khovrov.dev.",
         bullets: [],
       },
       {
@@ -204,7 +172,7 @@ const defaults: Record<Locale, CvContent> = {
         url: "",
         period: "",
         description:
-          "Speech-ML-проект: словарь искусственного языка и его распознаватель проектируются вместе, фонетическая различимость проверяется до записи аудио; сравнение с тремя базовыми подходами. Python, PanPhon, WavLM.",
+          "Speech-ML-движок: генерирует устные словари и распознаёт их без переобучения. Предобученная фонемная модель wav2vec 2.0, CTC-ранжирование по активному списку слов, оценка каждой фонемы. Есть браузерная лаборатория. Python, PyTorch, Transformers, CMUdict, FastAPI.",
         bullets: [],
       },
     ],

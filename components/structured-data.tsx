@@ -11,6 +11,7 @@ export function StructuredData() {
       "AI Automation Engineer building production voice agents, RAG systems, and automation workflows.",
     email: "mailto:mkhovrov01@gmail.com",
     sameAs: [
+      "https://t.me/khovre",
       "https://github.com/mkhovrov01",
       "https://www.linkedin.com/in/maksim-khovrov-113633293",
     ],
