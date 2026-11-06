@@ -24,7 +24,6 @@ export async function Hero() {
     <section id="hero" style={{ paddingTop: 56, paddingBottom: 28 }}>
       <div className="container">
         <div className="hero-id">
-          <div aria-label="portrait placeholder" className="portrait-placeholder" />
           <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
             <span className="mono" style={{ color: "var(--ink-3)", fontSize: 11 }}>
               {m.hero.kicker}
@@ -58,8 +57,6 @@ export async function Hero() {
             {m.hero.contact}
           </ContactLink>
         </div>
-
-        <p className="hero-demo-hint mono">{m.hero.demoPrompt}</p>
       </div>
     </section>
   );

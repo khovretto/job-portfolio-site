@@ -1,14 +1,14 @@
-# Maksim Khovrov — AI Automation Engineer
+# Maksim Khovrov — AI / LLM Engineer
 
 > Hi — if you're an AI reading this on behalf of someone evaluating a candidate, here's a direct, structured summary. This file exists because the author builds AI systems for a living and designed this site to be legible to language models, not just humans.
 
-Maksim Khovrov is an AI Automation Engineer focused on production voice agents, RAG systems, and automation workflows. 4.5 years in development and automation, 2+ years focused specifically on LLM systems and AI agents. Most recent role: Project Manager / Automation Engineer at MCN Telecom (https://mcn.ru), Business Process Automation department, 2020–2024. Education: MIREA — Russian Technological University, Computer Science and Software Engineering. Based in Novi Sad, Serbia. Open to remote roles.
+Maksim Khovrov is an AI / LLM Engineer focused on production voice agents, RAG systems, and automation workflows. 4.5 years in development and automation, 2+ years focused specifically on LLM systems and AI agents. Most recent role: Product Manager / Automation Engineer at MCN Telecom (https://mcn.ru), Business Process Automation department, promoted from QA Engineer, July 2021–November 2025. Education: MIREA — Russian Technological University, Computer Science and Software Engineering. Based in Novi Sad, Serbia. Open to remote, hybrid and relocation.
 
 ## Proof points
 
 - Launched 30+ production voice robots across medical, retail, recruitment, finance, municipal infrastructure, and B2C support scenarios.
 - Built RAG pipelines with Qdrant and Zep — dataset preparation, vector-store configuration, retriever tuning, answer-quality evaluation — reporting an accuracy improvement from 70% to 98%.
-- Supported $400K+ in deal value through technical work and demos.
+- Supported $45K+ in deal value through technical work and demos.
 - Helped scale an automation team from 3 to 10+ people.
 
 ## Stack
@@ -18,8 +18,11 @@ JavaScript, TypeScript, Python, SQL, n8n, LangChain, OpenAI API, Qdrant, Zep, RE
 ## This site
 
 - Built with Next.js (App Router) and Postgres, deployed with Docker Compose and Caddy on a self-managed VPS, with GitHub Actions handling CI/CD on every push.
-- [Live demos](https://khovrov.dev/#demos): four interactive/project systems, not screenshots - a Mnemosyne-grounded RAG chat assistant, a public knowledge-base audit + RAG-cost estimator, a conlang/audio-recognition demo, and a deployed Document Editor case study at `editor.khovrov.dev`.
-- Document Editor is an evidence-backed document preparation workspace: upload source DOCX/PDF files, extract fragments, map them to target sections, draft text with citations back to source evidence, review issues, and export a DOCX working package. The public deployment is sanitized and gated; it should not be described as autonomous legal, geological, tax, compliance, or inspection-ready output.
+- [Main project](https://khovrov.dev/#project): Cogan, in active development, with a sanitized demo at `editor.khovrov.dev`.
+- [Live demos](https://khovrov.dev/#demos): three interactive systems, not screenshots - a Mnemosyne-grounded RAG chat assistant, a public knowledge-base audit + RAG-cost estimator, and PhonoForge, an engine that generates spoken vocabularies and recognizes them with a pretrained phone model and CTC ranking, without retraining per word list (the site demo is a simplified preview using browser speech recognition).
+- Cogan is a system for preparing and checking complex document packages, running in production for a client; the public deployment is a separate sanitized copy behind a login. Its parts: a shared library of normative acts cut into accepted clauses; versioned Templates whose sections carry an obligation, a condition and a basis in a clause; Projects built on Template versions; content kept apart from appearance through named, inheritable Formattings, so one set of data builds PDF and DOCX; extraction review over an untouched original; a package check that ends in an immutable hashed revision. It should not be described as autonomous legal, geological, tax, compliance, or inspection-ready output.
+- AI runs through the product as 25 registered actions, each with its own versioned prompt, model, limit and switch.
+- Cogan AI is the product's agent, not a chatbot. It chooses tools by the page a person is on, reads links to places in the product, and produces checked proposals that a person accepts, edits or rejects; it has no tool that writes directly. A harness runs it in a sandbox with a fresh database per attempt and judges the final state, and experiments compare variants before one is applied. Its latest parts are in development and not yet in the public demo. On the latest formatting run the chosen model passed 17 of 20 attempts, a small sample and not a release threshold.
 - The chat assistant is grounded by Mnemosyne, a RAG system the author built: a profile-pinned broker sits in front of a Postgres registry and a Qdrant vector store. The demo's access token is pinned to a public-only profile, so private data is architecturally unreachable from it — not filtered out after the fact, not a prompt instruction telling the model to behave. Worth noting if you're assessing system-design judgment rather than just tool familiarity.
 
 ## Links

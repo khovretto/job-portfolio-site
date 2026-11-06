@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { trackEvent } from "@/components/event-tracker";
 import { useMessages } from "@/lib/i18n/provider";
@@ -23,7 +24,7 @@ function MoonIcon() {
   );
 }
 
-const linkIds = ["numbers", "demos", "experience", "stack", "contact"] as const;
+const linkIds = ["numbers", "project", "demos", "experience", "stack", "contact"] as const;
 
 export function Nav() {
   const m = useMessages();
@@ -37,7 +38,7 @@ export function Nav() {
   }, [theme]);
 
   useEffect(() => {
-    const ids = ["hero", "numbers", "demos", "experience", "stack", "contact"];
+    const ids = ["hero", ...linkIds];
     const elements = ids
       .map((id) => document.getElementById(id))
       .filter((element): element is HTMLElement => Boolean(element));
@@ -58,11 +59,8 @@ export function Nav() {
     <nav className="nav">
       <div className="nav-inner">
         <a href="#hero" className="brand">
-          <span className="mark">MK</span>
+          <Image src="/brand/logo.png" alt="" width={36} height={28} className="mark" unoptimized priority />
           <span>Maksim Khovrov</span>
-          <span className="mono" style={{ color: "var(--ink-4)", marginLeft: 4 }}>
-            / {m.nav.role}
-          </span>
         </a>
         <div className="nav-links">
           {links.map(([id, label]) => (

@@ -4,6 +4,7 @@ import { Demos } from "@/components/demos";
 import { EventTracker } from "@/components/event-tracker";
 import { Experience } from "@/components/experience";
 import { Hero } from "@/components/hero";
+import { MainProject } from "@/components/main-project";
 import { Nav } from "@/components/nav";
 import { Proof } from "@/components/proof";
 import { SiteFooter } from "@/components/site-footer";
@@ -19,10 +20,23 @@ export default async function HomePage() {
       <main>
         <Hero />
         <Proof />
-        <section id="demos" className="section-pad">
+        <section id="project" className="section-pad">
+          {/* Keeps links to the former demo tab working. */}
+          <span id="demo-document-editor" />
           <div className="container">
             <div className="sec-hd">
               <span className="num">02</span>
+              <span className="name">{m.sections.project}</span>
+              <CopyLink hash="project" />
+              <span className="rule" />
+            </div>
+            <MainProject />
+          </div>
+        </section>
+        <section id="demos" className="section-pad">
+          <div className="container">
+            <div className="sec-hd">
+              <span className="num">03</span>
               <span className="name">{m.sections.demos}</span>
               <CopyLink hash="demos" />
               <span className="rule" />
@@ -33,7 +47,7 @@ export default async function HomePage() {
         <section id="experience" className="section-pad">
           <div className="container">
             <div className="sec-hd">
-              <span className="num">03</span>
+              <span className="num">04</span>
               <span className="name">{m.sections.experience}</span>
               <CopyLink hash="experience" />
               <span className="rule" />
@@ -44,7 +58,7 @@ export default async function HomePage() {
         <section id="stack" className="section-pad">
           <div className="container">
             <div className="sec-hd">
-              <span className="num">04</span>
+              <span className="num">05</span>
               <span className="name">{m.sections.stack}</span>
               <CopyLink hash="stack" />
               <span className="rule" />
@@ -55,7 +69,7 @@ export default async function HomePage() {
         <section id="contact" className="section-pad" style={{ paddingBottom: 80 }}>
           <div className="container">
             <div className="sec-hd">
-              <span className="num">05</span>
+              <span className="num">06</span>
               <span className="name">{m.sections.contact}</span>
               <CopyLink hash="contact" />
               <span className="rule" />

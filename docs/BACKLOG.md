@@ -27,6 +27,13 @@ losing them in chat.
   (`cv_files`, migration `db/004_cv_files.sql`), served via `/api/cv?lang=`, with
   a language popup on the public download buttons (`components/cv-download.tsx`).
 
+- CV builder: `/admin/cv` edits structured EN/RU content (`cv_documents`, migration `db/006_cv_documents.sql`),
+  previews it from `/admin/cv/preview`, and publishes a PDF (pdfkit, Inter from `lib/cv/fonts`) into `cv_files`.
+- Cogan (the repository and code still say Document Editor) moved from a demo tab to its own `#project` section (`components/main-project.tsx`). The tour lives in
+  `components/project-tour.tsx`; its screens are HTML copies in `components/project-tour-screens.tsx` with made-up
+  data and EN/RU text in `mainProject.tour.mock`. After the UI rework, update those copies; `data-spot` marks what
+  each stop highlights, so nothing needs coordinates.
+
 ## Notes / possible follow-ups
 
 - CVs are stored in Postgres as `bytea` (max 8 MB enforced in the upload action).

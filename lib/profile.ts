@@ -1,5 +1,5 @@
 export const publicProfileSummary = `
-Maksim Khovrov is an AI Automation Engineer based in Novi Sad, Serbia (GMT+2), open to remote work.
+Maksim Khovrov is an AI / LLM Engineer based in Novi Sad, Serbia (GMT+2), open to remote, hybrid and relocation.
 
 Profile:
 - 4.5 years in development and automation; 2+ years focused on LLM systems and AI agents.
@@ -7,10 +7,10 @@ Profile:
 - Education: MIREA — Russian Technological University, Computer Science and Software Engineering.
 - Seeking: AI development, automation, or technical product management.
 
-Production work at MCN Telecom (mcn.ru), Business Process Automation department, 2020-2024:
+Production work at MCN Telecom (mcn.ru), Business Process Automation department, Jul 2021 - Nov 2025:
 - Launched 30+ voice robots into production: 5 medical, 4 retail, 6 recruitment, 1 high-volume finance, 1 municipal infrastructure solution, plus others.
 - Implemented an internal custom voice AI robot with RAG for company B2C customers.
-- Conducted 15+ technical audits and supported proposals that closed $400K+ in deals.
+- Conducted 15+ technical audits and supported proposals that closed $45K+ in deals.
 - Core developer during automation team restructuring: redesigned processes, onboarded specialists, scaled team from 3 to 10+.
 - Designed and deployed 3 RAG pipelines with Qdrant and Zep, improving reported response accuracy from 70% to 98%.
 - Implemented alerting and error handling for external API integrations.

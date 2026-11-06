@@ -1,7 +1,7 @@
 import { query } from "@/lib/db";
 
 export const DEFAULT_PUBLIC_CONTEXT = `
-Maksim Khovrov is an AI Automation Engineer focused on production voice agents, RAG systems, and automation workflows.
+Maksim Khovrov is an AI / LLM Engineer focused on production voice agents, RAG systems, and automation workflows.
 
 Public proof points:
 - 4.5 years of automation experience.
@@ -9,7 +9,7 @@ Public proof points:
 - Launched 30+ production voice robots across medical, retail, recruitment, finance, municipal infrastructure, and B2C support scenarios.
 - Built RAG pipelines with Qdrant and Zep, including dataset preparation, vector-store configuration, retriever tuning, and answer-quality evaluation.
 - Reported RAG response-accuracy improvement from 70% to 98%.
-- Supported $400K+ in deal value through technical work and demos.
+- Supported $45K+ in deal value through technical work and demos.
 - Helped scale an automation team from 3 to 10+ people.
 
 Public stack:

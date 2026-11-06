@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { CopyLink } from "@/components/copy-link";
 import { DemoAI } from "@/components/demos/demo-ai";
-import { DemoDocumentEditor } from "@/components/demos/demo-document-editor";
 import { DemoKB } from "@/components/demos/demo-kb";
 import { DemoConlang } from "@/components/demos/demo-conlang";
 import { trackEvent } from "@/components/event-tracker";
@@ -12,9 +11,13 @@ import { useMessages } from "@/lib/i18n/provider";
 const demos = [
   { id: "ai", slug: "demo-assistant", num: "01", component: DemoAI },
   { id: "kb", slug: "demo-kb-audit", num: "02", component: DemoKB },
-  { id: "conlang", slug: "demo-conlang", num: "03", component: DemoConlang },
-  { id: "documentEditor", slug: "demo-document-editor", num: "04", component: DemoDocumentEditor },
+  { id: "conlang", slug: "demo-phonoforge", num: "03", component: DemoConlang },
 ] as const;
+
+// Links shared before PhonoForge was renamed.
+const legacySlugs: Record<string, (typeof demos)[number]["slug"]> = {
+  "demo-conlang": "demo-phonoforge",
+};
 
 export function Demos() {
   const m = useMessages();
@@ -25,7 +28,8 @@ export function Demos() {
   // Deep links: #demo-<slug> opens the matching tab and scrolls to the demos section.
   useEffect(() => {
     function applyHash() {
-      const hash = window.location.hash.replace(/^#/, "");
+      const raw = window.location.hash.replace(/^#/, "");
+      const hash = legacySlugs[raw] ?? raw;
       const match = demos.find((demo) => demo.slug === hash);
       if (match) {
         setActive(match.id);

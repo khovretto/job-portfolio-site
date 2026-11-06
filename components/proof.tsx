@@ -4,7 +4,7 @@ import { getMessages } from "@/lib/i18n/server";
 const tiles = [
   { id: "voiceRobots", value: "30+" },
   { id: "ragAccuracy", value: "70 -> 98%", bar: 0.98 },
-  { id: "deals", value: "$400K+" },
+  { id: "deals", value: "$45K+" },
   { id: "team", value: "3 -> 10+" },
 ] as const;
 

@@ -22,7 +22,7 @@ And numerous other solutions for various services
 
  - Implemented an internal custom voice AI robot with RAG to handle all company B2C customers.
 
- - Conducted 15+ technical audits and assisted in preparing commercial proposals that closed deals worth $400K+.
+ - Conducted 15+ technical audits and assisted in preparing commercial proposals that closed deals worth $45K+.
 
  - Served as the core developer for automation solutions during the restructuring of the team: redesigned processes, onboarded specialists, and scaled the team from 3 to 10+ people.
 

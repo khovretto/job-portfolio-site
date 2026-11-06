@@ -6,9 +6,9 @@ export function StructuredData() {
     "@type": "Person",
     name: "Maksim Khovrov",
     url: siteUrl,
-    jobTitle: "AI Automation Engineer",
+    jobTitle: "AI / LLM Engineer",
     description:
-      "AI Automation Engineer building production voice agents, RAG systems, and automation workflows.",
+      "AI / LLM Engineer building production voice agents, RAG systems, and automation workflows.",
     email: "mailto:mkhovrov01@gmail.com",
     sameAs: [
       "https://t.me/khovre",

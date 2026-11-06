@@ -1,13 +1,13 @@
 {
   "meta": {
-    "title": "Maksim Khovrov | AI Automation Engineer",
-    "description": "AI Automation Engineer building production voice agents, RAG systems, and automation workflows.",
+    "title": "Maksim Khovrov | AI / LLM Engineer",
+    "description": "AI / LLM Engineer building production voice agents, RAG systems, and automation workflows.",
     "ogDescription": "Production voice agents, RAG systems, automation workflows, and public project demos."
   },
   "nav": {
-    "role": "AI Automation Engineer",
     "links": {
       "numbers": "numbers",
+      "project": "project",
       "demos": "demos",
       "experience": "experience",
       "stack": "stack",
@@ -25,6 +25,7 @@
     "russian": "Russian"
   },
   "sections": {
+    "project": "main project",
     "demos": "interactive demos",
     "experience": "experience / operating model",
     "stack": "technical stack",
@@ -37,10 +38,9 @@
   "hero": {
     "kicker": "// portfolio / v1 / 2026",
     "location": "Novi Sad, Serbia",
-    "role": "AI Automation Engineer",
+    "role": "AI / LLM Engineer",
     "tagline": "I build [[AI agents]] that run in production.",
-    "subline": "4.5 years in development and automation, 2+ focused on LLM systems and AI agents. Open to remote.",
-    "demoPrompt": "Don't take my word for it — try four live demos below.",
+    "subline": "4.5 years in development and automation, 2+ focused on LLM systems and AI agents. Open to remote, hybrid and relocation.",
     "downloadCv": "Download CV",
     "tryDemos": "Try the demos",
     "contact": "Contact"
@@ -79,15 +79,15 @@
   },
   "experience": {
     "roleLabel": "role",
-    "roleTitle": "Project Manager / Automation Engineer",
+    "roleTitle": "Product Manager / Automation Engineer",
     "company": "MCN Telecom / Business Process Automation department",
-    "period": "2020 - 2024 / 4 yrs 5 mo",
+    "period": "Jul 2021 - Nov 2025 / 4 yrs 5 mo",
     "keyWinsLabel": "key wins",
     "wins": [
       "Launched 30+ voice robots into production across medical, retail, recruitment, finance and municipal sectors.",
       "Designed and deployed 3 RAG pipelines with Qdrant and Zep, improving reported response accuracy from 70% to 98%.",
       "Stood up an internal voice AI with RAG for company B2C customer interactions.",
-      "Conducted 15+ technical audits and supported commercial proposals that closed $400K+ in deals.",
+      "Conducted 15+ technical audits and supported commercial proposals that closed $45K+ in deals.",
       "Core developer through restructuring: onboarded specialists and scaled the team from 3 to 10+."
     ],
     "responsibilitiesLabel": "responsibilities",
@@ -138,7 +138,7 @@
   "contact": {
     "label": "contact",
     "title": "Hire a reliable AI engineer.",
-    "body": "Open to remote AI development, automation, or technical product management. Based in Novi Sad (GMT+2), comfortable with EU and US-East overlap.",
+    "body": "Open to AI development, automation, or technical product management: remote, hybrid or relocation. Based in Novi Sad (GMT+2), comfortable with EU and US-East overlap.",
     "privacy": "Privacy note: demo interactions may be logged for diagnostics. Raw IP addresses are not stored.",
     "emailMe": "Email me",
     "downloadCv": "Download CV",
@@ -160,12 +160,8 @@
         "sub": "Drop a URL and get an honest pipeline estimate: ETA, cost and confidence."
       },
       "conlang": {
-        "title": "Conlang + Audio Recognition",
-        "sub": "150 generated words. Pick one, say it, and see what was heard."
-      },
-      "documentEditor": {
-        "title": "Document Editor",
-        "sub": "A deployed evidence-backed document workspace: source fragments, section mapping, citations, review, and DOCX export."
+        "title": "PhonoForge",
+        "sub": "An engine that generates spoken vocabularies and recognizes them with one phone model, without retraining. This demo is a simplified preview: 150 words and browser speech recognition."
       }
     }
   },
@@ -241,39 +237,445 @@
     "heard": "heard",
     "emptyHint": "empty / pick a word from the lexicon and try saying it. the recognizer scores closeness with edit distance."
   },
-  "demoDocumentEditor": {
-    "problemLabel": "case study",
-    "workflowLabel": "workflow",
-    "title": "Evidence-backed document preparation, not a generic text editor.",
-    "body": "Document Editor turns messy source DOCX/PDF material into a structured workspace where every drafted section can be traced back to inspectable source fragments. The portfolio deployment is sanitized and protected separately from the real client deployment.",
+  "mainProject": {
+    "status": "active development",
+    "title": "Cogan",
+    "lede": "A system for preparing and checking complex document packages: from the requirements of normative acts to a finished PDF and DOCX. An AI agent works through all of it, and every change it proposes waits for a person.",
     "openDemo": "Open live demo",
-    "accessNote": "Protected demo at editor.khovrov.dev — the login and password are in my cover letter. You can also ask the AI assistant (module 01) or contact me directly.",
-    "steps": [
-      {
-        "label": "Upload",
-        "detail": "Source DOCX/PDF files are ingested and preserved unchanged — every later step keeps a pointer back to the original file and page."
+    "accessNote": "Runs in production for a client. The demo is a separate sanitized copy; its login is in my cover letter, or just ask me.",
+    "boundary": "Document preparation, not autonomous compliance or final expert approval.",
+    "tour": {
+      "synthetic": "screen copy, made-up data",
+      "soon": "next release",
+      "pause": "pause",
+      "play": "play",
+      "stops": {
+        "agent": {
+          "screen": "cogan ai / formatting area",
+          "title": "Cogan AI: an agent, not a chatbot",
+          "body": "It knows which page you are on, opens the tools it needs and takes a link to any place in the product. Its result is a checked proposal you accept, edit or reject. Its own harness runs it in a sandbox with a fresh database per attempt and judges the final state."
+        },
+        "ai": {
+          "screen": "ai console",
+          "title": "AI in every action",
+          "body": "25 AI actions across six areas: reading tables and formulas from images, comparing against a scan, clause applicability, check verdicts, coverage, rules from acts. Each has its own versioned prompt, model, limit and switch in one console."
+        },
+        "formatting": {
+          "screen": "formatting",
+          "title": "Data apart from appearance",
+          "body": "Blocks hold the content; a Formatting decides how it lands on the page. The product knows no standard: GOST is one Formatting among others, with inheritance and a source for every rule. One set of data builds both PDF and DOCX with native Word styles."
+        },
+        "templates": {
+          "screen": "template / editor",
+          "title": "Projects on versioned Templates",
+          "body": "A Template is the make-up of a package: documents and sections, each with an obligation, a condition and a basis in an act's clause. Published versions never change. A project moves to a new one through preview, shadow run and activation, with rollback."
+        },
+        "library": {
+          "screen": "normative library / clauses",
+          "title": "A library of acts and clauses",
+          "body": "Acts live in a shared library with editions and validity periods. Each is cut into clauses, conditions and sub-items; a person accepts them and sets the question each one asks of a package. Templates, Formattings, checks and Cogan AI's citations all draw on them."
+        },
+        "extraction": {
+          "screen": "source view",
+          "title": "Extraction you can correct",
+          "body": "A separate worker reads tables, formulas, scans and page positions with Docling and OCR. Corrections are a journal over an untouched original, and a review decision goes stale when its content changes. This loop could become a product of its own."
+        },
+        "release": {
+          "screen": "package check / release",
+          "title": "From package check to frozen release",
+          "body": "The check list is built from accepted clauses and the Template, with its price shown up front. It finds gaps and numbers that disagree, and says why it could not check something. Once a person confirms, the package freezes into a hashed revision."
+        }
       },
-      {
-        "label": "Extract",
-        "detail": "Headings, paragraphs, tables, and page breaks are parsed into typed fragments with location metadata, so evidence stays inspectable instead of dissolving into one blob of text."
-      },
-      {
-        "label": "Map",
-        "detail": "Fragments are assigned to sections of the 103-section report template. Coverage is tracked per section, so gaps and unused sources are visible before drafting starts."
-      },
-      {
-        "label": "Draft",
-        "detail": "Section text is written against the mapped evidence, and every claim carries a citation that resolves back to a concrete source fragment for review."
-      },
-      {
-        "label": "Export",
-        "detail": "The workspace assembles the reviewed sections into a DOCX working package with citations intact, ready to hand off."
+      "mock": {
+        "mark": "Co",
+        "project": "Demo report",
+        "nav": [
+          "Project",
+          "Materials",
+          "Library",
+          "Authoring",
+          "Review",
+          "Export",
+          "AI"
+        ],
+        "agent": {
+          "sandboxTitle": "Sandbox: scenario run",
+          "sandboxScore": "17 / 20",
+          "sandboxNote": "Fresh database per attempt. Writes stay in here.",
+          "scenarios": [
+            {
+              "name": "Rule from a message",
+              "check": "final state",
+              "ok": true
+            },
+            {
+              "name": "Rules from a DOCX sample",
+              "check": "values match",
+              "ok": true
+            },
+            {
+              "name": "Scan with no text",
+              "check": "refuses",
+              "ok": true
+            },
+            {
+              "name": "Not in the vocabulary",
+              "check": "no proposal",
+              "ok": true
+            },
+            {
+              "name": "Table label template",
+              "check": "required rule",
+              "ok": false
+            }
+          ],
+          "loop": [
+            "variant",
+            "compare",
+            "apply"
+          ],
+          "dockTitle": "Cogan AI",
+          "area": "Formatting",
+          "linkChip": "sample.docx",
+          "message": "Make our tables look like in this sample.",
+          "trace": [
+            "open_area(formatting)",
+            "measure_sample(sample.docx)",
+            "propose_formatting_rules(2)"
+          ],
+          "proposalKind": "Change a rule",
+          "proposalTitle": "Table · cell text size",
+          "oldValue": "12 pt",
+          "newValue": "11 pt",
+          "proposalSource": "Source: sample, measured in DOCX",
+          "accept": "Accept",
+          "edit": "Accept with edit",
+          "reject": "Reject"
+        },
+        "ai": {
+          "title": "AI console",
+          "surfaces": [
+            {
+              "name": "Import",
+              "count": 7
+            },
+            {
+              "name": "Expertise",
+              "count": 5
+            },
+            {
+              "name": "Library",
+              "count": 1
+            },
+            {
+              "name": "Assistant",
+              "count": 1
+            },
+            {
+              "name": "Evaluation",
+              "count": 3
+            },
+            {
+              "name": "Agent",
+              "count": 8
+            }
+          ],
+          "actions": [
+            "Read a table from its image",
+            "Read a formula from its image",
+            "Compare against the scan",
+            "Re-read from the image",
+            "Fix the structure",
+            "Propose a caption"
+          ],
+          "chainTitle": "Which model runs it",
+          "chain": [
+            "Project · action",
+            "Project · task",
+            "Global · action",
+            "Global · task",
+            "Environment"
+          ],
+          "params": [
+            {
+              "key": "Prompt",
+              "value": "version 4"
+            },
+            {
+              "key": "Spend limit",
+              "value": "12 ₽"
+            },
+            {
+              "key": "Data allowed",
+              "value": "public"
+            },
+            {
+              "key": "Spent this month",
+              "value": "84 ₽"
+            }
+          ]
+        },
+        "formatting": {
+          "blocksTitle": "Blocks",
+          "blocks": [
+            "Title page",
+            "1. General",
+            "Table 3.1",
+            "3.2 Volumes",
+            "Appendix 1"
+          ],
+          "blocksNote": "Content as data, with no look of its own",
+          "title": "Technical report",
+          "version": "v3",
+          "inherits": "Inherits from a national standard, keeps only its differences",
+          "rules": [
+            {
+              "name": "Page · margins",
+              "value": "30 / 15 / 20 mm",
+              "source": "clause 4.1"
+            },
+            {
+              "name": "Table · label",
+              "value": "right, above",
+              "source": "clause 6.2"
+            },
+            {
+              "name": "Table · cell text",
+              "value": "11 pt",
+              "source": "sample"
+            },
+            {
+              "name": "Heading 1 · new page",
+              "value": "yes",
+              "source": "message"
+            },
+            {
+              "name": "Formula · numbering",
+              "value": "by section",
+              "source": "author"
+            }
+          ],
+          "tableLabel": "Table 3.1",
+          "outputsNote": "One source, two outputs"
+        },
+        "templates": {
+          "title": "Technical report package",
+          "version": "v1.2 published",
+          "tree": [
+            {
+              "name": "Report",
+              "tag": "document",
+              "depth": 0
+            },
+            {
+              "name": "Title page",
+              "tag": "form",
+              "depth": 1
+            },
+            {
+              "name": "Summary of works",
+              "tag": "required",
+              "depth": 1
+            },
+            {
+              "name": "Safety measures",
+              "tag": "conditional",
+              "depth": 1
+            },
+            {
+              "name": "Calculation of volumes",
+              "tag": "required",
+              "depth": 1
+            },
+            {
+              "name": "Cover letter",
+              "tag": "document",
+              "depth": 0
+            }
+          ],
+          "fields": [
+            {
+              "key": "Obligation",
+              "value": "if the condition holds"
+            },
+            {
+              "key": "Condition",
+              "value": "Field work is planned"
+            },
+            {
+              "key": "Basis",
+              "value": "Act No. 12, clause 7"
+            },
+            {
+              "key": "Formatting",
+              "value": "Technical report v3"
+            }
+          ],
+          "projectsTitle": "Moving a project to this version",
+          "migration": [
+            "preview",
+            "shadow",
+            "activate",
+            "rollback"
+          ],
+          "projects": [
+            {
+              "name": "Demo report",
+              "version": "v1.2"
+            },
+            {
+              "name": "Second demo",
+              "version": "v1.1"
+            }
+          ]
+        },
+        "library": {
+          "act": "Requirements for a technical report, No. 12",
+          "inForce": "in force",
+          "counts": "48 clauses · 45 accepted · cited by 3 templates",
+          "clauses": [
+            {
+              "name": "cl. 6",
+              "text": "The report contains a list of authors",
+              "state": "accepted",
+              "done": true
+            },
+            {
+              "name": "cl. 7",
+              "text": "When field work is planned, the report states",
+              "state": "accepted",
+              "done": true
+            },
+            {
+              "name": "cl. 8",
+              "text": "Tables carry a number and a title",
+              "state": "accepted",
+              "done": true
+            },
+            {
+              "name": "cl. 9",
+              "text": "Graphic appendices are drawn to scale",
+              "state": "to review",
+              "done": false
+            },
+            {
+              "name": "App. 2, cl. 1",
+              "text": "The title page lists the executor",
+              "state": "accepted",
+              "done": true
+            }
+          ],
+          "condition": "When field work is planned, the report states:",
+          "items": [
+            "a) the area and its boundaries;",
+            "b) the volume by kind of work;",
+            "c) the safety measures."
+          ],
+          "questionLabel": "Question it asks of the package",
+          "question": "Does the document have this section?",
+          "usedLabel": "Used by",
+          "used": [
+            "template section",
+            "check",
+            "Formatting",
+            "Cogan AI"
+          ]
+        },
+        "extraction": {
+          "railTitle": "Fragments",
+          "fragments": [
+            {
+              "type": "heading",
+              "name": "3. Methods"
+            },
+            {
+              "type": "text",
+              "name": "The survey covered…"
+            },
+            {
+              "type": "table",
+              "name": "Table 3.1"
+            },
+            {
+              "type": "text",
+              "name": "Volumes were…"
+            },
+            {
+              "type": "figure",
+              "name": "Fig. 2"
+            }
+          ],
+          "boxes": [
+            "heading",
+            "text",
+            "table",
+            "text"
+          ],
+          "journalTitle": "Corrections",
+          "journalNote": "Raw extraction stays unchanged",
+          "operations": [
+            "merge_blocks #41 #42",
+            "set_type #57 table",
+            "edit_text #63",
+            "split_block #70"
+          ],
+          "verify": "Verified",
+          "flag": "Flag"
+        },
+        "release": {
+          "title": "Package check",
+          "forecast": "forecast 38 ₽",
+          "checks": [
+            {
+              "name": "Mandatory make-up",
+              "note": "14 of 14",
+              "state": "ok"
+            },
+            {
+              "name": "Cover letter present",
+              "note": "missing",
+              "state": "bad"
+            },
+            {
+              "name": "Thickness: 4.3 m and 4.5 m",
+              "note": "sections 4, 5",
+              "state": "bad"
+            },
+            {
+              "name": "Requisites match",
+              "note": "by value",
+              "state": "ok"
+            },
+            {
+              "name": "Formula «where» lines",
+              "note": "2 to add",
+              "state": "warn"
+            },
+            {
+              "name": "Lettering height on maps",
+              "note": "not checked: no vector",
+              "state": "warn"
+            }
+          ],
+          "revisionsTitle": "Immutable revisions",
+          "revisions": [
+            {
+              "name": "#2 after findings",
+              "hash": "6a21ea56"
+            },
+            {
+              "name": "#1 first build",
+              "hash": "97e5d14e"
+            }
+          ],
+          "files": [
+            "Report.docx, Report.pdf",
+            "evidence_index.json",
+            "package_manifest.json",
+            "package_revision_2.zip"
+          ]
+        }
       }
-    ],
-    "chips": {
-      "liveDemo": "live",
-      "protected": "auth gated",
-      "sanitized": "sanitized"
     }
   }
 }

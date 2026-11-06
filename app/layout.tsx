@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Inter, Martian_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
+import "./project-tour.css";
 import { LocaleProvider } from "@/lib/i18n/provider";
 import { getLocale, getMessages } from "@/lib/i18n/server";
 import { getDictionary } from "@/lib/i18n/dictionaries";
@@ -13,9 +14,11 @@ const inter = Inter({
   display: "swap",
 });
 
-const jetBrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-jetbrains",
+// Labels appear in Russian too, so the Cyrillic subset is required.
+const monoFace = Martian_Mono({
+  subsets: ["latin", "cyrillic"],
+  axes: ["wdth"],
+  variable: "--font-mono-face",
   display: "swap",
 });
 
@@ -43,7 +46,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const messages = getDictionary(locale);
 
   return (
-    <html lang={locale} data-theme="dark" className={`${inter.variable} ${jetBrainsMono.variable}`}>
+    <html lang={locale} data-theme="dark" className={`${inter.variable} ${monoFace.variable}`}>
       <body>
         <StructuredData />
         <LocaleProvider locale={locale} messages={messages}>
